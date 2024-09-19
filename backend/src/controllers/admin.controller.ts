@@ -28,6 +28,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
 }
 
 
+
 export async function logOut(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     res.status(200).clearCookie("admin_access_token").json({
