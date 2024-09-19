@@ -1,5 +1,6 @@
 import express, {NextFunction, Request, Response} from "express";
 import adminRouter from "./routes/admin.route";
+import pageRouter from "./routes/page.route";
 import dotenv from "dotenv";
 
 const app = express();

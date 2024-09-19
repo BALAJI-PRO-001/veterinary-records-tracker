@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewUser</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/client/public/css/header.component.css">
+</head>
+
+<body>
+    {{HEADER}}
+    <div class="container position-relative shadow" style="top: 8em; max-height: 550px;overflow: scroll;">
+        <form id="add-user-form">
+            <div class="d-flex flex-column">
+                <div class="form-heading mb-2" style="font-weight: bold;">Customer Details</div>
+                <div class="form-group row mb-1">
+                    <div class="col-md-4">
+                        <label for="customerName">Name</label>
+                        <input type="text" class="form-control" id="customer-name" placeholder="Customer Name">
+                        <p id="Err-element" style="font-size: 10px; color: red; font-weight: bold; letter-spacing: 1px;"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="customerPhone">Phone No</label>
+                        <input type="text" class="form-control" id="customer-phone" placeholder="Phone Number" maxlength="12">
+                        <p id="Err-element" style="font-size: 14px; color: red; font-weight: bold; letter-spacing: 1px;"></p>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="customerAddress">Address</label>
+                        <input type="text" class="form-control" id="customer-address" placeholder="Address">
+                        <p id="Err-element" style="font-size: 10px; color: red; font-weight: bold; letter-spacing: 1px;"></p>
+                    </div>
+                </div>
+
+                <div class="cow-container"> 
+                    <div class="cow-details">
+                        <div class="form-heading mb-2"  style="font-weight: bold;">Cow Details</div>
+                            <div class="form-group row mb-1">
+                                <div class="col-md-4">
+                                    <label for="cow-name">Name</label>
+                                    <input type="text" class="form-control" id="cow-name" placeholder="Cow Name">
+                                    <p id="Err-element" style="font-size: 10px; color: red; font-weight: bold; letter-spacing: 1px;"></p>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="cow-breed">Breed</label>
+                                    <input type="text" class="form-control" id="cow-breed" placeholder="Cow Breed">
+                                    <p id="Err-element" style="font-size: 10px; color: red; font-weight: bold; letter-spacing: 1px;"></p>
+                                </div>
+                                    <div class="col-md-4">
+                                    <label for="bull-name">Bull Name</label>
+                                    <input type="text" class="form-control" id="bull-name" placeholder="Bull Name">
+                                    <p id="Err-element" style="font-size: 10px; color: red; font-weight: bold; letter-spacing: 1px;"></p>
+                                </div>
+                            </div>
+                        <div class="form-group row mb-1">
+                            <div class="col-md-4">
+                                <label for="injuction-name">Injuction Name</label>
+                                <input type="text" class="form-control" id="cow-name" placeholder="Injuction Name">
+                                <p id="Err-element" style="font-size: 10px; color: red; font-weight: bold; letter-spacing: 1px;"></p>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="ai-date">Ai Date</label>
+                                <input type="text" class="form-control" id="ai-date" placeholder="Ai Date">
+                                <p id="Err-element" style="font-size: 10px; color: red; font-weight: bold; letter-spacing: 1px;"></p>
+                            </div>  
+                            <div class="col-md-4">
+                                <label for="injuction-cost">Bull Name</label>
+                                <input type="text" class="form-control" id="injuction-cost" placeholder="Injuction Cost">
+                                <p id="Err-element" style="font-size: 10px; color: red; font-weight: bold; letter-spacing: 1px;"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+                <div class="form-group row m-1 mb-4 d-flex flex-row justify-content-between">
+                    <button type="button" class="btn btn-success" id="another-cow-btn">Add Another cow</button>
+                    <button type="button" class="btn btn-danger" id="delete-recent-cow">Remove</button>
+                </div>
+
+
+                <div class="form-group row m-2 mb-5 mt-3">
+                    <button class="btn btn-success" type="button" id="submit-btn">Submit</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="/js/header.component.js"></script>
+    <script src="../../public/js/add-user.js" type="module"></script>
+</body>
+</html>
