@@ -1,4 +1,4 @@
 /node_modules
 /backend/dist
-/backend/src/db/db
+/backend/src/db/
 /.env

@@ -1,32 +1,20 @@
-import express, {NextFunction, Request, Response} from "express";
-import adminRouter from "./routes/admin.route";
-import dotenv from "dotenv";
+import sqlite3 from "./db/sqlite3";
+import { app, PROTOCOL, HOST, PORT } from "./app";
 
-const app = express();
-dotenv.config(); 
+async function main() {
+  try {
+    await sqlite3.connect();
+    console.log("Sqlite3 database connected!")
+    await sqlite3.createTables();
 
-app.use(express.json());
-
-app.use("/api/v1", adminRouter);
-
-
-
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  const statusCode: number = err.statusCode || 500;
-  const message: string = err.message || "Internal server error.";
-  res.status(statusCode).json({
-    success: false,
-    statusCode: statusCode,
-    message: message
-  });
-});
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}!`);
+      console.log("URL: " + `${PROTOCOL}://${HOST}:${PORT}/` )
+    });
+  } catch(err: any) {
+    console.error("Startup Error: " + err.message);
+  }
+}
 
 
-
-const HOST = process.env.HOST || "localhost";
-const PROTOCOL = process.env.PROTOCOL || "http";
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}!`);
-  console.log("URL: " + `${PROTOCOL}://${HOST}:${PORT}/` )
-});
+main();
