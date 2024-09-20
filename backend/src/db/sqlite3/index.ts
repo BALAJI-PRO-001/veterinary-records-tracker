@@ -82,7 +82,7 @@ class Sqlite3 {
 
 
 
-  async select(sql: string, selectAll: boolean = false, ...values: any[]) {
+  async select(sql: string, selectAll: boolean, ...values: any[]): Promise<unknown> {
     return new Promise((resolve, reject) => {
       if (!this.db) {
         return reject(new Sqlite3Error("Database not connected."));
@@ -97,10 +97,46 @@ class Sqlite3 {
       }
       
       if (selectAll) {
-        return values.length > 0 ? this.db.all(sql, values, callback) : this.db.all(sql, callback);
+        return this.db.all(sql, values, callback);
       } else {
-        return values.length > 0 ? this.db.get(sql, values, callback) : this.db.get(sql, callback);
+        return this.db.get(sql, values, callback);
       }
+    });
+  }
+
+
+
+  async update(sql: string, ...values: any[]): Promise<void | Sqlite3Error> {
+    return new Promise((resolve, reject) => {
+      if (!this.db) {
+        return reject(new Sqlite3Error("Database not connected."));
+      }
+
+      this.db.run(sql, values, (err) => {
+        if (err) {
+          reject();
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+
+
+  async delete(sql: string, ...values: any[]): Promise<void | Sqlite3Error> {
+    return new Promise((resolve, reject) => {
+      if (!this.db) {
+        return reject(new Sqlite3Error("Database not connected."));
+      }
+
+      this.db.run(sql, values, (err) => {
+        if (err) {
+          reject(new Sqlite3Error(`${err.message} while executing query: "${sql}"`));
+        } else {
+          resolve();
+        }
+      });
     });
   }
 
