@@ -1,6 +1,7 @@
 import express, {NextFunction, Request, Response} from "express";
 import adminRouter from "./routes/admin.route";
 import pageRouter from "./routes/page.route";
+import { STATIC_FILE_PATH } from "./utils/constants";
 import dotenv from "dotenv";
 
 const app = express();
@@ -10,6 +11,8 @@ app.use(express.json());
 
 app.use("/api/v1", adminRouter);
 
+app.use(express.static(STATIC_FILE_PATH));
+app.use("/", pageRouter);
 
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
@@ -24,12 +27,9 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
 
 
 
-const HOST = process.env.HOST || "localhost";
-const PROTOCOL = process.env.PROTOCOL || "http";
 const PORT = process.env.PORT || 3000;
 
 
-
 export {
-  app, PROTOCOL, HOST, PORT
+  app, PORT
 };

@@ -1,4 +1,4 @@
 /node_modules
 /backend/dist
-/backend/src/db/
+/backend/src/db/sqlite3/db
 /.env
