@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 
 
-
 export async function login(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { email, password } = req.body;
