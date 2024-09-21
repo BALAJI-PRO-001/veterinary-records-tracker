@@ -76,8 +76,8 @@ BODY: {
   },
   cows: [
     {
-        cowName: <string>,
-        cowBreed: <string>,
+        name: <string>,
+        breed: <string>,
         bullName: <string>,
         injectionInfoAndAiDates: [
             {
@@ -130,8 +130,8 @@ Response (Request Based)
         cows: [
             {
               id: <cowId>,
-              cowName: <cowName>,
-              cowBreed: <cowBreed>,
+              name: <cowName>,
+              breed: <cowBreed>,
               bullName: <bullName>,
               injectionInfoAndAiDates: [
                 {
@@ -182,8 +182,8 @@ Response (Request Based)
         cows: [
             {
               id: <cowId>,
-              cowName: <cowName>,
-              cowBreed: <cowBreed>,
+              name: <cowName>,
+              breed: <cowBreed>,
               bullName: <bullName>,
               injectionInfoAndAiDates: [
                 {
@@ -247,8 +247,8 @@ METHOD: POST
 COOKIE: Admin cookie must 
 CONTENT-TYPE: application/json
 BODY: {
-  cowName: <string>,
-  cowBreed: <string>,
+  name: <string>,
+  breed: <string>,
   bullName: <string>,
   injectionInfoAndAiDates: [
     {
