@@ -131,23 +131,25 @@ async function getAllUsers(): Promise<User[]> {
 
 
 
-async function updateUserById(id: number, userDataToUpdate: UserDataToUpdate): Promise<void> {
+async function updateUserById(id: number, userDataToUpdate: UserDataToUpdate): Promise<User> {
   validateId(id);
+  console.log(userDataToUpdate);
 
   for (let [key, value] of Object.entries(userDataToUpdate)) {
     key = key.includes("phoneNumber") ? "phone_number" : key;
-    await sqlite3.update(queries.UPDATE_USER_RECORD_BY_USER_ID.replace("<column_name>", key), value, id);
+    const sql = queries.UPDATE_USER_RECORD_BY_ID.replace("<column_name>", key);
+    await sqlite3.update(sql, value, id);
   }
 
-  // const updatedUser = await sqlite3.select(queries.SELECT_USER_RECORD_BY_ID_SQL, false, id) as UserReccordStructureInDB;
-  // return {
-  //   id: updatedUser.id,
-  //   name: updatedUser.name,
-  //   phoneNumber: updatedUser.phone_number,
-  //   address: updatedUser.address, 
-  //   isCurrentUser: updatedUser.is_current_user === 1 ? true : false,
-  //   createdAt: updatedUser.date_and_time
-  // }
+  const updatedUser = await sqlite3.select(queries.SELECT_USER_RECORD_BY_ID_SQL, false, id) as UserReccordStructureInDB;
+  return {
+    id: updatedUser.id,
+    name: updatedUser.name,
+    phoneNumber: updatedUser.phone_number,
+    address: updatedUser.address, 
+    isCurrentUser: updatedUser.is_current_user === 1 ? true : false,
+    createdAt: updatedUser.date_and_time
+  }
 }
 
 
