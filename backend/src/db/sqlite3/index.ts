@@ -114,7 +114,7 @@ class Sqlite3 {
 
       this.db.run(sql, values, (err) => {
         if (err) {
-          reject();
+          reject(new Sqlite3Error(`${err.message} while executing query: "${sql}"`));
         } else {
           resolve();
         }

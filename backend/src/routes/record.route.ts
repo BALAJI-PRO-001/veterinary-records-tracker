@@ -1,30 +1,39 @@
 import express, { Request, Response, NextFunction } from "express";
 import User from "../models/user.model";
+import Cow from "../models/cow.model";
 
 const router = express.Router();
 
-interface RequestUserData {
+interface RequestData {
+  userId: number;
   name: string,
-  phoneNumber: number,
-  address: string
+  breed: string,
+  bullName: string,
+  injectionInfoAndAiDates: Array<{
+    name: string,
+    cost: number, 
+    date: string
+  }>
 }
 
 async function testApi(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    // const { name, phoneNumber, address } = req.body as unknown as RequestUserData;
-    // const newUser = await User.addNewUser({name, phoneNumber, address});
-    // console.log(newUser);
-    // const users = await User.getAllUsers();
-    // console.log(users);
-
-    const updatedUser = await User.updateUserById(6, {name: "Updated", phoneNumber: 1231253653});
-    console.log(updatedUser);
+    // const { name, breed, bullName, injectionInfoAndAiDates } = req.body as unknown as RequestData;
+    // const newCow = await Cow.addNewCow({
+    //   userId: 1,
+    //   name: name,
+    //   breed: breed,
+    //   bullName: bullName,
+    //   injectionInfoAndAiDates: injectionInfoAndAiDates
+    // });
+    // res.json(newCow);
+    const cows = await Cow.getAllCows();
   } catch(err) { 
     next(err);
   }
 }
 
-router.post("/user", testApi);
+router.post("/test", testApi);
 
 
 export default router;
