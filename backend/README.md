@@ -170,7 +170,7 @@ Response (Request Based)
   success: true,
   statusCode: 200,
   data: {
-    records: {
+    record: {
         user: {
               id: <userId>,
               name: <name>,
