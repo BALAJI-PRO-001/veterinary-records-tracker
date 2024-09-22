@@ -4,9 +4,17 @@ import {
   NewCow, 
   Cow, 
   CowInDB, 
-  InjectionInfoAndAiDates
+  InjectionInfoAndAiDates,
+  InjectionInfoAndAiDatesInDB
 } from "../utils/types";
 
+
+
+function validateId(id: number, name: "Cow" | "User") {
+  if (!id) {
+    throw new Error(`${name} id is null or undefined.`)
+  }
+}
 
 
 async function addNewCow(newCow: NewCow): Promise<Cow> {
@@ -27,6 +35,7 @@ async function addNewCow(newCow: NewCow): Promise<Cow> {
 
 
 async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDates[]): Promise<InjectionInfoAndAiDates[]> {
+  validateId(cowId, "Cow");
   for (let { name, cost, date } of injectionInfoAndAiDates) {
     await sqlite3.insert(queries.INSERT_INJECTION_INFO_AND_AI_DATES_RECORD_SQL, cowId, name, cost, date);
   }
@@ -42,15 +51,35 @@ async function getInjectionInfoAndAiDatesByCowId(cowId: number): Promise<Injecti
 
 
 
+async function getAllCows(): Promise<Cow[]> {
+  let cows = await sqlite3.select(queries.SELECT_ALL_COWS_RECORDS_SQL, true) as CowInDB[];
+  const injectionInfoAndAiDates = await sqlite3.select(queries.SELECT_ALL_INJECTION_INFO_AND_AI_DATES_RECORDS_WITH_COW_ID_SQL, true) as InjectionInfoAndAiDatesInDB[];
 
-// async function getAllCows(): Promise<Cow[]> {
-//   let cows = await sqlite3.select(queries.SELECT_ALL_COWS_RECORDS_SQL, true) as CowRecordStructureInDB[];
-//   const injectionInfoAndAiDates = await sqlite3.select(queries.SELECT_ALL_INJECTION_INFO_AND_AI_DATES_RECORDS_SQL, true);
+  const cowRecords: Cow[] = [];
+  for (let cow of cows) {
+    const cowInjectionInfoAndAiDates: InjectionInfoAndAiDates[] = injectionInfoAndAiDates
+      .filter(({cow_id}) => cow_id === cow.id)
+      .map(({id, name, cost, date}) => {
+          return {id, name, cost, date};
+      });
 
-// }
+    cowRecords.push({
+      id: cow.id,
+      userId: cow.user_id,
+      name: cow.name,
+      breed: cow.breed,
+      bullName: cow.bull_name,
+      injectionInfoAndAiDates: cowInjectionInfoAndAiDates,
+      createdAt: cow.date_and_time
+    });
+  }
+
+  return cowRecords;
+}
+
 
 
 export default {
   addNewCow,
-  // getAllCows
+  getAllCows,
 };

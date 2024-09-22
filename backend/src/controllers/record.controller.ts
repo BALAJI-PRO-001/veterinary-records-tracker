@@ -44,7 +44,13 @@ export async function createNewRecord(req: Request, res: Response, next: NextFun
 export async function getAllRecords(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const records = await Record.getAllRecords();
-    res.json(records);
+    res.status(200).json({
+      success: true,
+      length: records.length,
+      data: {
+        records: records
+      }
+    });
   } catch(err) {
     next(err);
   }

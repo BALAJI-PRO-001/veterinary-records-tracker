@@ -4,12 +4,12 @@ import {
   NewUser, 
   NewCow, 
   User as UserRecord, 
-  Cow as CowsRecords 
+  Cow as CowRecords, 
 } from "../utils/types";
 
 
 
-async function createNewRecord(user: NewUser, cows: NewCow[]): Promise<{user: UserRecord, cows: CowsRecords[]}> {
+async function createNewRecord(user: NewUser, cows: NewCow[]): Promise<{user: UserRecord, cows: CowRecords[]}> {
   const newUser = await User.addNewUser(user);
   const newCows = [];
   for (let cow of cows) {
@@ -41,11 +41,29 @@ async function isPhoneNumberAlreadyInUse(phoneNumber: number): Promise<boolean> 
 
 
 
-async function getAllRecords(): Promise<any> {
-  const user = await User.getAllUsers();
-  console.log(user);
-  return user;
+async function getAllRecords(): Promise<Array<{user: UserRecord, cows: CowRecords[]}>> {
+  const users = await User.getAllUsers();
+  const cows = await Cow.getAllCows();
+  const records: Array<{user: UserRecord, cows: CowRecords[]}> = [];
+
+  for (let user of users) {
+    const userCows: CowRecords[] = cows
+      .filter(({userId}) => userId === user.id)
+      .map(({id, name, breed, bullName, injectionInfoAndAiDates, createdAt}) => {
+        return {id, name, breed, bullName, injectionInfoAndAiDates, createdAt}
+      });
+
+    records.push({
+      user: user,
+      cows: userCows
+    });
+  }
+
+  return records;
 }
+
+
+
 
 export default {
   createNewRecord,

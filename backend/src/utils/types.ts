@@ -59,6 +59,16 @@ export interface InjectionInfoAndAiDates {
 
 
 
+export interface InjectionInfoAndAiDatesInDB {
+  id: number,
+  cow_id: number,
+  name: string,
+  cost: number,
+  date: string
+}
+
+
+
 export interface Cow {
   id: number,
   userId?: number,
