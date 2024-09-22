@@ -2,16 +2,19 @@ import express, {NextFunction, Request, Response} from "express";
 import adminRouter from "./routes/admin.route";
 import pageRouter from "./routes/page.route";
 import recordRouter from "./routes/record.route";
+import cookieParser from "cookie-parser";
 import { STATIC_FILE_PATH } from "./utils/constants";
+import verifyAdminAuthenticationToken from "./utils/verifyAdminAuthenticationToken";
 import dotenv from "dotenv";
 
 const app = express();
 dotenv.config(); 
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/api/v1", adminRouter);
-app.use("/api/v1", recordRouter);
+app.use("/api/v1", verifyAdminAuthenticationToken, recordRouter);
 
 app.use(express.static(STATIC_FILE_PATH));
 app.use("/", pageRouter);

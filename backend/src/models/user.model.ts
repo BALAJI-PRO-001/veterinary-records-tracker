@@ -1,46 +1,11 @@
 import sqlite3 from "../db/sqlite3"
 import queries from "../db/sqlite3/queries";
-
-
-
-interface NewUser {
-  name: string,
-  phoneNumber: number,
-  address: string
-}
-
-
-
-interface User {
-  id: number,
-  name: string,
-  phoneNumber: number,
-  address: string, 
-  isCurrentUser: boolean,
-  createdAt: string
-}
-
-
-
-interface UserDataToUpdate {
-  id?: number,
-  name?: string,
-  phoneNumber?: number,
-  address?: string, 
-  isCurrentUser?: boolean,
-  createdAt?: string
-}
-
-
-
-interface UserReccordStructureInDB {
-  id: number;
-  name: string;
-  phone_number: number;
-  address: string,
-  is_current_user: number;
-  date_and_time: string;
-}
+import { 
+ NewUser,
+ User,
+ UserInDB,
+ UserToUpdate
+} from "../utils/types";
 
 
 
@@ -63,7 +28,7 @@ function validateId(id: number): void {
 async function addNewUser(newUser: NewUser): Promise<User> {
   validatePhoneNumber(newUser.phoneNumber);
   await sqlite3.insert(queries.INSERT_USER_RECORD_SQL, newUser.name, newUser.phoneNumber, newUser.address);
-  const createdUser = await sqlite3.select(queries.SELECT_LAST_USER_RECORD_SQL, false) as UserReccordStructureInDB;
+  const createdUser = await sqlite3.select(queries.SELECT_LAST_USER_RECORD_SQL, false) as UserInDB;
 
   return {
     id: createdUser.id,
@@ -79,7 +44,7 @@ async function addNewUser(newUser: NewUser): Promise<User> {
 
 async function getUserByPhoneNumber(phoneNumber: number): Promise<User | null> {
   validatePhoneNumber(phoneNumber);
-  const user = await sqlite3.select(queries.SELECT_USER_RECORD_BY_PHONE_NUMBER_SQL, false, phoneNumber) as UserReccordStructureInDB;
+  const user = await sqlite3.select(queries.SELECT_USER_RECORD_BY_PHONE_NUMBER_SQL, false, phoneNumber) as UserInDB;
   if (!user) {
     return null;
   }
@@ -98,7 +63,7 @@ async function getUserByPhoneNumber(phoneNumber: number): Promise<User | null> {
 async function getUserById(id: number): Promise<User | null> {
   validateId(id);
 
-  const user = await sqlite3.select(queries.SELECT_USER_RECORD_BY_ID_SQL, false, id) as UserReccordStructureInDB;
+  const user = await sqlite3.select(queries.SELECT_USER_RECORD_BY_ID_SQL, false, id) as UserInDB;
   if (!user) {
     return null;
   }
@@ -115,7 +80,7 @@ async function getUserById(id: number): Promise<User | null> {
 
 
 async function getAllUsers(): Promise<User[]> {
-  const usersRecords = await sqlite3.select(queries.SELECT_ALL_USERS_RECORDS_SQL, true) as UserReccordStructureInDB[];
+  const usersRecords = await sqlite3.select(queries.SELECT_ALL_USERS_RECORDS_SQL, true) as UserInDB[];
   const users = usersRecords.map((user) => {
     return {
       id: user.id,
@@ -131,7 +96,7 @@ async function getAllUsers(): Promise<User[]> {
 
 
 
-async function updateUserById(id: number, userDataToUpdate: UserDataToUpdate): Promise<User> {
+async function updateUserById(id: number, userDataToUpdate: UserToUpdate): Promise<User> {
   validateId(id);
   console.log(userDataToUpdate);
 
@@ -141,7 +106,7 @@ async function updateUserById(id: number, userDataToUpdate: UserDataToUpdate): P
     await sqlite3.update(sql, value, id);
   }
 
-  const updatedUser = await sqlite3.select(queries.SELECT_USER_RECORD_BY_ID_SQL, false, id) as UserReccordStructureInDB;
+  const updatedUser = await sqlite3.select(queries.SELECT_USER_RECORD_BY_ID_SQL, false, id) as UserInDB;
   return {
     id: updatedUser.id,
     name: updatedUser.name,

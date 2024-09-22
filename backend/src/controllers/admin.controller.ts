@@ -8,11 +8,11 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
   try {
     const { email, password } = req.body;
     if (email !== process.env.ADMIN_EMAIL) {
-      return next(errorHandler(404, "Admin not found (Invalid Email)."));
+      return next(errorHandler(404, "Admin not found: Invalid email."));
     }
 
     if (!bcryptjs.compareSync(password, process.env.ADMIN_PASSWORD as string)) {
-      return next(errorHandler(401, "Unauthorized (Invalid password)."));
+      return next(errorHandler(401, "Unauthorized: Invalid password."));
     }
 
     const adminAccessToken = jwt.sign({email: process.env.ADMIN_EMAIL}, process.env.JWT_SECRET_KEY as string);
