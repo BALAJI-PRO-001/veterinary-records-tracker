@@ -85,10 +85,10 @@ BODY: {
               cost: <number>,
               date: <string>
             }, 
-            {}, {}, {} ......
+            {}, {}, {} ...... injectionInfoAndAiDates
         ]
     }, 
-    {}, {}, {}, .......
+    {}, {}, {}, ....... cows
   ]
 }
 
@@ -116,6 +116,7 @@ Response (Request Based)
 {
   success: true,
   statusCode: 200,
+  length: <number>
   data: {
     records: [
       {
