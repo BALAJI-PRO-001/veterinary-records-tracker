@@ -19,7 +19,7 @@ function validatePhoneNumber(phoneNumber: number): void {
 
 function validateId(id: number): void {
   if (!id) {
-    throw new Error("Id is null or undefined.");
+    throw new Error("User id is null or undefined.");
   }
 }
 

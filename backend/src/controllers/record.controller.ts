@@ -26,7 +26,7 @@ export async function createNewRecord(req: Request, res: Response, next: NextFun
       return next(errorHandler(409, "Duplicate Key: Phone number is already in use by another record."));
     }
 
-    const newRecord = await Record.createNewRecord(user, cows);
+    const newRecord = await Record.createNewRecord({user: user, cows: cows});
     res.status(201).json({
       success: true,
       statusCode: 201,
@@ -50,6 +50,79 @@ export async function getAllRecords(req: Request, res: Response, next: NextFunct
       data: {
         records: records
       }
+    });
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+
+export async function getRecordByUserId(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { userId } = req.params;
+    const isRecordExists = await Record.exists(Number(userId));
+    if (!isRecordExists) {
+      return next(errorHandler(409, "Record not found for the specified user ID: " + userId));
+    }
+
+    const record = await Record.getRecordByUserId(Number(userId));
+    res.status(200).json({
+      success: true,
+      statusCode: 200,
+      data: {
+        record: record
+      }
+    });
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+
+export async function deleteAllRecords(req: Request, res: Response, next: NextFunction) {
+  try {
+    await Record.deleteAllRecords();
+    res.status(204).json({});
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+
+export async function deleteRecord(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req.params;
+    const isRecordExists = await Record.exists(Number(userId));
+    if (!isRecordExists) {
+      return next(errorHandler(404, "Record not found for the specified user ID: " + userId));
+    }
+    await Record.deleteRecordByUserId(Number(userId));
+    res.status(204).json({});
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+
+export async function addNewCowToUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req.params;
+    const isRecordExists = await Record.exists(Number(userId));
+    if (!isRecordExists) {
+      return next(errorHandler(404, "Record not found for the specified user ID: " + userId));
+    }
+
+    validateCowRequiredData([req.body]);
+
+    await Record.addNewCowToUser(Number(userId), req.body);
+    res.status(201).json({
+      success: true,
+      statusCode: 201,
+      message: `A new cow record successfully created for user ID: ${userId}`
     });
   } catch(err) {
     next(err);

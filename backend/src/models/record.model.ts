@@ -1,18 +1,19 @@
 import User from "../models/user.model";
 import Cow from "../models/cow.model";
-import { 
-  NewUser, 
-  NewCow, 
-  User as UserRecord, 
-  Cow as CowRecords, 
+import {  
+  User as UserRecord,
+  Cow as CowRecord,
+  NewCow,
+  NewRecord,
+  Record,
 } from "../utils/types";
 
 
 
-async function createNewRecord(user: NewUser, cows: NewCow[]): Promise<{user: UserRecord, cows: CowRecords[]}> {
-  const newUser = await User.addNewUser(user);
+async function createNewRecord(record: NewRecord): Promise<Record> {
+  const newUser = await User.addNewUser(record.user);
   const newCows = [];
-  for (let cow of cows) {
+  for (let cow of record.cows) {
     const newCow = await Cow.addNewCow({
       userId: newUser.id,
       name: cow.name,
@@ -25,7 +26,8 @@ async function createNewRecord(user: NewUser, cows: NewCow[]): Promise<{user: Us
   
   return {
     user: newUser,
-    cows: newCows
+    cows: newCows,
+    createdAt: newUser.createdAt
   };
 }
 
@@ -33,21 +35,25 @@ async function createNewRecord(user: NewUser, cows: NewCow[]): Promise<{user: Us
 
 async function isPhoneNumberAlreadyInUse(phoneNumber: number): Promise<boolean> {
   const user = await User.getUserByPhoneNumber(phoneNumber);
-  if (user) {
-    return true;
-  }
-  return false;
+  return user ? true : false;
 }
 
 
 
-async function getAllRecords(): Promise<Array<{user: UserRecord, cows: CowRecords[]}>> {
+async function exists(userId: number) {
+  const user = await User.getUserById(userId);
+  return user ? true : false;
+}
+
+
+
+async function getAllRecords(): Promise<Array<Record>> {
   const users = await User.getAllUsers();
   const cows = await Cow.getAllCows();
-  const records: Array<{user: UserRecord, cows: CowRecords[]}> = [];
+  const records: Array<Record> = [];
 
   for (let user of users) {
-    const userCows: CowRecords[] = cows
+    const userCows: CowRecord[] = cows
       .filter(({userId}) => userId === user.id)
       .map(({id, name, breed, bullName, injectionInfoAndAiDates, createdAt}) => {
         return {id, name, breed, bullName, injectionInfoAndAiDates, createdAt}
@@ -55,7 +61,8 @@ async function getAllRecords(): Promise<Array<{user: UserRecord, cows: CowRecord
 
     records.push({
       user: user,
-      cows: userCows
+      cows: userCows,
+      createdAt: user.createdAt
     });
   }
 
@@ -64,11 +71,52 @@ async function getAllRecords(): Promise<Array<{user: UserRecord, cows: CowRecord
 
 
 
+async function getRecordByUserId(userId: number): Promise<Record> {
+  const user = await User.getUserById(userId) as UserRecord;
+  const cows = await Cow.getCowsByUserId(userId);
+  return {
+    user: user,
+    cows: cows,
+    createdAt: user.createdAt
+  };
+}
+
+
+
+async function deleteAllRecords(): Promise<void> {
+  await User.deleteAllUsers();
+  await Cow.deleteAllCows();
+}
+
+
+async function deleteRecordByUserId(userId: number): Promise<void> {
+  await User.deleteUserById(userId);
+  await Cow.deleteCowsByUserId(userId);
+}
+
+
+
+async function addNewCowToUser(userId: number, newCow: NewCow): Promise<CowRecord> {
+  return await Cow.addNewCow({
+    userId: userId,
+    name: newCow.name,
+    breed: newCow.breed,
+    bullName: newCow.bullName,
+    injectionInfoAndAiDates: newCow.injectionInfoAndAiDates
+  });
+}
+
+
 
 export default {
   createNewRecord,
   isPhoneNumberAlreadyInUse,
-  getAllRecords
+  getAllRecords,
+  getRecordByUserId,
+  exists,
+  deleteAllRecords,
+  deleteRecordByUserId,
+  addNewCowToUser
 };
 
 

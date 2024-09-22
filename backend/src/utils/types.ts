@@ -89,3 +89,18 @@ export interface CowInDB {
   bull_name: string
   date_and_time: string
 }
+
+
+
+export interface NewRecord {
+  user: NewUser,
+  cows: NewCow[]
+}
+
+
+
+export interface Record {
+  user: User,
+  cows: Cow[],
+  createdAt: string
+}

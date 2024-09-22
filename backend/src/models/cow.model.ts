@@ -51,11 +51,18 @@ async function getInjectionInfoAndAiDatesByCowId(cowId: number): Promise<Injecti
 
 
 
+async function deleteInjectionInfoAndAiDatesByCowId(cowId: number): Promise<void> {
+  validateId(cowId, "Cow");
+  await sqlite3.delete(queries.DELETE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_COW_ID_SQL, cowId);
+}
+
+
+
 async function getAllCows(): Promise<Cow[]> {
   let cows = await sqlite3.select(queries.SELECT_ALL_COWS_RECORDS_SQL, true) as CowInDB[];
   const injectionInfoAndAiDates = await sqlite3.select(queries.SELECT_ALL_INJECTION_INFO_AND_AI_DATES_RECORDS_WITH_COW_ID_SQL, true) as InjectionInfoAndAiDatesInDB[];
 
-  const cowRecords: Cow[] = [];
+  const cowsRecords: Cow[] = [];
   for (let cow of cows) {
     const cowInjectionInfoAndAiDates: InjectionInfoAndAiDates[] = injectionInfoAndAiDates
       .filter(({cow_id}) => cow_id === cow.id)
@@ -63,7 +70,7 @@ async function getAllCows(): Promise<Cow[]> {
           return {id, name, cost, date};
       });
 
-    cowRecords.push({
+    cowsRecords.push({
       id: cow.id,
       userId: cow.user_id,
       name: cow.name,
@@ -74,12 +81,52 @@ async function getAllCows(): Promise<Cow[]> {
     });
   }
 
-  return cowRecords;
+  return cowsRecords;
 }
 
+
+
+async function getCowsByUserId(userId: number): Promise<Cow[]> {
+  let cows = await sqlite3.select(queries.SELECT_COWS_RECORDS_BY_USER_ID_SQL, true, userId) as CowInDB[];
+  const cowsRecords: Cow[] = [];
+  for (let cow of cows) {
+    const injectionInfoAndAiDates = await getInjectionInfoAndAiDatesByCowId(cow.id);
+    cowsRecords.push({
+      id: cow.id,
+      name: cow.name,
+      breed: cow.breed,
+      bullName: cow.bull_name,
+      injectionInfoAndAiDates: injectionInfoAndAiDates,
+      createdAt: cow.date_and_time
+    });
+  }
+
+  return cowsRecords;
+}
+
+
+
+async function deleteAllCows(): Promise<void> {
+  await sqlite3.delete(queries.DELETE_ALL_COWS_RECORDS_SQL);
+  await sqlite3.delete(queries.DELETE_ALL_INJECTION_INFO_AND_AI_DATES_RECORDS_SQL);
+}
+
+
+
+async function deleteCowsByUserId(userId: number): Promise<void> {
+  validateId(userId, "User");
+  const cows = await getCowsByUserId(userId);
+  for (let cow of cows) {
+    await deleteInjectionInfoAndAiDatesByCowId(cow.id);
+  }
+  await sqlite3.delete(queries.DELETE_COWS_RECORDS_BY_USER_ID_SQL, userId);
+}
 
 
 export default {
   addNewCow,
   getAllCows,
+  getCowsByUserId,
+  deleteAllCows,
+  deleteCowsByUserId,
 };
