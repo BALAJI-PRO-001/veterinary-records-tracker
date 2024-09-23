@@ -21,6 +21,7 @@ export default function validateCowRequiredData(cows: NewCow[]): ValidationError
       }
     }
 
+
     for (let [index, { name, cost, date }] of Object.entries(cow.injectionInfoAndAiDates)) {
       if (!name || !cost || !date) {
         const missingField = !name ? 'injection name' : !cost ? 'injection cost' : 'ai date';

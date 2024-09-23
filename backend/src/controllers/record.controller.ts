@@ -61,9 +61,9 @@ export async function getAllRecords(req: Request, res: Response, next: NextFunct
 export async function getRecordByUserId(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId } = req.params;
-    const isRecordExists = await Record.exists(Number(userId));
-    if (!isRecordExists) {
-      return next(errorHandler(409, "Record not found for the specified user ID: " + userId));
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "Record not found for the specified user id: " + userId));
     }
 
     const record = await Record.getRecordByUserId(Number(userId));
@@ -95,9 +95,9 @@ export async function deleteAllRecords(req: Request, res: Response, next: NextFu
 export async function deleteRecord(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req.params;
-    const isRecordExists = await Record.exists(Number(userId));
-    if (!isRecordExists) {
-      return next(errorHandler(404, "Record not found for the specified user ID: " + userId));
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "Record not found for the specified user id: " + userId));
     }
     await Record.deleteRecordByUserId(Number(userId));
     res.status(204).json({});
@@ -111,9 +111,9 @@ export async function deleteRecord(req: Request, res: Response, next: NextFuncti
 export async function addNewCowToUser(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req.params;
-    const isRecordExists = await Record.exists(Number(userId));
+    const isRecordExists = await Record.hasUserRecord(Number(userId));
     if (!isRecordExists) {
-      return next(errorHandler(404, "Record not found for the specified user ID: " + userId));
+      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
     }
 
     validateCowRequiredData([req.body]);
@@ -122,8 +122,30 @@ export async function addNewCowToUser(req: Request, res: Response, next: NextFun
     res.status(201).json({
       success: true,
       statusCode: 201,
-      message: `A new cow record successfully created for user ID: ${userId}`
+      message: `A new cow record successfully created for user id: ${userId}`
     });
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+
+export async function deleteCowFromUser(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { userId, cowId } = req.params;
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
+    }
+
+    const isCowRecordAvailable = await Record.hasCowRecord(Number(cowId));
+    if (!isCowRecordAvailable) {
+      return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
+    }
+
+    await Record.deleteCowFromUser(Number(cowId));
+    res.status(204).json({});
   } catch(err) {
     next(err);
   }

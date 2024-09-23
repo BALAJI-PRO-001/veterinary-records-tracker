@@ -106,6 +106,26 @@ async function getCowsByUserId(userId: number): Promise<Cow[]> {
 
 
 
+async function getCowById(id: number): Promise<Cow | null> {
+  validateId(id, "Cow");
+  const cow = await sqlite3.select(queries.SELECT_COW_RECORD_BY_ID, false, id) as CowInDB;
+  if (!cow) {
+    return null;
+  }
+
+  const injectionInfoAndAiDates = await getInjectionInfoAndAiDatesByCowId(id);
+  return {
+    id: cow.id,
+    name: cow.name,
+    breed: cow.breed,
+    bullName: cow.bull_name,
+    injectionInfoAndAiDates: injectionInfoAndAiDates,
+    createdAt: cow.date_and_time
+  }
+}
+
+
+
 async function deleteAllCows(): Promise<void> {
   await sqlite3.delete(queries.DELETE_ALL_COWS_RECORDS_SQL);
   await sqlite3.delete(queries.DELETE_ALL_INJECTION_INFO_AND_AI_DATES_RECORDS_SQL);
@@ -123,10 +143,21 @@ async function deleteCowsByUserId(userId: number): Promise<void> {
 }
 
 
+
+async function deleteCowById(id: number) {
+  validateId(id, "Cow");
+  await sqlite3.delete(queries.DELETE_COW_RECORD_BY_ID_SQL, id);
+  await deleteInjectionInfoAndAiDatesByCowId(id);
+}
+
+
+
 export default {
   addNewCow,
   getAllCows,
+  getCowById,
   getCowsByUserId,
   deleteAllCows,
+  deleteCowById,
   deleteCowsByUserId,
 };

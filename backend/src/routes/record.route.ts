@@ -5,7 +5,8 @@ import {
   getRecordByUserId,
   deleteAllRecords,
   deleteRecord,
-  addNewCowToUser
+  addNewCowToUser,
+  deleteCowFromUser
 } from "../controllers/record.controller";
 
 
@@ -18,7 +19,8 @@ router.get("/records/all", getAllRecords)
       .get("/records/:userId", getRecordByUserId);
 
 router.delete("/records/all", deleteAllRecords)
-      .delete("/records/:userId", deleteRecord);
+      .delete("/records/:userId", deleteRecord)
+      .delete("/records/:userId/cows/:cowId", deleteCowFromUser);
 
 
 export default router;

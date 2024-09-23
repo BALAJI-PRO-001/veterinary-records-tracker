@@ -40,11 +40,17 @@ async function isPhoneNumberAlreadyInUse(phoneNumber: number): Promise<boolean> 
 
 
 
-async function exists(userId: number) {
+async function hasUserRecord(userId: number): Promise<boolean> {
   const user = await User.getUserById(userId);
   return user ? true : false;
 }
 
+
+
+async function hasCowRecord(cowId: number) {
+  const cow = await Cow.getCowById(cowId);
+  return cow ? true : false
+}
 
 
 async function getAllRecords(): Promise<Array<Record>> {
@@ -108,15 +114,21 @@ async function addNewCowToUser(userId: number, newCow: NewCow): Promise<CowRecor
 
 
 
+async function deleteCowFromUser(cowId: number) {
+  await Cow.deleteCowById(cowId);
+}
+
+
 export default {
   createNewRecord,
   isPhoneNumberAlreadyInUse,
   getAllRecords,
   getRecordByUserId,
-  exists,
+  hasUserRecord, hasCowRecord,
   deleteAllRecords,
   deleteRecordByUserId,
-  addNewCowToUser
+  addNewCowToUser,
+  deleteCowFromUser
 };
 
 
