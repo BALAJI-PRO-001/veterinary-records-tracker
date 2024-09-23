@@ -54,6 +54,14 @@ async function hasCowRecord(cowId: number) {
 }
 
 
+
+async function hasInjectionInfoAndAiDatesRecord(id: number): Promise<boolean> {
+  const injectionInfoAndAiDates = await Cow.getInjectionInfoAndAiDatesById(id);
+  return injectionInfoAndAiDates ? true : false;
+}
+
+
+
 async function getAllRecords(): Promise<Array<Record>> {
   const users = await User.getAllUsers();
   const cows = await Cow.getAllCows();
@@ -128,17 +136,25 @@ async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAn
 
 
 
+async function removeInjectionInfoAndAiDatesFromCow(id: number) {
+  await Cow.deleteInjectionInfoAndAiDatesById(id);
+}
+
+
+
 export default {
   createNewRecord,
   isPhoneNumberAlreadyInUse,
   getAllRecords,
   getRecordByUserId,
   hasUserRecord, hasCowRecord,
+  hasInjectionInfoAndAiDatesRecord,
   deleteAllRecords,
   deleteRecordByUserId,
   addNewCowToUser,
   deleteCowFromUser,
-  addNewInjectionInfoAndAiDatesToCow
+  addNewInjectionInfoAndAiDatesToCow,
+  removeInjectionInfoAndAiDatesFromCow
 };
 
 

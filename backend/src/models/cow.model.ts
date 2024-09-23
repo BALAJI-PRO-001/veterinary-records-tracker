@@ -10,7 +10,7 @@ import {
 
 
 
-function validateId(id: number, name: "Cow" | "User") {
+function validateId(id: number, name: "Cow" | "User" | "Injection info and ai dates") {
   if (!id) {
     throw new Error(`${name} id is null or undefined.`)
   }
@@ -46,7 +46,16 @@ async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAn
 
 
 async function getInjectionInfoAndAiDatesByCowId(cowId: number): Promise<InjectionInfoAndAiDates[]> {
+  validateId(cowId, "Cow");
   return await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_COW_ID_SQL, true, cowId) as InjectionInfoAndAiDates[];
+}
+
+
+
+async function getInjectionInfoAndAiDatesById(id: number): Promise<InjectionInfoAndAiDates | null> {
+  validateId(id, "Injection info and ai dates");
+  const injectionInfoAndAiDates =  await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL, false, id) as InjectionInfoAndAiDates;
+  return injectionInfoAndAiDates ? injectionInfoAndAiDates : null;
 }
 
 
@@ -54,6 +63,13 @@ async function getInjectionInfoAndAiDatesByCowId(cowId: number): Promise<Injecti
 async function deleteInjectionInfoAndAiDatesByCowId(cowId: number): Promise<void> {
   validateId(cowId, "Cow");
   await sqlite3.delete(queries.DELETE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_COW_ID_SQL, cowId);
+}
+
+
+
+async function deleteInjectionInfoAndAiDatesById(id: number) {
+  validateId(id, "Injection info and ai dates");
+  await sqlite3.delete(queries.DELETE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL, id);
 }
 
 
@@ -161,5 +177,7 @@ export default {
   deleteAllCows,
   deleteCowById,
   deleteCowsByUserId,
-  addNewInjectionInfoAndAiDatesToCow
+  addNewInjectionInfoAndAiDatesToCow,
+  getInjectionInfoAndAiDatesById,
+  deleteInjectionInfoAndAiDatesById
 };

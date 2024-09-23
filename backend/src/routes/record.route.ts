@@ -7,7 +7,8 @@ import {
   deleteRecord,
   addNewCowToUser,
   deleteCowFromUser,
-  addNewInjectionInfoAndAiDatesToCow
+  addNewInjectionInfoAndAiDatesToCow,
+  removeInjectionInfoAndAiDatesFromCow
 } from "../controllers/record.controller";
 
 
@@ -22,7 +23,8 @@ router.get("/records/all", getAllRecords)
 
 router.delete("/records/all", deleteAllRecords)
       .delete("/records/:userId", deleteRecord)
-      .delete("/records/:userId/cows/:cowId", deleteCowFromUser);
+      .delete("/records/:userId/cows/:cowId", deleteCowFromUser)
+      .delete("/records/:userId/cows/:cowId/inject-info-ai-dates/:id", removeInjectionInfoAndAiDatesFromCow);
 
 
 export default router;

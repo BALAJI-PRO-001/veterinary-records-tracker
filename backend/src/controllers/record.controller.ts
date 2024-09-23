@@ -82,7 +82,7 @@ export async function getRecordByUserId(req: Request, res: Response, next: NextF
 
 
 
-export async function deleteAllRecords(req: Request, res: Response, next: NextFunction) {
+export async function deleteAllRecords(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     await Record.deleteAllRecords();
     res.status(204).json({});
@@ -93,7 +93,7 @@ export async function deleteAllRecords(req: Request, res: Response, next: NextFu
 
 
 
-export async function deleteRecord(req: Request, res: Response, next: NextFunction) {
+export async function deleteRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId } = req.params;
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
@@ -109,7 +109,7 @@ export async function deleteRecord(req: Request, res: Response, next: NextFuncti
 
 
 
-export async function addNewCowToUser(req: Request, res: Response, next: NextFunction) {
+export async function addNewCowToUser(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId } = req.params;
     const isRecordExists = await Record.hasUserRecord(Number(userId));
@@ -132,7 +132,7 @@ export async function addNewCowToUser(req: Request, res: Response, next: NextFun
 
 
 
-export async function deleteCowFromUser(req: Request, res: Response, next: NextFunction) {
+export async function deleteCowFromUser(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId, cowId } = req.params;
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
@@ -154,7 +154,7 @@ export async function deleteCowFromUser(req: Request, res: Response, next: NextF
 
 
 
-export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Response, next: NextFunction) {
+export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId, cowId } = req.params;
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
@@ -175,6 +175,33 @@ export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Resp
       statusCode: 201,
       message: `New injection info and AI dates have been successfully created for cow id: ${cowId}.`
     });
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+
+export async function removeInjectionInfoAndAiDatesFromCow(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { userId, cowId, id } = req.params;
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
+    }
+
+    const isCowRecordAvailable = await Record.hasCowRecord(Number(cowId));
+    if (!isCowRecordAvailable) {
+      return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
+    }
+
+    const isInjectionInfoAndAiDatesRecordAvailable = await Record.hasInjectionInfoAndAiDatesRecord(Number(id));
+    if (!isInjectionInfoAndAiDatesRecordAvailable) {
+      return next(errorHandler(404, "Injection info and ai dates record not found for the specific id: " + id));
+    }
+
+    await Record.removeInjectionInfoAndAiDatesFromCow(Number(id));
+    res.status(204).json({});
   } catch(err) {
     next(err);
   }
