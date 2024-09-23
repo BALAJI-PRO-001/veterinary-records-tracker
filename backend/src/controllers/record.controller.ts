@@ -3,6 +3,7 @@ import Record from "../models/record.model";
 import errorHandler from "../utils/errorHandler";
 import validateUserRequiredData from "../utils/validateUserRequiredData";
 import validateCowRequiredData from "../utils/validateCowRequiredData";
+import validateInjectionInfoAndAiDatesRequiredData from "../utils/validateInjectionInfoAndAiDatesRequiredData";
 
 
 
@@ -146,6 +147,34 @@ export async function deleteCowFromUser(req: Request, res: Response, next: NextF
 
     await Record.deleteCowFromUser(Number(cowId));
     res.status(204).json({});
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+
+export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { userId, cowId } = req.params;
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
+    }
+
+    const isCowRecordAvailable = await Record.hasCowRecord(Number(cowId));
+    if (!isCowRecordAvailable) {
+      return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
+    }
+
+    validateInjectionInfoAndAiDatesRequiredData(req.body);
+
+    await Record.addNewInjectionInfoAndAiDatesToCow(Number(cowId), req.body);
+    res.status(201).json({
+      success: true,
+      statusCode: 201,
+      message: `New injection info and AI dates have been successfully created for cow id: ${cowId}.`
+    });
   } catch(err) {
     next(err);
   }

@@ -6,6 +6,7 @@ import {
   NewCow,
   NewRecord,
   Record,
+  InjectionInfoAndAiDates,
 } from "../utils/types";
 
 
@@ -119,6 +120,14 @@ async function deleteCowFromUser(cowId: number) {
 }
 
 
+
+
+async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDates): Promise<void> {
+   await Cow.addNewInjectionInfoAndAiDatesToCow(cowId, [injectionInfoAndAiDates]);
+}
+
+
+
 export default {
   createNewRecord,
   isPhoneNumberAlreadyInUse,
@@ -128,7 +137,8 @@ export default {
   deleteAllRecords,
   deleteRecordByUserId,
   addNewCowToUser,
-  deleteCowFromUser
+  deleteCowFromUser,
+  addNewInjectionInfoAndAiDatesToCow
 };
 
 

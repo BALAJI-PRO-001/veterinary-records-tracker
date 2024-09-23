@@ -152,6 +152,7 @@ async function deleteCowById(id: number) {
 
 
 
+
 export default {
   addNewCow,
   getAllCows,
@@ -160,4 +161,5 @@ export default {
   deleteAllCows,
   deleteCowById,
   deleteCowsByUserId,
+  addNewInjectionInfoAndAiDatesToCow
 };

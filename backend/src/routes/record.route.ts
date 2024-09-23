@@ -6,14 +6,16 @@ import {
   deleteAllRecords,
   deleteRecord,
   addNewCowToUser,
-  deleteCowFromUser
+  deleteCowFromUser,
+  addNewInjectionInfoAndAiDatesToCow
 } from "../controllers/record.controller";
 
 
 const router = express.Router();
 
 router.post("/records", createNewRecord)
-      .post("/records/:userId/cows", addNewCowToUser);
+      .post("/records/:userId/cows", addNewCowToUser)
+      .post("/records/:userId/cows/:cowId/inject-info-ai-dates", addNewInjectionInfoAndAiDatesToCow);
 
 router.get("/records/all", getAllRecords)
       .get("/records/:userId", getRecordByUserId);
