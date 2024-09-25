@@ -2,3 +2,5 @@
 /backend/dist
 /backend/src/db/sqlite3/db
 /.env
+__tests__/unit/sqlite3/db/database.db
+appArch.drawio

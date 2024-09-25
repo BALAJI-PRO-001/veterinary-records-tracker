@@ -11,7 +11,7 @@ class Sqlite3Error extends Error {
 
 
 class Sqlite3 {
-  db: sqlite3.Database | null;
+  private db: sqlite3.Database | null;
 
   constructor() {
     this.db = null;
