@@ -8,7 +8,8 @@ import {
   addNewCowToUser,
   deleteCowFromUser,
   addNewInjectionInfoAndAiDatesToCow,
-  removeInjectionInfoAndAiDatesFromCow
+  removeInjectionInfoAndAiDatesFromCow,
+  updateRecord
 } from "../controllers/record.controller";
 
 
@@ -20,6 +21,8 @@ router.post("/records", createNewRecord)
 
 router.get("/records/all", getAllRecords)
       .get("/records/:userId", getRecordByUserId);
+
+router.patch("/records/:userId", updateRecord);
 
 router.delete("/records/all", deleteAllRecords)
       .delete("/records/:userId", deleteRecord)

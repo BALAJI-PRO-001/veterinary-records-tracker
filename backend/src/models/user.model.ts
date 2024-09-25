@@ -98,7 +98,9 @@ async function getAllUsers(): Promise<User[]> {
 
 async function updateUserById(id: number, userDataToUpdate: UserToUpdate): Promise<User> {
   validateId(id);
-  console.log(userDataToUpdate);
+  if (userDataToUpdate.phoneNumber) {
+    validatePhoneNumber(userDataToUpdate.phoneNumber);
+  }
 
   for (let [key, value] of Object.entries(userDataToUpdate)) {
     key = key.includes("phoneNumber") ? "phone_number" : key;

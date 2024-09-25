@@ -5,7 +5,8 @@ import {
   Cow, 
   CowInDB, 
   InjectionInfoAndAiDates,
-  InjectionInfoAndAiDatesInDB
+  InjectionInfoAndAiDatesInDB,
+  CowToUpdate
 } from "../utils/types";
 
 
@@ -168,6 +169,23 @@ async function deleteCowById(id: number) {
 
 
 
+async function updateCowById(id: number, cowDataToUpdate: CowToUpdate): Promise<Cow> {
+  validateId(id, "Cow");
+
+  for (let [key, value] of Object.entries(cowDataToUpdate)) {
+    if (key === "id" || key === "injectionInfoAndAiDates") {
+      continue;
+    }
+
+    key = key === "bullName" ? "bull_name" : key;
+    const sql = queries.UPDATE_COW_RECORD_BY_ID.replace("<column_name>", key);
+    await sqlite3.update(sql, value, id);
+  }
+
+  return await getCowById(id) as Cow;
+}
+
+
 
 export default {
   addNewCow,
@@ -179,5 +197,6 @@ export default {
   deleteCowsByUserId,
   addNewInjectionInfoAndAiDatesToCow,
   getInjectionInfoAndAiDatesById,
-  deleteInjectionInfoAndAiDatesById
+  deleteInjectionInfoAndAiDatesById,
+  updateCowById
 };

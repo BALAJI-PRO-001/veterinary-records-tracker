@@ -206,3 +206,42 @@ export async function removeInjectionInfoAndAiDatesFromCow(req: Request, res: Re
     next(err);
   }
 }
+
+
+
+export async function updateRecord(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { userId } = req.params;
+    const isRecordExists = await Record.hasUserRecord(Number(userId));
+    if (!isRecordExists) {
+      return next(errorHandler(404, "Record not found for the specified user id: " + userId));
+    }
+
+    const { user, cows } = req.body;
+
+    if (user && user.id) {
+      return next(errorHandler(400, "Bad Request: Cannot update user id."));
+    }
+    
+    if (cows) {
+      for (let cow of cows) {
+        const isCowRecordAvailable = await Record.hasCowRecord(cow.id);
+        if (!isCowRecordAvailable) {
+          return next(errorHandler(404, "Cow record not found for the specific cow id: " + cow.id));
+        }
+      }
+    }
+
+    const updatedRecord = await Record.updateRecord({user: {id: userId, ...user}, cows: cows});
+
+    res.status(200).json({
+      success: true,
+      statusCode: 200,
+      data: {
+        record: updatedRecord
+      }
+    });
+  } catch(err) {
+    next(err);
+  }
+}

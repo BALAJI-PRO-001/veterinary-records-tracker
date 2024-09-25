@@ -7,6 +7,7 @@ import {
   NewRecord,
   Record,
   InjectionInfoAndAiDates,
+  RecordToUpdate,
 } from "../utils/types";
 
 
@@ -142,6 +143,29 @@ async function removeInjectionInfoAndAiDatesFromCow(id: number) {
 
 
 
+async function updateRecord(record: RecordToUpdate): Promise<Record> {
+  let updatedUser: UserRecord | null = null;
+  if (record.user) {
+    updatedUser = await User.updateUserById(Number(record.user.id), {...record.user});
+  }
+
+  const updatedCows = [];
+  if (record.cows) {
+    for (let cow of record.cows) {
+      const updatedCow = await Cow.updateCowById(cow.id, {...cow});
+      updatedCows.push(updatedCow);
+    }
+  }
+
+  return {
+    user: updatedUser as UserRecord,
+    cows: updatedCows,
+    createdAt: updatedUser?.createdAt!
+  }
+}
+
+
+
 export default {
   createNewRecord,
   isPhoneNumberAlreadyInUse,
@@ -154,7 +178,8 @@ export default {
   addNewCowToUser,
   deleteCowFromUser,
   addNewInjectionInfoAndAiDatesToCow,
-  removeInjectionInfoAndAiDatesFromCow
+  removeInjectionInfoAndAiDatesFromCow,
+  updateRecord
 };
 
 

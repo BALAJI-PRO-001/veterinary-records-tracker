@@ -92,6 +92,16 @@ export interface CowInDB {
 
 
 
+export interface CowToUpdate {
+  id: number,
+  name?: string,
+  breed?: string, 
+  bullName?: string,
+  injectionInfoAndAiDates?: InjectionInfoAndAiDates[]
+}
+
+
+
 export interface NewRecord {
   user: NewUser,
   cows: NewCow[]
@@ -103,4 +113,11 @@ export interface Record {
   user: User,
   cows: Cow[],
   createdAt: string
+}
+
+
+
+export interface RecordToUpdate {
+  user?: UserToUpdate,
+  cows?: CowToUpdate[]
 }
