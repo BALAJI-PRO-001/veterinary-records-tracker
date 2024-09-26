@@ -63,6 +63,10 @@ async function getUserByPhoneNumber(phoneNumber: number): Promise<User | null> {
 async function getUserById(id: number): Promise<User | null> {
   validateId(id);
 
+  if (id < 0) {
+    throw new Error("Id must be positive number.");
+  }
+
   const user = await sqlite3.select(queries.SELECT_USER_RECORD_BY_ID_SQL, false, id) as UserInDB;
   if (!user) {
     return null;
