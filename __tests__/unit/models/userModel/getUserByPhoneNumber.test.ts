@@ -15,14 +15,14 @@ describe("GET USER RECORD BY PHONE NUMBER TESTS", () => {
   });
 
   test("Test 2 (Fetch user record using invalid phone number)", async () => {
-    const res = await User.getUserByPhoneNumber(1231231239);
-    expect(res).toBeNull();
+    const user = await User.getUserByPhoneNumber(1231231239);
+    expect(user).toBeNull();
   });
 
   test("Test 3 (Fetch user record using valid phone number)", async () => {
-    const res = await User.getUserByPhoneNumber(1231231233);
-    expect(Object.keys(res!)).toEqual(["id", "name", "phoneNumber", "address", "isCurrentUser", "createdAt"]);
-    expect(res).not.toBeNull();
+    const user = await User.getUserByPhoneNumber(1231231233);
+    expect(Object.keys(user!)).toEqual(["id", "name", "phoneNumber", "address", "isCurrentUser", "createdAt"]);
+    expect(user).not.toBeNull();
   });
 
   test("Test 4 (Inject random phone number)", async () => {
