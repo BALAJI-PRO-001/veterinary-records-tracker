@@ -103,6 +103,10 @@ async function getAllUsers(): Promise<User[]> {
 async function updateUserById(id: number, userDataToUpdate: UserToUpdate): Promise<User> {
   validateId(id);
 
+  if (Object.keys(userDataToUpdate).length == 0) {
+    throw new Error("The provided data is empty. At least one field must be updated.");
+  }
+
   if (userDataToUpdate.phoneNumber) {
     validatePhoneNumber(userDataToUpdate.phoneNumber);
   }
