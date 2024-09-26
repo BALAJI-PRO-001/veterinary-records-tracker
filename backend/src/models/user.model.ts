@@ -127,6 +127,10 @@ async function updateUserById(id: number, userDataToUpdate: UserToUpdate): Promi
 
 async function deleteUserById(id: number): Promise<void> {
   validateId(id);
+  if (id < 0) {
+    throw new Error("Id must be positive number.");
+  }
+  
   await sqlite3.delete(queries.DELETE_USER_RECORD_BY_ID_SQL, id);
 }
 
