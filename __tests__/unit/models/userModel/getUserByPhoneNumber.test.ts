@@ -24,4 +24,15 @@ describe("GET USER RECORD BY PHONE NUMBER TESTS", () => {
     expect(Object.keys(res!)).toEqual(["id", "name", "phoneNumber", "address", "isCurrentUser", "createdAt"]);
     expect(res).not.toBeNull();
   });
+
+  test("Test 4 (Inject random phone number)", async () => {
+    function generateRandom10DigitNumber() {
+      return Math.floor(1000000000 + Math.random() * 9000000000);
+    }
+
+    for (let i = 1; i <= 100; i++) {
+      const randomPhoneNumber = generateRandom10DigitNumber();
+      await expect(User.getUserByPhoneNumber(randomPhoneNumber)).resolves.toBeNull();
+    }
+  });
 });
