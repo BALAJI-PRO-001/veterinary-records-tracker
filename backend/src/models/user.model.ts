@@ -18,6 +18,10 @@ function validatePhoneNumber(phoneNumber: number): void {
 
 
 function validateId(id: number): void {
+  if (id < 0) {
+    throw new Error("Id must be positive number.");
+  }
+
   if (!id) {
     throw new Error("User id is null or undefined.");
   }
@@ -63,10 +67,6 @@ async function getUserByPhoneNumber(phoneNumber: number): Promise<User | null> {
 async function getUserById(id: number): Promise<User | null> {
   validateId(id);
 
-  if (id < 0) {
-    throw new Error("Id must be positive number.");
-  }
-
   const user = await sqlite3.select(queries.SELECT_USER_RECORD_BY_ID_SQL, false, id) as UserInDB;
   if (!user) {
     return null;
@@ -102,6 +102,7 @@ async function getAllUsers(): Promise<User[]> {
 
 async function updateUserById(id: number, userDataToUpdate: UserToUpdate): Promise<User> {
   validateId(id);
+
   if (userDataToUpdate.phoneNumber) {
     validatePhoneNumber(userDataToUpdate.phoneNumber);
   }
@@ -127,10 +128,6 @@ async function updateUserById(id: number, userDataToUpdate: UserToUpdate): Promi
 
 async function deleteUserById(id: number): Promise<void> {
   validateId(id);
-  if (id < 0) {
-    throw new Error("Id must be positive number.");
-  }
-  
   await sqlite3.delete(queries.DELETE_USER_RECORD_BY_ID_SQL, id);
 }
 
