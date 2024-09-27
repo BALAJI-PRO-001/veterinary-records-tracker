@@ -1,19 +1,18 @@
-import {setIcon,setType} from "./utils/userInterface.js"
+import {
+        removeBorder, 
+        setIcon,
+        setType,
+        setMessage,
+        setBorder
+      } from "./utils/userInterface.js";
+import validator from "./utils/validator.js";
+import {addValidationListener} from "./utils/common.js";
 
 const loginBTN = document.getElementById("login-btn");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const icon = document.getElementById("eye-icon");
 const rememberMe = document.getElementById("formCheck");
-
-function setBorder(element,errElement) {
-  if(element.value == "") {
-    element.style.cssText = `border: 1px solid rgba(128, 128, 128, 0.451);`;
-    errElement.innerText = "";
-  }
-
-}
-
 
 window.addEventListener("load", () => {
   const email = localStorage.getItem("email");
@@ -22,73 +21,67 @@ window.addEventListener("load", () => {
   // passwordInput.value = password;
 });
 
-
 async function login(e) {
   e.preventDefault();
-
 
   if(rememberMe.checked) {
     localStorage.setItem("email",emailInput.value);
     localStorage.setItem("password",passwordInput.value);
   }
-
-  e.target.innerText = "Loading...";
+  e.target.innerHTML = "loading...";
   e.target.style.opacity = "0.7";
-  e.target.setAttribute("disabled",'');
-  const res = await fetch("/api/v1/admin/login",{
-    method: "POST",
-    headers: {"CONTENT-TYPE": "application/json" },
-    body: JSON.stringify({
-      email: emailInput.value.trim(),
-      password: passwordInput.value.trim()
-    })
-  });
+  e.target.setAttribute("disabled","");
 
-  const data = await res.json();
-  e.target.innerText = "Login";
-  e.target.style.opacity = "1";
-  e.target.removeAttribute("disabled");
-  const emailErr = document.getElementById("email-err-element");
-  const passwordErr = document.getElementById("password-err-element");
+  try {
+    const res = await fetch("/api/v1/admin/login",{
+      method: "POST",
+      headers: {"CONTENT-TYPE": "application/json" },
+      body: JSON.stringify({
+        email: emailInput.value.trim(),
+        password: passwordInput.value.trim()
+      })
+    });
 
-  if(data.statusCode == 404) {
-    emailErr.innerHTML = "* Email not found...";
-    emailInput.style.cssText = `border: 2px solid red;`;
-    emailErr.style.cssText = `color: red;`;
-    return;
-  }
-  else {
-    emailInput.style.cssText = `border: 0.01px solid rgba(128, 128, 128, 0.451);`;
-    emailErr.innerText = '';
-  }
-  if(data.statusCode == 401) {
-    passwordErr.innerHTML = "* Invalid password..";
-    passwordInput.style.cssText = `border: 2px solid red;`
-    passwordErr.style.cssText = `color: red;`;
-    return;
-  }
-  else {
-    passwordInput.style.cssText = `border: 0.1px solid rgba(128, 128, 128, 0.451);`
-    passwordErr.innerText = '';
-  }
+    const data = await res.json();
+    e.target.innerHTML = "logIn";
+    e.target.style.opacity = "1";
+    e.target.removeAttribute("disabled","");
 
-  location.href = "/home";
+    console.log(data);
+    if(data.statusCode == 404) {
+      setBorder(emailInput,"is-invalid");
+      setMessage(emailInput.nextElementSibling,"*invalid Email..")
+      return;
+    }else {
+      removeBorder(emailInput,"is-invalid");
+      setMessage(emailInput.nextElementSibling,"");
+    }
+
+    if(data.statusCode == 401) {
+      setBorder(passwordInput,"is-invalid");
+      setMessage(passwordInput.nextElementSibling,"*invalid Password...");
+      return;
+    }
+    else {
+     removeBorder(passwordInput,"is-invalid");
+     setMessage(passwordInput.nextElementSibling,"");
+    }
+    if(data.statusCode == 200) {
+      location.href = "/home"
+    }
+    
+
+  }catch(err) {
+    console.log(err.message);
+  }
 }
 
-emailInput.addEventListener("keyup",() => {
-  setBorder(emailInput,emailInput.parentElement.querySelector("#email-err-element"));
-})
-
-passwordInput.addEventListener("keyup",() => {
-  setBorder(passwordInput,passwordInput.parentElement.querySelector("#password-err-element"));
-})
+addValidationListener(emailInput,validator.isAllFieldsValid);
+addValidationListener(passwordInput,validator.isAllFieldsValid);
 
 icon.addEventListener("click",() => {
   setIcon(icon,"bi-eye-slash","bi-eye");
   setType(passwordInput,"password","text");
 })
-
-
-
 
 loginBTN.addEventListener("click",login);

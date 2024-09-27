@@ -25,20 +25,15 @@ export function removeInjectionDetails(e) {
 }
 
 export function addInjectionDetails(e) {
-
   const injectionDetails = e.target.parentElement.parentElement.querySelector(".injection-details").cloneNode(true);
-  console.log(injectionDetails);
+  injectionDetails.querySelectorAll("input").forEach((input) => {
+    input.value = "";
+    removeBorder(input,"is-invalid");
+    setMessage(input.nextElementSibling,"");
+  })
   e.target.parentElement.parentElement.insertBefore(injectionDetails,e.target.parentElement);
-  console.log("welcome");
 }
 
-export function getContainerClone(className) {
-  return document.querySelector(className).cloneNode(true);
-}
-
-export function getContainer(className) {
-  return document.querySelector(className);
-}
 
 export function addAnotherCow(e){
   const data = e.target.parentElement.parentElement.querySelector(".cow-container").querySelectorAll(".cow-details");
@@ -47,6 +42,7 @@ export function addAnotherCow(e){
   inputs.forEach((input) => {
     input.value = "";
     removeBorder(input,"is-invalid");
+    setMessage(input.nextElementSibling,"");
   })
   const unwantedChilds = cowContent.querySelectorAll(".injection-details");
   for(let i=1;i<unwantedChilds.length;i++) {

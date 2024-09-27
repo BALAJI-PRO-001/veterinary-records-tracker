@@ -1,4 +1,4 @@
-
+import {setBorder,removeBorder,setMessage} from "./userInterface.js";
 
 class Validator {
   NUMERIC_CHARACTER_REGEX_PATTERN = /^\d+$/;
@@ -42,9 +42,36 @@ class Validator {
     }
   }
 
+  isAllFieldsValid(e) {
+    const element = e.target;
+    const value = element.value;
+    const errElement = element.nextElementSibling;
+    if(value == "") {
+      setBorder(element,"is-invalid");
+      setMessage(errElement,"* must Enter this...")
+    }
+    if(value != "") {
+      removeBorder(element,"is-invalid");
+      setMessage(errElement,"");
+    }
+
+  }
+
+
+  isFieldValid(inputs) {
+    for (let input of inputs) {
+      if (input.value === "") {
+        return false;
+      }
+    }
+    return true;
+  }
   
 }
 
 
+
+
 const validator = new Validator();
+
 export default validator;

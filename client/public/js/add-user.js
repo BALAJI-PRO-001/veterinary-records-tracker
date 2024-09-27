@@ -1,9 +1,8 @@
+import validator from "./utils/validator.js";
 import { 
         addValidationListener,
         removeInjectionDetails,
         addInjectionDetails,
-        getContainerClone,
-        getContainer,
         addAnotherCow,
         removeCow 
       } from "./utils/common.js";
@@ -11,7 +10,7 @@ import {
         validatePhoneandUpdateUi,
         setBorder,
         removeBorder,
-        fieldIsValid
+        setMessage
       } from "./utils/userInterface.js";
 
 const addUserForm = document.getElementById("add-user-form");
@@ -27,14 +26,6 @@ addUserForm.reset();
 
 inputs.splice(0,1);
 
-// inputs.forEach((input) => {
-//   input.addEventListener("keyup",() => {
-//     if(input.value != "") {
-//       removeBorder(input,"is-invalid");
-//     }
-//   })
-// })
-
 
 addAnotherInjection.addEventListener("click",addInjectionDetails);
 removeInjection.addEventListener("click",removeInjectionDetails);
@@ -45,32 +36,33 @@ removeCowBtn.addEventListener("click",removeCow);
 
 addValidationListener(phoneInput,validatePhoneandUpdateUi);
 
-function isFieldValid(inputs) {
-  for (let input of inputs) {
-    if (input.value === "") {
-      return false;
-    }
-  }
-  return true;
-}
+
 
 
 async function submit(e) {
   e.preventDefault();
   const inputs = Array.from(document.querySelectorAll("input"));
   inputs.splice(0,1);
-  inputs.splice(1,1);
-  // inputs.forEach((input) => {
-  //   addValidationListener(input,fieldIsValid);
-  // })
+    
 
   inputs.forEach((input) => {
-    if(input.value ==  "") {
+    if(input.value == "") {
       setBorder(input,"is-invalid");
+      setMessage(input.nextElementSibling,"*must enter this column...");
+    }
+    else {
+      removeBorder(input,"is-invalid");
+      setMessage(input.nextElementSibling,"");
     }
   })
+
+  inputs.splice(1,1);
+
+  inputs.forEach((input) => {
+    addValidationListener(input,validator.isAllFieldsValid);
+  })
   
-  if(isFieldValid(inputs) == true) {
+  if(validator.isFieldValid(inputs) == true) {
     const cows = document.querySelectorAll(".cow-details");
     const userDetails = {
       name : document.querySelector("#user-details").querySelector("#customer-name").value,
