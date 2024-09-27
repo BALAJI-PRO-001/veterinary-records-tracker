@@ -12,22 +12,25 @@ import {
   updateRecord
 } from "../controllers/record.controller";
 
+import verifyAdminAuthenticationToken from "../utils/verifyAdminAuthenticationToken";
+
+
 
 const router = express.Router();
 
-router.post("/records", createNewRecord)
-      .post("/records/:userId/cows", addNewCowToUser)
-      .post("/records/:userId/cows/:cowId/inject-info-ai-dates", addNewInjectionInfoAndAiDatesToCow);
+router.post("", verifyAdminAuthenticationToken, createNewRecord)
+      .post("/:userId/cows", verifyAdminAuthenticationToken, addNewCowToUser)
+      .post("/:userId/cows/:cowId/inject-info-ai-dates", verifyAdminAuthenticationToken, addNewInjectionInfoAndAiDatesToCow);
 
-router.get("/records/all", getAllRecords)
-      .get("/records/:userId", getRecordByUserId);
+router.get("/all", verifyAdminAuthenticationToken, getAllRecords)
+      .get("/:userId", verifyAdminAuthenticationToken, getRecordByUserId);
 
-router.patch("/records/:userId", updateRecord);
+router.patch("/:userId", verifyAdminAuthenticationToken, updateRecord);
 
-router.delete("/records/all", deleteAllRecords)
-      .delete("/records/:userId", deleteRecord)
-      .delete("/records/:userId/cows/:cowId", deleteCowFromUser)
-      .delete("/records/:userId/cows/:cowId/inject-info-ai-dates/:id", removeInjectionInfoAndAiDatesFromCow);
+router.delete("/all", verifyAdminAuthenticationToken, deleteAllRecords)
+      .delete("/:userId", verifyAdminAuthenticationToken, deleteRecord)
+      .delete("/:userId/cows/:cowId", verifyAdminAuthenticationToken, deleteCowFromUser)
+      .delete("/:userId/cows/:cowId/inject-info-ai-dates/:id", verifyAdminAuthenticationToken, removeInjectionInfoAndAiDatesFromCow);
 
 
 export default router;
