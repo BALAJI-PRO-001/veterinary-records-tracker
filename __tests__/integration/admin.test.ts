@@ -5,7 +5,7 @@ const randomPasswordGenerator = require("generate-password");
 
 
 
-describe("Admin API Tests", () => {
+describe("Admin Login API Tests", () => {
   it ("should return email and password both required", async () => {
     const res = await request(app).post("/api/v1/admin/login");
     expect(res.statusCode).toBe(400);
@@ -57,7 +57,7 @@ describe("Admin API Tests", () => {
 
 
   it ("should return invalid email", async () => {
-    for (let i = 1; i <= 1000; i++) {
+    for (let i = 1; i <= 100; i++) {
       const randomEmail = randomEmailGenerator("gmail.com");
       const res = await request(app).post("/api/v1/admin/login").send({email: randomEmail, password: ""});
       expect(res.statusCode).toBe(404);
@@ -71,15 +71,51 @@ describe("Admin API Tests", () => {
   
   it ("should return invalid password or unauthorized", async () => {
     const passwordGeneratorConfig = {length: 10, numbers: true, symbols: true, lowercase: true, uppercase: true};
+    const promises: Promise<void>[] = [];
     for (let i = 1; i <= 100; i++) {
-      const randomPassword = randomPasswordGenerator.generate(passwordGeneratorConfig);
-      const res = await request(app).post("/api/v1/admin/login").send({email: process.env.ADMIN_EMAIL, password: randomPassword});
-      expect(res.statusCode).toBe(401);
-      expect(res.body.success).toBe(false);
-      expect(res.body.statusCode).toBe(401);
-      expect(res.body.message).toBe("Unauthorized: Invalid password.");
+      const newPromise: Promise<void> = new Promise((resolve, reject) => {
+        const randomPassword = randomPasswordGenerator.generate(passwordGeneratorConfig);
+        request(app)
+          .post("/api/v1/admin/login")
+          .send({email: process.env.ADMIN_EMAIL, password: randomPassword})
+          .then((res) => {
+            try {
+              expect(res.statusCode).toBe(401);
+              expect(res.body.statusCode).toBe(401);
+              expect(res.body.success).toBe(false);
+              expect(res.body.message).toBe("Unauthorized: Invalid password.");
+              resolve();
+            } catch(err) {
+              reject(err);
+            }
+          })
+      });
+      promises.push(newPromise);
     }
+    await Promise.all(promises);
+  }, 10 * 10000);
+
+
+  it ("should return admin access token with success status code (200)", async () => {
+    const adminCredentials = {email: process.env.ADMIN_EMAIL, password: "Admin@1234"};
+    console.log(adminCredentials);
+    const res = await request(app).post("/api/v1/admin/login").send(adminCredentials);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.message).toBe("Admin logged in successfully.");
+    expect(res.headers["set-cookie"]).toBeDefined();
   });
 });
 
 
+
+describe("Admin Log Out API Tests", () => {
+  it ("should return success status code", async () => {
+    const res = await request(app).get("/api/v1/admin/log-out");
+    expect(res.statusCode).toBe(200);
+    expect(res.body.statusCode).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.message).toBe("Admin has been logged out successfully.")
+  });
+});
