@@ -4,7 +4,7 @@ import validateAdminCredentials from "../utils/validateAdminCredentials";
 
 const router = express.Router();
 
-router.post("/admin/login", validateAdminCredentials, login)
-      .get("/admin/logout", logOut);
+router.post("/login", validateAdminCredentials, login)
+      .get("/logout", logOut);
 
 export default router;
