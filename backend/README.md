@@ -47,7 +47,7 @@ Response (Request Based)
 ``` base
 Request Information
 ===================
-URL: /api/v1/admin/log-out
+URL: /api/v1/admin/logout
 METHOD: GET
 
 Response (Request Based)
