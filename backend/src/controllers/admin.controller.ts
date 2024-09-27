@@ -33,7 +33,7 @@ export async function logOut(req: Request, res: Response, next: NextFunction): P
     res.status(200).clearCookie("admin_access_token").json({
       success: true,
       statusCode: 200,
-      message: "Admin has been logged out successfully"
+      message: "Admin has been logged out successfully."
     });
   } catch(err) {
     next(err);
