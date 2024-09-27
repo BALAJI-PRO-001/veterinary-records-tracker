@@ -6,7 +6,7 @@ const randomPasswordGenerator = require("generate-password");
 
 
 describe("Admin Login API Tests", () => {
-  it ("should return email and password both required", async () => {
+  it ("POST: /api/v1/admin/login  RESPONSE: Bad Request (Both email and password are required) [400]", async () => {
     const res = await request(app).post("/api/v1/admin/login");
     expect(res.statusCode).toBe(400);
     expect(res.body.success).toBe(false);
@@ -16,7 +16,7 @@ describe("Admin Login API Tests", () => {
 
 
 
-  it ("should return email is required", async () => {
+  it ("POST: /api/v1/admin/login  RESPONSE: Bad Request (email is required) [400]", async () => {
     const res = await request(app).post("/api/v1/admin/login").send({password: ""});
     expect(res.statusCode).toBe(400);
     expect(res.body.statusCode).toBe(400);
@@ -26,7 +26,7 @@ describe("Admin Login API Tests", () => {
 
 
 
-  it ("should return password is required", async () => {
+  it ("POST: /api/v1/admin/login  RESPONSE: Bad Request (password is required) [400]", async () => {
     const res = await request(app).post("/api/v1/admin/login").send({email: ""});
     expect(res.statusCode).toBe(400);
     expect(res.body.statusCode).toBe(400);
@@ -36,7 +36,7 @@ describe("Admin Login API Tests", () => {
 
 
 
-  it ("should return email cannot be null", async () => {
+  it ("POST: /api/v1/admin/login  RESPONSE: Bad Request (email cannot be null) [400]", async () => {
     const res = await request(app).post("/api/v1/admin/login").send({email: null, password: ""});
     expect(res.statusCode).toBe(400);
     expect(res.body.statusCode).toBe(400);
@@ -46,7 +46,7 @@ describe("Admin Login API Tests", () => {
 
 
 
-  it ("should return password cannot be null", async () => {
+  it ("POST: /api/v1/admin/login  RESPONSE: Bad Request (password cannot be null) [400]", async () => {
     const res = await request(app).post("/api/v1/admin/login").send({email: "", password: null});
     expect(res.statusCode).toBe(400);
     expect(res.body.statusCode).toBe(400);
@@ -56,7 +56,7 @@ describe("Admin Login API Tests", () => {
 
 
 
-  it ("should return invalid email", async () => {
+  it ("POST: /api/v1/admin/login  RESPONSE: Bad Request (invalid email) [404]", async () => {
     for (let i = 1; i <= 100; i++) {
       const randomEmail = randomEmailGenerator("gmail.com");
       const res = await request(app).post("/api/v1/admin/login").send({email: randomEmail, password: ""});
@@ -69,7 +69,7 @@ describe("Admin Login API Tests", () => {
 
 
   
-  it ("should return invalid password or unauthorized", async () => {
+  it ("POST: /api/v1/admin/login  RESPONSE: Bad Request (invalid password) [401]", async () => {
     const passwordGeneratorConfig = {length: 10, numbers: true, symbols: true, lowercase: true, uppercase: true};
     const promises: Promise<void>[] = [];
     for (let i = 1; i <= 100; i++) {
@@ -96,7 +96,7 @@ describe("Admin Login API Tests", () => {
   }, 10 * 10000);
 
 
-  it ("should return admin access token with success status code (200)", async () => {
+  it ("POST: /api/v1/admin/login  RESPONSE: Admin logged in successfully [200]", async () => {
     const adminCredentials = {email: process.env.ADMIN_EMAIL, password: "Admin@1234"};
     console.log(adminCredentials);
     const res = await request(app).post("/api/v1/admin/login").send(adminCredentials);
@@ -111,8 +111,8 @@ describe("Admin Login API Tests", () => {
 
 
 describe("Admin Log Out API Tests", () => {
-  it ("should return success status code", async () => {
-    const res = await request(app).get("/api/v1/admin/log-out");
+  it ("POST: /api/v1/admin/logout  RESPONSE: Admin has been logged out successfully [200]", async () => {
+    const res = await request(app).get("/api/v1/admin/logout");
     expect(res.statusCode).toBe(200);
     expect(res.body.statusCode).toBe(200);
     expect(res.body.success).toBe(true);
