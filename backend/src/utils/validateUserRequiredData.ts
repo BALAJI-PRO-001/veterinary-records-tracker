@@ -13,8 +13,16 @@ class ValidationError extends Error {
 export default function validateUserRequiredData(user: NewUser): ValidationError | void {
   const requiredFields: (keyof NewUser)[] = ["name", "phoneNumber", "address"];
   for (let field of requiredFields) {
-    if (!user[field]) {
+    if (user[field] === undefined) {
       throw new ValidationError(400, `Bad Request: User ${field} is required.`);
+    }
+
+    if (user[field] === "") {
+      throw new ValidationError(400, `Bad Request: User ${field} cannot be empty.`);
+    }
+
+    if (user[field] === null || user[field] === undefined) {
+      throw new ValidationError(400, `Bad Request: User ${field} cannot be null.`)
     }
   }
 }
