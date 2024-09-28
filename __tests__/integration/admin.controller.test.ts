@@ -97,7 +97,7 @@ describe("Admin Login API Tests", () => {
 
 
   it ("POST: /api/v1/admin/login  RESPONSE: Admin logged in successfully [200]", async () => {
-    const adminCredentials = {email: process.env.ADMIN_EMAIL, password: "Admin@1234"};
+    const adminCredentials = {email: process.env.ADMIN_EMAIL, password: "<password>"};
     console.log(adminCredentials);
     const res = await request(app).post("/api/v1/admin/login").send(adminCredentials);
     expect(res.statusCode).toBe(200);
