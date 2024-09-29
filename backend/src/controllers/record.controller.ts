@@ -14,13 +14,8 @@ export async function createNewRecord(req: Request, res: Response, next: NextFun
       return next(errorHandler(400, "Bad Request: User or cows data is missing."));
     }    
 
-    try {
-      validateUserRequiredData(user);
-      validateCowRequiredData(cows);
-    } catch(err) {
-      return next(err);
-    }
-
+    validateUserRequiredData(user);
+    validateCowRequiredData(cows);
     
     const isPhoneNumberAlreadyInUse = await Record.isPhoneNumberAlreadyInUse(user.phoneNumber);
     if (isPhoneNumberAlreadyInUse) {
