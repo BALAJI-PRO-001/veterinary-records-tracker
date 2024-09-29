@@ -64,3 +64,80 @@ describe("Record API Tests [ Create New Record ] [ User Data Validation ]", () =
     }
   });
 });
+
+
+
+
+
+describe("Record API Tests [ Create New Record ] [ Cow Data Validation ]", () => {
+  test(`Test 1 [ Task: Invalid cow data ] [ Response: Bad Request 400 ]`, async () => {
+  const res = await request(app).post("/api/v1/records")
+    .send({user: {name: "<name>", phoneNumber: 123, address: "<address>"}, cows: []})
+    .set("Cookie", adminAccessToken!);
+
+  expect(res.statusCode).toBe(400);
+  expect(res.body.statusCode).toBe(400);
+  expect(res.body.success).not.toBeTruthy();
+  expect(res.body.message).toBe("Bad Request: Cows data must contain at least one entry.");
+  });
+
+
+
+  test(`Test 2 [ Task: Validate cow name ] [ Response: Bad Request 400 ]`, async () => {
+    for (let nameDataToTest of data.cowDataToTest.nameData.data) {
+      const res = await request(app).post("/api/v1/records")
+        .send(nameDataToTest)
+        .set("Cookie", adminAccessToken!);
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body.statusCode).toBe(400);
+      expect(res.body.success).not.toBeTruthy();
+      expect(res.body.message).toBe(data.cowDataToTest.nameData.message);
+    }
+  });
+
+
+
+  test(`Test 3 [ Task: Validate cow breed ] [ Response: Bad Request 400 ]`, async () => {
+    for (let breedDataToTest of data.cowDataToTest.breedData.data) {
+      const res = await request(app).post("/api/v1/records")
+        .send(breedDataToTest)
+        .set("Cookie", adminAccessToken!);
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body.statusCode).toBe(400);
+      expect(res.body.success).not.toBeTruthy();
+      expect(res.body.message).toBe(data.cowDataToTest.breedData.message);
+    }
+  });
+
+
+
+  test(`Test 4 [ Task: Validate cow bull name ] [ Response: Bad Request 400 ]`, async () => {
+    for (let bullNameDataToTest of data.cowDataToTest.bullNameData.data) {
+      const res = await request(app).post("/api/v1/records")
+        .send(bullNameDataToTest)
+        .set("Cookie", adminAccessToken!);
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body.statusCode).toBe(400);
+      expect(res.body.success).not.toBeTruthy();
+      expect(res.body.message).toBe(data.cowDataToTest.bullNameData.message);
+    }
+  });
+
+
+
+  // test(`Test 4 [ Task: Validate cow injection info and ai dates ] [ Response: Bad Request 400 ]`, async () => {
+  //   for (let bullNameDataToTest of data.cowDataToTest.bullNameData.data) {
+  //     const res = await request(app).post("/api/v1/records")
+  //       .send(bullNameDataToTest)
+  //       .set("Cookie", adminAccessToken!);
+
+  //     expect(res.statusCode).toBe(400);
+  //     expect(res.body.statusCode).toBe(400);
+  //     expect(res.body.success).not.toBeTruthy();
+  //     expect(res.body.message).toBe(data.cowDataToTest.bullNameData.message);
+  //   }
+  // });
+});

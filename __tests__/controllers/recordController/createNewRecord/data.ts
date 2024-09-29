@@ -1,3 +1,5 @@
+const userDataForCow = {name: "<name>", phoneNumber: 123, address: "<address>"};
+
 export default {
   userDataToTest: {
     nameData: {
@@ -28,7 +30,34 @@ export default {
       ]
     }
   },
+
   cowDataToTest: {
-    
+    nameData: {
+      message: "Bad Request: Cow[0] name is required and cannot be (empty, null, or undefined).",
+      data: [
+        {user: userDataForCow, cows: [{}]},
+        {user: userDataForCow, cows: [{name: ""}]},
+        {user: userDataForCow, cows: [{name: null}]},
+        {user: userDataForCow, cows: [{name: undefined}]},
+      ]
+    },
+    breedData: {
+      message: "Bad Request: Cow[0] breed is required and cannot be (empty, null, or undefined).",
+      data: [
+        {user: userDataForCow, cows: [{name: "<cowName>"}]},
+        {user: userDataForCow, cows: [{name: "<cowName>", breed: ""}]},
+        {user: userDataForCow, cows: [{name: "<cowName>", breed: null}]},
+        {user: userDataForCow,cows: [{name: "<cowName>", breed: undefined}]},
+      ]
+    },
+    bullNameData: {
+      message: "Bad Request: Cow[0] bullName is required and cannot be (empty, null, or undefined).",
+      data: [
+        {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>"}]},
+        {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: ""}]},
+        {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: null}]},
+        {user: userDataForCow,cows: [{name: "<cowName>", breed: "<breed>", bullName: undefined}]},
+      ]
+    }
   }
 }
