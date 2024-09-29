@@ -1,5 +1,5 @@
 export default {
-  emailTestData: [
+  emailDataToTest: [
     {
       data: {email: ""},
       message: "Bad Request: Email is required and cannot be (empty, null, or undefined)."
@@ -13,7 +13,7 @@ export default {
       message: "Bad Request: Email is required and cannot be (empty, null, or undefined)."
     }
   ],
-  passwordTestData: [
+  passwordDataToTest: [
     {
       data: {email: "<email>"},
       message: "Bad Request: Password is required and cannot be (empty, null, or undefined)."

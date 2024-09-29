@@ -20,16 +20,16 @@ describe("Admin Login API Tests [ Invalid Credentials ]", () => {
 
 describe("Admin Login API Tests [Invalid Email]", () => {
   let testCount = 1;
-  for (let emailTestData of data.emailTestData) {
+  for (let emailDataToTest of data.emailDataToTest) {
     test(`Test ${testCount ++} [ Task: Login with invalid email ] [ Response: Bad Request 400 ]`, async () => {
       const res = await request(app)
       .post("/api/v1/admin/login")
-      .send(emailTestData.data);
+      .send(emailDataToTest.data);
     
       expect(res.statusCode).toBe(400);
       expect(res.body.statusCode).toBe(400);
       expect(res.body.success).not.toBeTruthy();
-      expect(res.body.message).toBe(emailTestData.message);
+      expect(res.body.message).toBe(emailDataToTest.message);
     });
   }
 });
@@ -39,16 +39,16 @@ describe("Admin Login API Tests [Invalid Email]", () => {
 
 describe("Admin Login API Tests [Invalid Password]", () => {
   let testCount = 1;
-  for (let passwordTestData of data.passwordTestData) {
+  for (let passwordDataToTest of data.passwordDataToTest) {
     test(`Test ${testCount ++} [ Task: Login with invalid password ] [ Response: Bad Request 400 ]`, async () => {
       const res = await request(app)
       .post("/api/v1/admin/login")
-      .send(passwordTestData.data);
+      .send(passwordDataToTest.data);
     
       expect(res.statusCode).toBe(400);
       expect(res.body.statusCode).toBe(400);
       expect(res.body.success).not.toBeTruthy();
-      expect(res.body.message).toBe(passwordTestData.message);
+      expect(res.body.message).toBe(passwordDataToTest.message);
     });
   }
 });
@@ -102,7 +102,7 @@ describe("Admin Login API Tests [ Random Password ]", () => {
 
 describe("Admin Login API Tests [ Valid Credentials ]", () => {
   test(`Test 1 [ Task: Login with correct credentials ]  [Response: Logged successfully 200 ]`, async () => {
-    const adminCredentials = {email: process.env.ADMIN_EMAIL, password: "Admin@1234"};
+    const adminCredentials = {email: process.env.ADMIN_EMAIL, password: "<password>"};
     const res = await request(app).post("/api/v1/admin/login").send(adminCredentials);
     expect(res.statusCode).toBe(200);
     expect(res.body.statusCode).toBe(200);
