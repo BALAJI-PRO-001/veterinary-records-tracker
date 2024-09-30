@@ -97,5 +97,57 @@ export default {
         ],
       ]
     }
-  }
+  },
+
+
+  newRecordDataToTest: [
+    {
+      message: "Phone number must be a valid number with exactly 10 digits.",
+      data:     {
+        user: {
+          name: "name",
+          phoneNumber: 123,
+          address: "address"
+        }, 
+        cows: [
+          {
+            name: "cow 1",
+            breed: "breed",
+            bullName: "bullName",
+            injectionInfoAndAiDates: [
+              {
+                name: "injection 1",
+                cost: 100,
+                date: "12/2/2004"
+              }
+            ]
+          }
+        ]
+      }  
+    },
+    {
+      message: "New record created successfully.",
+      data:     {
+        user: {
+          name: "name",
+          phoneNumber: 1231231233,
+          address: "address"
+        }, 
+        cows: [
+          {
+            name: "cow 1",
+            breed: "breed",
+            bullName: "bullName",
+            injectionInfoAndAiDates: [
+              {
+                name: "injection 1",
+                cost: 100,
+                date: "12/2/2004"
+              }
+            ]
+          }
+        ]
+      }  
+    }
+  ]
 }
