@@ -78,7 +78,7 @@ describe("Record API Tests [ Create New Record ] [ Cow Data Validation ]", () =>
   expect(res.statusCode).toBe(400);
   expect(res.body.statusCode).toBe(400);
   expect(res.body.success).not.toBeTruthy();
-  expect(res.body.message).toBe("Bad Request: Cows data must contain at least one entry.");
+  expect(res.body.message).toBe("Bad Request: Cows data must contain at least one cow entry.");
   });
 
 
@@ -128,16 +128,59 @@ describe("Record API Tests [ Create New Record ] [ Cow Data Validation ]", () =>
 
 
 
-  // test(`Test 4 [ Task: Validate cow injection info and ai dates ] [ Response: Bad Request 400 ]`, async () => {
-  //   for (let bullNameDataToTest of data.cowDataToTest.bullNameData.data) {
-  //     const res = await request(app).post("/api/v1/records")
-  //       .send(bullNameDataToTest)
-  //       .set("Cookie", adminAccessToken!);
+  test(`Test 5 [ Task: Validate cow injection info and ai dates ] [ Response: Bad Request 400 ]`, async () => {
+    for (let injectionInfoAndAiDatesDataToTest of data.cowDataToTest.injectionInfoAndAiDates.data[0]) {
+      const res = await request(app).post("/api/v1/records")
+        .send(injectionInfoAndAiDatesDataToTest)
+        .set("Cookie", adminAccessToken!);
 
-  //     expect(res.statusCode).toBe(400);
-  //     expect(res.body.statusCode).toBe(400);
-  //     expect(res.body.success).not.toBeTruthy();
-  //     expect(res.body.message).toBe(data.cowDataToTest.bullNameData.message);
-  //   }
-  // });
+      expect(res.statusCode).toBe(400);
+      expect(res.body.statusCode).toBe(400);
+      expect(res.body.success).not.toBeTruthy();
+      expect(res.body.message).toBe(data.cowDataToTest.injectionInfoAndAiDates.message[0]);
+    }
+  });
+
+
+
+  test(`Test 6 [ Task: Invalid injection info and ai dates ] [ Response: Bad Request 400 ]`, async () => {
+    const res = await request(app).post("/api/v1/records")
+      .send(data.cowDataToTest.injectionInfoAndAiDates.data[1][0])
+      .set("Cookie", adminAccessToken!);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.statusCode).toBe(400);
+    expect(res.body.success).not.toBeTruthy();
+    expect(res.body.message).toBe(data.cowDataToTest.injectionInfoAndAiDates.message[1]);
+  });
+
+
+
+  test(`Test 7 [ Task: Validate cow injection info and ai dates (name) ] [ Response: Bad Request 400 ]`, async () => {
+    for (let nameDataToTest of data.cowDataToTest.injectionInfoAndAiDates.data[2]) {
+      const res = await request(app).post("/api/v1/records")
+        .send(nameDataToTest)
+        .set("Cookie", adminAccessToken!);
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body.statusCode).toBe(400);
+      expect(res.body.success).not.toBeTruthy();
+      expect(res.body.message).toBe(data.cowDataToTest.injectionInfoAndAiDates.message[2]);
+    }
+  });
+
+
+
+  test(`Test 8 [ Task: Validate cow injection info and ai dates (date) ] [ Response: Bad Request 400 ]`, async () => {
+    for (let aiDateDataToTest of data.cowDataToTest.injectionInfoAndAiDates.data[4]) {
+      const res = await request(app).post("/api/v1/records")
+        .send(aiDateDataToTest)
+        .set("Cookie", adminAccessToken!);
+
+      expect(res.statusCode).toBe(400);
+      expect(res.body.statusCode).toBe(400);
+      expect(res.body.success).not.toBeTruthy();
+      expect(res.body.message).toBe(data.cowDataToTest.injectionInfoAndAiDates.message[4]);
+    }
+  });
 });

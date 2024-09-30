@@ -58,6 +58,44 @@ export default {
         {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: null}]},
         {user: userDataForCow,cows: [{name: "<cowName>", breed: "<breed>", bullName: undefined}]},
       ]
+    },
+    injectionInfoAndAiDates: {
+      message: [
+        "Bad Request: Cow[0] injectionInfoAndAiDates is required and cannot be (empty, null, or undefined).",
+        `Bad Request: Cow[0] injectionInfoAndAiDates must contain at least one entry for each cow.`,
+        `Bad Request: Cow[0] InjectionInfoAndAiDates[0] injection name is required and cannot be (empty, null or undefined).`,
+        `Bad Request: Cow[0] InjectionInfoAndAiDates[0] injection cost is required and cannot be (empty, null or undefined).`,
+        `Bad Request: Cow[0] InjectionInfoAndAiDates[0] ai date is required and cannot be (empty, null or undefined).`
+      ],
+      data: [
+        [
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>"}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: ""}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: null}]},
+          {user: userDataForCow,cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: undefined}]},
+        ],
+        [
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: []}]},
+        ],
+        [
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{}]}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: ""}]}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: null}]}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: undefined}]}]},
+        ],
+        [
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: "<name>"}]}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: "<name>", cost: ""}]}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: "<name>", cost: null}]}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: "<name>", cost: undefined}]}]},
+        ],
+        [
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: "<name>", cost: "<cost>"}]}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: "<name>", cost: "<cost>", date: ""}]}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: "<name>", cost: "<cost>", date: null}]}]},
+          {user: userDataForCow, cows: [{name: "<cowName>", breed: "<breed>", bullName: "<bullName>", injectionInfoAndAiDates: [{name: "<name>", cost: "<cost>", date: undefined}]}]},
+        ],
+      ]
     }
   }
 }

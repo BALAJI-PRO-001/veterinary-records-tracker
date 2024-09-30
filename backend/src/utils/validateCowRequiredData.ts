@@ -16,7 +16,7 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
   const requiredFields: (keyof NewCow)[] = ["name", "breed", "bullName", "injectionInfoAndAiDates"];
 
   if (cows.length === 0) {
-    throw new CowDataValidationError(400, "Bad Request: Cows data must contain at least one entry.");
+    throw new CowDataValidationError(400, "Bad Request: Cows data must contain at least one cow entry.");
   }  
 
   for (let [currentCowIndex, cow] of Object.entries(cows)) {
@@ -26,11 +26,14 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
       }
     }
 
+    if (cow.injectionInfoAndAiDates.length === 0) {
+      throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] injectionInfoAndAiDates must contain at least one entry for each cow.`);
+    }    
 
     for (let [index, { name, cost, date }] of Object.entries(cow.injectionInfoAndAiDates)) {
       if (!name || !cost || !date) {
         const missingField = !name ? 'injection name' : !cost ? 'injection cost' : 'ai date';
-        throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] InjectionInfoAndAiDates[${index}] ${missingField} is required.`);
+        throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] InjectionInfoAndAiDates[${index}] ${missingField} is required and cannot be (empty, null or undefined).`);
       }
     }
   }
