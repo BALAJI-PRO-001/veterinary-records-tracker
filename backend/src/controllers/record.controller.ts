@@ -16,19 +16,22 @@ export async function createNewRecord(req: Request, res: Response, next: NextFun
 
     validateUserRequiredData(user);
     validateCowRequiredData(cows);
-    
-    const isPhoneNumberAlreadyInUse = await Record.isPhoneNumberAlreadyInUse(user.phoneNumber);
-    if (isPhoneNumberAlreadyInUse) {
-      return next(errorHandler(409, "Duplicate Key: Phone number is already in use by another record."));
+
+    try {
+      const isPhoneNumberAlreadyInUse = await Record.isPhoneNumberAlreadyInUse(user.phoneNumber);
+      if (isPhoneNumberAlreadyInUse) {
+        return next(errorHandler(409, "Duplicate Key: Phone number is already in use by another record."));
+      }
+    } catch(err) {
+      const errMessage = err instanceof Error ? err.message : String(err);
+      return next(errorHandler(400, errMessage));
     }
 
-    const newRecord = await Record.createNewRecord({user: user, cows: cows});
+    await Record.createNewRecord({user: user, cows: cows});
     res.status(201).json({
       success: true,
       statusCode: 201,
-      data: {
-        record: newRecord
-      }
+      message: "New record created successfully."
     });
   } catch(err) {
     next(err);
