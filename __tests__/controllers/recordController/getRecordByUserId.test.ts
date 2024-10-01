@@ -11,7 +11,7 @@ beforeAll(async () => {
 
   const res = await request(app).post("/api/v1/admin/login").send({
     email: process.env.ADMIN_EMAIL,
-    password: "Admin@1234"
+    password: "<password>"
   });
 
   adminAccessToken = res.headers["set-cookie"];
@@ -90,3 +90,4 @@ describe("Record API Tests [ Get Record By User Id ]", () => {
     expect(res.body.data.record.recordCreatedAt).toBeTruthy();
   });
 });
+
