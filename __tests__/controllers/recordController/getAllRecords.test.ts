@@ -11,7 +11,7 @@ beforeAll(async () => {
 
   const res = await request(app).post("/api/v1/admin/login").send({
     email: process.env.ADMIN_EMAIL,
-    password: "<password>"
+    password: "Admin@1234"
   });
 
   adminAccessToken = res.headers["set-cookie"];
@@ -26,49 +26,59 @@ describe("Record API Tests [ Get All Records ]", () => {
     expect(res.body.statusCode).toBe(200);
     expect(res.body.success).toBeTruthy();
 
+    const userFields = ["id", "name", "phoneNumber", "address", "isCurrentUser", "createdAt"];
+    const cowFields = ["id", "name", "breed", "bullName", "injectionInfoAndAiDates", "createdAt"];
+    const injectionInfoAndAiDatesFields = ["id", "name", "cost", "date"];
+
     for (let record of res.body.data.records) {
       expect(record.user).toBeDefined();
       expect(record.user).toBeTruthy();
-      expect(record.user.id).toBeDefined();
-      expect(record.user.id).toBeTruthy();
-      expect(record.user.id).toBeGreaterThanOrEqual(1);
-      expect(record.user.name).toBeDefined();
-      expect(record.user.name).toBeTruthy();
-      expect(record.user.phoneNumber).toBeDefined();
-      expect(record.user.phoneNumber).toBeTruthy();
-      expect(typeof record.user.phoneNumber === "number").toBeTruthy();
-      expect(record.user.address).toBeDefined();
-      expect(record.user.address).toBeTruthy();
-      expect(record.user.isCurrentUser).toBeDefined();
-      expect(record.user.createdAt).toBeDefined();
-      expect(record.user.createdAt).toBeTruthy();
+      expect(record.user).not.toBeNull();
+      expect(record.cows).toBeDefined();
+      expect(record.cows).toBeTruthy();
+      expect(record.cows).not.toBeNull()
+
+      for (let field of userFields) {
+        expect(record.user[field]).toBeDefined();
+        expect(record.user[field]).toBeTruthy();
+        expect(record.user[field]).not.toBeNull();
+
+        if (field === "id") {
+          expect(record.user[field]).toBeGreaterThanOrEqual(1);
+        }
+
+        if (field === "phoneNumber") {
+          expect(typeof record.user[field] === "number").toBeTruthy();
+        }
+      }
 
 
       for (let cow of record.cows) {
-        expect(cow.id).toBeDefined();
-        expect(cow.id).toBeGreaterThanOrEqual(1);
-        expect(cow.name).toBeDefined();
-        expect(cow.name).toBeTruthy();
-        expect(cow.breed).toBeDefined();
-        expect(cow.breed).toBeTruthy();
-        expect(cow.bullName).toBeDefined();
-        expect(cow.bullName).toBeTruthy();
+        for (let field of cowFields) {
+          expect(cow[field]).toBeDefined();
+          expect(cow[field]).toBeTruthy();
+          expect(cow[field]).not.toBeNull();
+        }
+
+
         expect(cow.injectionInfoAndAiDates).toBeDefined();
         expect(cow.injectionInfoAndAiDates).toBeTruthy();
-        expect(cow.createdAt).toBeDefined();
-        expect(cow.createdAt).toBeTruthy();
+        expect(cow.injectionInfoAndAiDates).not.toBeNull();
 
-
-        for (let {id, name, cost, date} of cow.injectionInfoAndAiDates) {
-          expect(id).toBeDefined();
-          expect(id).toBeGreaterThanOrEqual(1);
-          expect(name).toBeDefined();
-          expect(name).toBeTruthy();
-          expect(cost).toBeTruthy();
-          expect(typeof cost === "number").toBeTruthy();
-          expect(cost).toBeTruthy();
-          expect(date).toBeDefined();
-          expect(date).toBeTruthy();
+        for (let injectionInfoAndAiDates of cow.injectionInfoAndAiDates) {
+          for (let filed of injectionInfoAndAiDatesFields) {
+            expect(injectionInfoAndAiDates[filed]).toBeDefined();
+            expect(injectionInfoAndAiDates[filed]).toBeTruthy();
+            expect(injectionInfoAndAiDates[filed]).not.toBeNull();
+  
+            if (filed === "id") {
+              expect(injectionInfoAndAiDates[filed]).toBeGreaterThanOrEqual(1);
+            }
+  
+            if (filed === "cost") {
+              expect(typeof injectionInfoAndAiDates[filed] === "number").toBeTruthy();
+            }
+          }
         }
       }
 
