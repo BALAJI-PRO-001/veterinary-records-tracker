@@ -29,7 +29,7 @@ async function createNewRecord(record: NewRecord): Promise<Record> {
   return {
     user: newUser,
     cows: newCows,
-    createdAt: newUser.createdAt
+    recordCreatedAt: newUser.createdAt
   };
 }
 
@@ -78,7 +78,7 @@ async function getAllRecords(): Promise<Array<Record>> {
     records.push({
       user: user,
       cows: userCows,
-      createdAt: user.createdAt
+      recordCreatedAt: user.createdAt
     });
   }
 
@@ -93,7 +93,7 @@ async function getRecordByUserId(userId: number): Promise<Record> {
   return {
     user: user,
     cows: cows,
-    createdAt: user.createdAt
+    recordCreatedAt: user.createdAt
   };
 }
 
@@ -160,7 +160,7 @@ async function updateRecord(record: RecordToUpdate): Promise<Record> {
   return {
     user: updatedUser as UserRecord,
     cows: updatedCows,
-    createdAt: updatedUser?.createdAt!
+    recordCreatedAt: updatedUser?.createdAt!
   }
 }
 

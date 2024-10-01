@@ -112,7 +112,7 @@ export interface NewRecord {
 export interface Record {
   user: User;
   cows: Cow[];
-  createdAt: string;
+  recordCreatedAt: string;
 }
 
 

@@ -45,6 +45,7 @@ export async function getAllRecords(req: Request, res: Response, next: NextFunct
     const records = await Record.getAllRecords();
     res.status(200).json({
       success: true,
+      statusCode: 200,
       length: records.length,
       data: {
         records: records
