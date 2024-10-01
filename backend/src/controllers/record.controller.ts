@@ -62,7 +62,7 @@ export async function getRecordByUserId(req: Request, res: Response, next: NextF
   try {
     const { userId } = req.params;
     if (!userId.match(/\d/)) {
-      return next(errorHandler(400, "Bad Request: Invalid user id in URL. The id must be a number, but a string was provided."));
+      return next(errorHandler(400, `Bad Request: Invalid user id in URL. The id must be a number, but "${userId}" provided.`));
     }
 
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
