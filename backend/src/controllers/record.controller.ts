@@ -146,6 +146,14 @@ export async function addNewCowToUser(req: Request, res: Response, next: NextFun
 export async function deleteCowFromUser(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId, cowId } = req.params;
+    if (!userId.match(/\d/)) {
+      return next(errorHandler(400, `Bad Request: Invalid user id in URL. The id must be a number, but '${userId}' provided.`));
+    }
+
+    if (!cowId.match(/\d/)) {
+      return next(errorHandler(400, `Bad Request: Invalid cow id in URL. The id must be a number, but '${cowId}' provided.`));
+    }
+
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
       return next(errorHandler(404, "User record not found for the specified user id: " + userId));
