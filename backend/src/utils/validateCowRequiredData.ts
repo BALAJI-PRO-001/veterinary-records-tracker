@@ -19,7 +19,13 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
     throw new CowDataValidationError(400, "Bad Request: Cows data must contain at least one cow entry.");
   }  
 
+
   for (let [currentCowIndex, cow] of Object.entries(cows)) {
+
+    if (Object.keys(cow).length !== 4) {
+      throw new CowDataValidationError(400, "Bad Request: Missing required cow data (name, breed, bullName, or injectionInfoAndAiDates).");
+    }
+
     for (let field of requiredFields) {
       if (cow[field] === undefined || cow[field] === "" || cow[field] === null) {
         throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] ${field} is required and cannot be (empty, null, or undefined).`);

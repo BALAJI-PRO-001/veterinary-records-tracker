@@ -102,7 +102,7 @@ export async function deleteRecord(req: Request, res: Response, next: NextFuncti
     if (!userId.match(/\d/)) {
       return next(errorHandler(400, `Bad Request: Invalid user id in URL. The id must be a number, but '${userId}' provided.`));
     }
-    
+
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
       return next(errorHandler(404, "Record not found for the specified user id: " + userId));
@@ -119,6 +119,10 @@ export async function deleteRecord(req: Request, res: Response, next: NextFuncti
 export async function addNewCowToUser(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId } = req.params;
+    if (!userId.match(/\d/)) {
+      return next(errorHandler(400, `Bad Request: Invalid user id in URL. The id must be a number, but '${userId}' provided.`));
+    }
+    
     const isRecordExists = await Record.hasUserRecord(Number(userId));
     if (!isRecordExists) {
       return next(errorHandler(404, "User record not found for the specified user id: " + userId));
