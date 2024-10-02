@@ -4,7 +4,7 @@ import errorHandler from "../utils/errorHandler";
 import validateUserRequiredData from "../utils/validateUserRequiredData";
 import validateCowRequiredData from "../utils/validateCowRequiredData";
 import validateInjectionInfoAndAiDatesRequiredData from "../utils/validateInjectionInfoAndAiDatesRequiredData";
-
+import validateURLId from "../utils/validateURLId";
 
 
 export async function createNewRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -61,9 +61,7 @@ export async function getAllRecords(req: Request, res: Response, next: NextFunct
 export async function getRecordByUserId(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId } = req.params;
-    if (!userId.match(/\d/)) {
-      return next(errorHandler(400, `Bad Request: Invalid user id in URL. The id must be a number, but '${userId}' provided.`));
-    }
+    validateURLId(userId, "user");
 
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
@@ -99,9 +97,7 @@ export async function deleteAllRecords(req: Request, res: Response, next: NextFu
 export async function deleteRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId } = req.params;
-    if (!userId.match(/\d/)) {
-      return next(errorHandler(400, `Bad Request: Invalid user id in URL. The id must be a number, but '${userId}' provided.`));
-    }
+    validateURLId(userId, "user");
 
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
@@ -119,9 +115,7 @@ export async function deleteRecord(req: Request, res: Response, next: NextFuncti
 export async function addNewCowToUser(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId } = req.params;
-    if (!userId.match(/\d/)) {
-      return next(errorHandler(400, `Bad Request: Invalid user id in URL. The id must be a number, but '${userId}' provided.`));
-    }
+    validateURLId(userId, "user");
     
     const isRecordExists = await Record.hasUserRecord(Number(userId));
     if (!isRecordExists) {
@@ -146,13 +140,8 @@ export async function addNewCowToUser(req: Request, res: Response, next: NextFun
 export async function deleteCowFromUser(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId, cowId } = req.params;
-    if (!userId.match(/\d/)) {
-      return next(errorHandler(400, `Bad Request: Invalid user id in URL. The id must be a number, but '${userId}' provided.`));
-    }
-
-    if (!cowId.match(/\d/)) {
-      return next(errorHandler(400, `Bad Request: Invalid cow id in URL. The id must be a number, but '${cowId}' provided.`));
-    }
+    validateURLId(userId, "user");
+    validateURLId(cowId, "cow");
 
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
@@ -176,6 +165,9 @@ export async function deleteCowFromUser(req: Request, res: Response, next: NextF
 export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId, cowId } = req.params;
+    validateURLId(userId, "user");
+    validateURLId(cowId, "cow");
+
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
       return next(errorHandler(404, "User record not found for the specified user id: " + userId));
