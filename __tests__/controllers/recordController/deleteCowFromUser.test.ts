@@ -11,7 +11,7 @@ beforeAll(async () => {
 
   const res = await request(app).post("/api/v1/admin/login").send({
     email: process.env.ADMIN_EMAIL,
-    password: "Admin@1234"
+    password: "<password>"
   });
 
   adminAccessToken = res.headers["set-cookie"];
@@ -19,7 +19,7 @@ beforeAll(async () => {
 
 
 describe("Record API Tests [ Delete Cow From User ]", () => {
-  test("Test 1 [ Task: Delete cow from user (Invalid user id) ] [ Response: Bad Request 400 ]", async () => {
+  test("Test 1 [ Task: Invalid user id ] [ Response: Bad Request 400 ]", async () => {
     const requestParamsToTest = ["a", null, undefined];
     for (let value of requestParamsToTest) {
       const res = await request(app).delete(`/api/v1/records/${value}/cows/1`).set("Cookie", adminAccessToken!);
@@ -31,7 +31,7 @@ describe("Record API Tests [ Delete Cow From User ]", () => {
   });
 
 
-  test("Test 2 [ Task: Delete cow from user (Invalid cow id) ] [ Response: Bad Request 400 ]", async () => {
+  test("Test 2 [ Task: Invalid cow id ] [ Response: Bad Request 400 ]", async () => {
     const requestParamsToTest = ["a", null, undefined];
     for (let value of requestParamsToTest) {
       const res = await request(app).delete(`/api/v1/records/1/cows/${value}`).set("Cookie", adminAccessToken!);
@@ -44,7 +44,7 @@ describe("Record API Tests [ Delete Cow From User ]", () => {
 
 
 
-  test("Test 3 [ Task: Delete cow from user (Valid id but user record not exists) ] [ Response: Record not found 404 ]", async () => {
+  test("Test 3 [ Task: Valid id but user record not exists ] [ Response: Record not found 404 ]", async () => {
     const res = await request(app).delete(`/api/v1/records/100/cows/1`).set("Cookie", adminAccessToken!);
     expect(res.statusCode).toBe(404);
     expect(res.body.statusCode).toBe(404);
@@ -54,7 +54,7 @@ describe("Record API Tests [ Delete Cow From User ]", () => {
 
 
 
-  test("Test 4 [ Task: Delete cow from user (Valid id but cow record not exists) ] [ Response: Record not found 404 ]", async () => {
+  test("Test 4 [ Task: Valid id but cow record not exists ] [ Response: Record not found 404 ]", async () => {
     const res = await request(app).delete(`/api/v1/records/1/cows/100`).set("Cookie", adminAccessToken!);
     expect(res.statusCode).toBe(404);
     expect(res.body.statusCode).toBe(404);
@@ -64,7 +64,7 @@ describe("Record API Tests [ Delete Cow From User ]", () => {
 
 
 
-  test("Test 5 [ Task: Delete cow from user (With valid data) ] [ Response: Record not found 404 ]", async () => {
+  test("Test 5 [ Task: Delete cow from user with valid id ] [ Response: Record not found 404 ]", async () => {
     const res = await request(app).delete(`/api/v1/records/1/cows/2`).set("Cookie", adminAccessToken!);
     expect(res.statusCode).toBe(204);
     expect(res.body).toEqual({});
