@@ -99,6 +99,10 @@ export async function deleteAllRecords(req: Request, res: Response, next: NextFu
 export async function deleteRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId } = req.params;
+    if (!userId.match(/\d/)) {
+      return next(errorHandler(400, `Bad Request: Invalid user id in URL. The id must be a number, but '${userId}' provided.`));
+    }
+    
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
       return next(errorHandler(404, "Record not found for the specified user id: " + userId));
