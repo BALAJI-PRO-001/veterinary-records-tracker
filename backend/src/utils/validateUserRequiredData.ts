@@ -11,6 +11,11 @@ class UserDataValidationError extends Error {
 
 
 export default function validateUserRequiredData(user: NewUser): UserDataValidationError | void {
+
+  if (Object.keys(user).length !== 3) {
+    throw new UserDataValidationError(400, "Bad Request: Missing required user data (name, phoneNumber, address).");
+  }
+
   const requiredFields: (keyof NewUser)[] = ["name", "phoneNumber", "address"];
   for (let field of requiredFields) {
     if (user[field] === undefined || user[field] === "" || user[field] === null) {
