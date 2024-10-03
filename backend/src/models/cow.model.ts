@@ -11,11 +11,24 @@ import {
 
 
 
-function validateId(id: number, name: "Cow" | "User" | "Injection info and ai dates") {
+function validateId(id: number, name: "Cow" | "User" | "Injection info and ai dates"): Error | void {
+  if (id < 0) {
+    throw new Error(`${name} id must be positive number.`);
+  }
+
   if (!id) {
     throw new Error(`${name} id is null or undefined.`)
   }
 }
+
+
+
+function validateCost(cost: number): void {
+  if (isNaN(cost)) {
+    throw new Error("Cost must be a valid number.");
+  }
+}
+
 
 
 async function addNewCow(newCow: NewCow): Promise<Cow> {
@@ -37,7 +50,9 @@ async function addNewCow(newCow: NewCow): Promise<Cow> {
 
 async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDates[]): Promise<InjectionInfoAndAiDates[]> {
   validateId(cowId, "Cow");
+
   for (let { name, cost, date } of injectionInfoAndAiDates) {
+    validateCost(cost);
     await sqlite3.insert(queries.INSERT_INJECTION_INFO_AND_AI_DATES_RECORD_SQL, cowId, name, cost, date);
   }
   return await getInjectionInfoAndAiDatesByCowId(cowId);

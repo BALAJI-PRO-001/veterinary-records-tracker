@@ -181,7 +181,3 @@ export default {
   removeInjectionInfoAndAiDatesFromCow,
   updateRecord
 };
-
-
-
-

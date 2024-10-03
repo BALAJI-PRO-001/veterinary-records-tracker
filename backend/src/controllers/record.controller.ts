@@ -180,6 +180,10 @@ export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Resp
 
     validateInjectionInfoAndAiDatesRequiredData(req.body);
 
+    if (typeof req.body.cost !== "number") {
+      return next(errorHandler(400, "Bad Request: Injection cost must be a valid number."));
+    }
+
     await Record.addNewInjectionInfoAndAiDatesToCow(Number(cowId), req.body);
     res.status(201).json({
       success: true,
