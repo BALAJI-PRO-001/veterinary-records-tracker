@@ -231,9 +231,15 @@ export async function removeInjectionInfoAndAiDatesFromCow(req: Request, res: Re
 export async function updateRecord(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId } = req.params;
+    validateURLId(userId, "user");
+
     const isRecordExists = await Record.hasUserRecord(Number(userId));
     if (!isRecordExists) {
       return next(errorHandler(404, "Record not found for the specified user id: " + userId));
+    }
+
+    if (Object.keys(req.body).length == 0) {
+      return next(errorHandler(400, "Bad Request: Cannot update data because the provided input is empty."));
     }
 
     const { user, cows } = req.body;
@@ -241,12 +247,29 @@ export async function updateRecord(req: Request, res: Response, next: NextFuncti
     if (user && user.id) {
       return next(errorHandler(400, "Bad Request: Cannot update user id."));
     }
-    
-    if (cows) {
-      for (let cow of cows) {
+
+    if (cows && cows.length > 0) {
+      for (let [currentCowIndex, cow] of Object.entries(cows) as unknown as any) {
+        if (!cow.id) {
+          return next(errorHandler(400, `Bad Request: Cow[${currentCowIndex}] id is required and cannot be (empty, null or undefined).`));
+        }
+
         const isCowRecordAvailable = await Record.hasCowRecord(cow.id);
         if (!isCowRecordAvailable) {
           return next(errorHandler(404, "Cow record not found for the specific cow id: " + cow.id));
+        }
+
+        if (cow.injectionInfoAndAiDates) {
+          for (let [index, injectionInfoAndAiDates] of Object.entries(cow.injectionInfoAndAiDates) as unknown as any) {
+            if (!injectionInfoAndAiDates.id) {
+              return next(errorHandler(400, `Bad Request: Cow[${currentCowIndex}] InjectionInfoAndAiDates[${index}] id is required and cannot be (empty, null or undefined).`));
+            }
+  
+            const isInjectInfoAndAiDatesRecordAvailable = await Record.hasInjectionInfoAndAiDatesRecord(injectionInfoAndAiDates.id);
+            if (!isInjectInfoAndAiDatesRecordAvailable) {
+              return next(errorHandler(404, "Injection info and ai dates record not found for the specific id " + injectionInfoAndAiDates.id));
+            }
+          }  
         }
       }
     }
@@ -261,6 +284,11 @@ export async function updateRecord(req: Request, res: Response, next: NextFuncti
       }
     });
   } catch(err) {
+    const errMessage = err instanceof Error ? err.message : String(err);
+    if (errMessage.includes("SQLITE_CONSTRAINT: UNIQUE constraint failed: users.phone_number")) {
+      return next(errorHandler(409, "Duplicate Key: Phone number is already in use by another record."));
+    }
+    console.log(err);
     next(err);
   }
 }

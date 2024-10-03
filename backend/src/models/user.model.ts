@@ -112,7 +112,7 @@ async function updateUserById(id: number, userDataToUpdate: UserToUpdate): Promi
   }
 
   for (let [key, value] of Object.entries(userDataToUpdate)) {
-    key = key.includes("phoneNumber") ? "phone_number" : key;
+    key = key === "phoneNumber" ? "phone_number" : key === "isCurrentUser" ? "is_current_user" : key;
     const sql = queries.UPDATE_USER_RECORD_BY_ID.replace("<column_name>", key);
     await sqlite3.update(sql, value, id);
   }

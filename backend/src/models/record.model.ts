@@ -149,13 +149,13 @@ async function updateRecord(record: RecordToUpdate): Promise<Record> {
     updatedUser = await User.updateUserById(Number(record.user.id), {...record.user});
   }
 
-  const updatedCows = [];
   if (record.cows) {
     for (let cow of record.cows) {
-      const updatedCow = await Cow.updateCowById(cow.id, {...cow});
-      updatedCows.push(updatedCow);
+      await Cow.updateCowById(cow.id, {...cow});
     }
   }
+
+  const updatedCows = await Cow.getCowsByUserId(Number(record.user!.id));
 
   return {
     user: updatedUser as UserRecord,
