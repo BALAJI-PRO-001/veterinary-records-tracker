@@ -6,7 +6,8 @@ import {
   CowInDB, 
   InjectionInfoAndAiDates,
   InjectionInfoAndAiDatesInDB,
-  CowToUpdate
+  CowToUpdate,
+  InjectionInfoAndAiDatesToUpdate
 } from "../utils/types";
 
 
@@ -72,6 +73,16 @@ async function getInjectionInfoAndAiDatesById(id: number): Promise<InjectionInfo
   validateId(id, "Injection info and ai dates");
   const injectionInfoAndAiDates =  await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL, false, id) as InjectionInfoAndAiDates;
   return injectionInfoAndAiDates ? injectionInfoAndAiDates : null;
+}
+
+
+
+async function updateInjectionInfoAndAiDatesById(id: number, injectInfoAndAiDates: InjectionInfoAndAiDatesToUpdate ): Promise<void> {
+  validateId(id, "Injection info and ai dates");
+  for (let [key, value] of Object.entries(injectInfoAndAiDates)) {
+    const sql = queries.UPDATE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL.replace("<column_name>", key);
+    await sqlite3.update(sql, value, id);
+  }
 }
 
 
@@ -188,8 +199,15 @@ async function updateCowById(id: number, cowDataToUpdate: CowToUpdate): Promise<
   validateId(id, "Cow");
 
   for (let [key, value] of Object.entries(cowDataToUpdate)) {
-    if (key === "id" || key === "injectionInfoAndAiDates") {
+    if (key === "id") {
       continue;
+    }
+
+    if (key === "injectionInfoAndAiDates" && cowDataToUpdate.injectionInfoAndAiDates) {
+      for (let injectInfoAndAiDates of cowDataToUpdate.injectionInfoAndAiDates) {
+        await updateInjectionInfoAndAiDatesById(injectInfoAndAiDates.id, injectInfoAndAiDates);
+      }
+      continue; 
     }
 
     key = key === "bullName" ? "bull_name" : key;
