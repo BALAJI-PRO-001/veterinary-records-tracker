@@ -76,7 +76,20 @@ describe("Record API Tests [Method: POST]", () => {
 
 
 
-describe("Records Api Tests [Method: DELETE]", () => {
+
+describe("Records API Tests [Method: PATCH]", () => {
+  test("PATCH: /api/v1/records/1", async () => {
+    const res = await request(app).patch("/api/v1/records/1").set("Cookie", adminAccessToken!);
+    expect(res.statusCode).toBe(500);
+    expect(res.body.statusCode).toBe(500);
+    expect(res.body.success).not.toBeTruthy();
+    expect(res.body.message).toBe("Database not connected.");
+  });
+});
+
+
+
+describe("Records API Tests [Method: DELETE]", () => {
   const urls = [
     "/api/v1/records/all",
     "/api/v1/records/1",
