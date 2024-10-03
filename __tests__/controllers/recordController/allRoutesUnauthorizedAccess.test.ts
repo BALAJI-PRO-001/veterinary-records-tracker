@@ -38,6 +38,18 @@ describe("Record API Tests [Method: POST]", () => {
 
 
 
+describe("Records API Tests [Method: PATCH]", () => {
+  test("PATCH: /api/v1/records/1 Response: Unauthorized [401]", async () => {
+    const res = await request(app).patch("/api/v1/records/1");
+    expect(res.statusCode).toBe(401);
+    expect(res.body.statusCode).toBe(401);
+    expect(res.body.success).not.toBeTruthy();
+    expect(res.body.message).toBe("Unauthorized: Admin access token is missing in cookies.");
+  });
+});
+
+
+
 describe("Records Api Tests [Method: DELETE]", () => {
   const urls = [
     "/api/v1/records/all",
