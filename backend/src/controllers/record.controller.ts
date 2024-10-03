@@ -200,6 +200,10 @@ export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Resp
 export async function removeInjectionInfoAndAiDatesFromCow(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId, cowId, id } = req.params;
+    validateURLId(userId, "user");
+    validateURLId(cowId, "cow");
+    validateURLId(id, "injectInfoAndAiDates");
+
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
       return next(errorHandler(404, "User record not found for the specified user id: " + userId));
