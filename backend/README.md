@@ -349,7 +349,7 @@ Response (Request Based)
   data: {
     user: {
       // updated keys and values
-      <key>: <values>
+      <key>: <value>
       ....
     }
 }
@@ -380,7 +380,7 @@ Response (Request Based)
   data: {
     cow: {
       // updated keys and values
-      <key>: <values>
+      <key>: <value>
       ....
     }
 }
@@ -411,7 +411,7 @@ Response (Request Based)
   data: {
     injectionInfoAndAiDate: {
       // updated keys and values
-      <key>: <values>
+      <key>: <value>
       ....
     }
 }
