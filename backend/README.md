@@ -16,7 +16,9 @@
   - [Delete cow from user](#delete-cow-from-user)
   - [Add new injection info and ai dates to cow](#add-new-injection-info-and-ai-dates-to-cow)
   - [Delete injection info and ai dates from cow](#delete-injection-info-and-ai-dates-from-cow)
-  - [Update Record](#update-record)
+  - [Update user record](#update-user-record)
+  - [Update cow record](#update-cow-record)
+  - [Update injection info and ai date record](#update-injection-info-and-ai-date-record)
 
 
 ## Admin Login
@@ -237,7 +239,7 @@ statusCode: 204  body: empty
 ```
 
 
-## Add new cow to user
+## Add New Cow To User
 **Api usage and request response details**
 
 ``` base
@@ -323,23 +325,19 @@ statusCode: 204  body: empty
 ```
 
 
-## Update Record (Pending)
+## Update User Record
 **Api usage and request response details**
 ``` base
 Request Information
 ===================
-URL: /api/v1/records/<userId>
+URL: /api/v1/records/users/<userId>
 METHOD: PATCH
 COOKIE: Admin cookie must 
 CONTENT-TYPE: application/json
 BODY: {
-  user: {
-    <key>: <value>
-    ....
-  },
-  cows: [
-   
-  ]
+  // user data to update
+  <key>: <value>
+  ....
 }
 
 
@@ -350,11 +348,71 @@ Response (Request Based)
   statusCode: 200,
   data: {
     user: {
-      ....updated key and values
-    },
-    cows: [
-      {}
-    ]
-  }
+      // updated keys and values
+      <key>: <values>
+      ....
+    }
+}
+```
+
+
+## Update Cow Record
+**Api usage and request response details**
+``` base
+Request Information
+===================
+URL: /api/v1/records/<userId>/cows/<cowId>
+METHOD: PATCH
+COOKIE: Admin cookie must 
+CONTENT-TYPE: application/json
+BODY: {
+  // cow data to update
+  <key>: <value>
+  ....
+}
+
+
+Response (Request Based)
+=========================
+{
+  success: true,
+  statusCode: 200,
+  data: {
+    cow: {
+      // updated keys and values
+      <key>: <values>
+      ....
+    }
+}
+```
+
+
+## Update Injection Info And Ai Date Record
+**Api usage and request response details**
+``` base
+Request Information
+===================
+URL: /api/v1/records/<userId>/cows/<cowId>/inject-info-ai-dates/<id>
+METHOD: PATCH
+COOKIE: Admin cookie must 
+CONTENT-TYPE: application/json
+BODY: {
+  // injection info and ai date data to update
+  <key>: <value>
+  ....
+}
+
+
+Response (Request Based)
+=========================
+{
+  success: true,
+  statusCode: 200,
+  data: {
+    injectionInfoAndAiDate: {
+      // updated keys and values
+      <key>: <values>
+      ....
+    }
 }
 ```
