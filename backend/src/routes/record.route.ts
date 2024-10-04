@@ -9,7 +9,9 @@ import {
   deleteCowFromUser,
   addNewInjectionInfoAndAiDatesToCow,
   removeInjectionInfoAndAiDatesFromCow,
-  updateRecord
+  updateUserRecord,
+  updateCowRecord,
+  updateInjectionInfoAndAiDates
 } from "../controllers/record.controller";
 
 import verifyAdminAuthenticationToken from "../utils/verifyAdminAuthenticationToken";
@@ -25,7 +27,9 @@ router.post("", verifyAdminAuthenticationToken, createNewRecord)
 router.get("/all", verifyAdminAuthenticationToken, getAllRecords)
       .get("/:userId", verifyAdminAuthenticationToken, getRecordByUserId);
 
-router.patch("/:userId", verifyAdminAuthenticationToken, updateRecord);
+router.patch("/users/:userId", verifyAdminAuthenticationToken, updateUserRecord)
+      .patch("/:userId/cows/:cowId", verifyAdminAuthenticationToken, updateCowRecord)
+      .patch("/:userId/cows/:cowId/inject-info-ai-dates/:id", updateInjectionInfoAndAiDates);
 
 router.delete("/all", verifyAdminAuthenticationToken, deleteAllRecords)
       .delete("/:userId", verifyAdminAuthenticationToken, deleteRecord)

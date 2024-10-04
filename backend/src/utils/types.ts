@@ -123,10 +123,3 @@ export interface Record {
   cows: Cow[];
   recordCreatedAt: string;
 }
-
-
-
-export interface RecordToUpdate {
-  user?: UserToUpdate;
-  cows?: CowToUpdate[];
-}

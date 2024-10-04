@@ -24,7 +24,7 @@ export async function createNewRecord(req: Request, res: Response, next: NextFun
       }
     } catch(err) {
       const errMessage = err instanceof Error ? err.message : String(err);
-      return next(errorHandler(400, errMessage));
+      return next(errorHandler(400, "Bad Request: " + errMessage));
     }
 
     await Record.createNewRecord({user: user, cows: cows});
@@ -228,67 +228,54 @@ export async function removeInjectionInfoAndAiDatesFromCow(req: Request, res: Re
 
 
 
-export async function updateRecord(req: Request, res: Response, next: NextFunction) {
-  try {
+
+export async function updateUserRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try { 
     const { userId } = req.params;
     validateURLId(userId, "user");
 
-    const isRecordExists = await Record.hasUserRecord(Number(userId));
-    if (!isRecordExists) {
-      return next(errorHandler(404, "Record not found for the specified user id: " + userId));
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
     }
 
-    if (Object.keys(req.body).length == 0) {
-      return next(errorHandler(400, "Bad Request: Cannot update data because the provided input is empty."));
-    }
-
-    const { user, cows } = req.body;
-
-    if (user && user.id) {
+    if (req.body.id) {
       return next(errorHandler(400, "Bad Request: Cannot update user id."));
     }
 
-    if (cows && cows.length > 0) {
-      for (let [currentCowIndex, cow] of Object.entries(cows) as unknown as any) {
-        if (!cow.id) {
-          return next(errorHandler(400, `Bad Request: Cow[${currentCowIndex}] id is required and cannot be (empty, null or undefined).`));
-        }
-
-        const isCowRecordAvailable = await Record.hasCowRecord(cow.id);
-        if (!isCowRecordAvailable) {
-          return next(errorHandler(404, "Cow record not found for the specific cow id: " + cow.id));
-        }
-
-        if (cow.injectionInfoAndAiDates) {
-          for (let [index, injectionInfoAndAiDates] of Object.entries(cow.injectionInfoAndAiDates) as unknown as any) {
-            if (!injectionInfoAndAiDates.id) {
-              return next(errorHandler(400, `Bad Request: Cow[${currentCowIndex}] InjectionInfoAndAiDates[${index}] id is required and cannot be (empty, null or undefined).`));
-            }
-  
-            const isInjectInfoAndAiDatesRecordAvailable = await Record.hasInjectionInfoAndAiDatesRecord(injectionInfoAndAiDates.id);
-            if (!isInjectInfoAndAiDatesRecordAvailable) {
-              return next(errorHandler(404, "Injection info and ai dates record not found for the specific id " + injectionInfoAndAiDates.id));
-            }
-          }  
-        }
-      }
+    if (req.body && Object.keys(req.body).length === 0) {
+      return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
     }
 
-    const updatedRecord = await Record.updateRecord({user: {id: userId, ...user}, cows: cows});
-
+    const updatedUser = await Record.updateUserRecordById(Number(userId), req.body);
     res.status(200).json({
       success: true,
       statusCode: 200,
       data: {
-        record: updatedRecord
+        record: updatedUser
       }
     });
   } catch(err) {
     const errMessage = err instanceof Error ? err.message : String(err);
+    if (errMessage.includes("Phone number must be a valid number with exactly 10 digits.")) {
+      return next(errorHandler(400, "Bad Request: " + errMessage));
+    }
+
     if (errMessage.includes("SQLITE_CONSTRAINT: UNIQUE constraint failed: users.phone_number")) {
       return next(errorHandler(409, "Duplicate Key: Phone number is already in use by another record."));
     }
-    console.log(err);
     next(err);
   }
+}
+
+
+
+export async function updateCowRecord(req: Request, res: Response, next: NextFunction) {
+  
+}
+
+
+
+export async function updateInjectionInfoAndAiDates(req: Request, res: Response, next: NextFunction) {
+  
 }

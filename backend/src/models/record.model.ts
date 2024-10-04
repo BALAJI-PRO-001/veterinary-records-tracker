@@ -7,7 +7,7 @@ import {
   NewRecord,
   Record,
   InjectionInfoAndAiDates,
-  RecordToUpdate,
+  UserToUpdate,
 } from "../utils/types";
 
 
@@ -143,25 +143,8 @@ async function removeInjectionInfoAndAiDatesFromCow(id: number) {
 
 
 
-async function updateRecord(record: RecordToUpdate): Promise<Record> {
-  let updatedUser: UserRecord | null = null;
-  if (record.user) {
-    updatedUser = await User.updateUserById(Number(record.user.id), {...record.user});
-  }
-
-  if (record.cows) {
-    for (let cow of record.cows) {
-      await Cow.updateCowById(cow.id, {...cow});
-    }
-  }
-
-  const updatedCows = await Cow.getCowsByUserId(Number(record.user!.id));
-
-  return {
-    user: updatedUser as UserRecord,
-    cows: updatedCows,
-    recordCreatedAt: updatedUser?.createdAt!
-  }
+async function updateUserRecordById(id: number, dataToUpdate: UserToUpdate) {
+  return await User.updateUserById(id, dataToUpdate);
 }
 
 
@@ -179,5 +162,5 @@ export default {
   deleteCowFromUser,
   addNewInjectionInfoAndAiDatesToCow,
   removeInjectionInfoAndAiDatesFromCow,
-  updateRecord
+  updateUserRecordById
 };
