@@ -252,7 +252,7 @@ export async function updateUserRecord(req: Request, res: Response, next: NextFu
       success: true,
       statusCode: 200,
       data: {
-        record: updatedUser
+        user: updatedUser
       }
     });
   } catch(err) {
@@ -271,7 +271,36 @@ export async function updateUserRecord(req: Request, res: Response, next: NextFu
 
 
 export async function updateCowRecord(req: Request, res: Response, next: NextFunction) {
-  
+  try {
+    const { userId, cowId } = req.params;
+    validateURLId(userId, "user");
+    validateURLId(cowId, "cow");
+
+    if (req.body.id) {
+      return next(errorHandler(400, "Cannot update cow id."));
+    }
+
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
+    }
+
+    const isCowRecordAvailable = await Record.hasCowRecord(Number(cowId));
+    if (!isCowRecordAvailable) {
+      return next(errorHandler(404, "Cow record not found for the specified cow id: " + userId));
+    }
+
+    const updatedCow = await Record.updateCowRecordById(Number(cowId), req.body);
+    res.status(200).json({
+      success: true,
+      statusCode: 200,
+      data: {
+        cow: updatedCow
+      }
+    });
+  } catch(err) {
+    next(err);
+  }
 }
 
 

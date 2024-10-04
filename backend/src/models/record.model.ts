@@ -7,7 +7,9 @@ import {
   NewRecord,
   Record,
   InjectionInfoAndAiDates,
-  UserToUpdate,
+  UserDataToUpdate,
+  CowDataToUpdate,
+  UpdatedCow,
 } from "../utils/types";
 
 
@@ -124,7 +126,7 @@ async function addNewCowToUser(userId: number, newCow: NewCow): Promise<CowRecor
 
 
 
-async function deleteCowFromUser(cowId: number) {
+async function deleteCowFromUser(cowId: number): Promise<void> {
   await Cow.deleteCowById(cowId);
 }
 
@@ -137,16 +139,21 @@ async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAn
 
 
 
-async function removeInjectionInfoAndAiDatesFromCow(id: number) {
+async function removeInjectionInfoAndAiDatesFromCow(id: number): Promise<void> {
   await Cow.deleteInjectionInfoAndAiDatesById(id);
 }
 
 
 
-async function updateUserRecordById(id: number, dataToUpdate: UserToUpdate) {
-  return await User.updateUserById(id, dataToUpdate);
+async function updateUserRecordById(id: number, userDataToUpdate: UserDataToUpdate): Promise<UserRecord> {
+  return await User.updateUserById(id, userDataToUpdate);
 }
 
+
+
+async function updateCowRecordById(id: number, cowDataToUpdate: CowDataToUpdate): Promise<UpdatedCow>  {
+  return await Cow.updateCowById(id, cowDataToUpdate);
+}
 
 
 export default {
@@ -162,5 +169,6 @@ export default {
   deleteCowFromUser,
   addNewInjectionInfoAndAiDatesToCow,
   removeInjectionInfoAndAiDatesFromCow,
-  updateUserRecordById
+  updateUserRecordById,
+  updateCowRecordById
 };

@@ -17,7 +17,7 @@ export interface User {
 
 
 
-export interface UserToUpdate {
+export interface UserDataToUpdate {
   id?: number;
   name?: string;
   phoneNumber?: number;
@@ -101,7 +101,7 @@ export interface CowInDB {
 
 
 
-export interface CowToUpdate {
+export interface CowDataToUpdate {
   id: number;
   name?: string;
   breed?: string;
@@ -109,6 +109,14 @@ export interface CowToUpdate {
   injectionInfoAndAiDates?: InjectionInfoAndAiDates[];
 }
 
+
+export interface UpdatedCow {
+  id: number;
+  name: string;
+  breed: string;
+  bullName: string;
+  createdAt: string;
+}
 
 
 export interface NewRecord {

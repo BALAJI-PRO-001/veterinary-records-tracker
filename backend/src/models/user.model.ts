@@ -4,7 +4,7 @@ import {
  NewUser,
  User,
  UserInDB,
- UserToUpdate
+ UserDataToUpdate
 } from "../utils/types";
 
 
@@ -100,7 +100,7 @@ async function getAllUsers(): Promise<User[]> {
 
 
 
-async function updateUserById(id: number, userDataToUpdate: UserToUpdate): Promise<User> {
+async function updateUserById(id: number, userDataToUpdate: UserDataToUpdate): Promise<User> {
   validateId(id);
 
   if (Object.keys(userDataToUpdate).length == 0) {
