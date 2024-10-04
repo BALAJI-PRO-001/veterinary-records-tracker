@@ -276,10 +276,6 @@ export async function updateCowRecord(req: Request, res: Response, next: NextFun
     validateURLId(userId, "user");
     validateURLId(cowId, "cow");
 
-    if (req.body.id) {
-      return next(errorHandler(400, "Cannot update cow id."));
-    }
-
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
       return next(errorHandler(404, "User record not found for the specified user id: " + userId));
@@ -287,7 +283,15 @@ export async function updateCowRecord(req: Request, res: Response, next: NextFun
 
     const isCowRecordAvailable = await Record.hasCowRecord(Number(cowId));
     if (!isCowRecordAvailable) {
-      return next(errorHandler(404, "Cow record not found for the specified cow id: " + userId));
+      return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
+    }
+
+    if (req.body.id) {
+      return next(errorHandler(400, "Bad Request: Cannot update cow id."));
+    }
+
+    if (req.body && Object.keys(req.body).length === 0) {
+      return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
     }
 
     const updatedCow = await Record.updateCowRecordById(Number(cowId), req.body);
@@ -306,5 +310,44 @@ export async function updateCowRecord(req: Request, res: Response, next: NextFun
 
 
 export async function updateInjectionInfoAndAiDates(req: Request, res: Response, next: NextFunction) {
-  
+  try {
+    const { userId, cowId, id } = req.params;
+    validateURLId(userId, "user");
+    validateURLId(cowId, "cow");
+    validateURLId(id, "inject info and ai dates");
+
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
+    }
+
+    const isCowRecordAvailable = await Record.hasCowRecord(Number(cowId));
+    if (!isCowRecordAvailable) {
+      return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
+    }
+
+    const isInjectionInfoAndAiDatesRecordAvailable = await Record.hasInjectionInfoAndAiDatesRecord(Number(id));
+    if (!isInjectionInfoAndAiDatesRecordAvailable) {
+      return next(errorHandler(404, "Injection info and ai dates record not found for the specific id: " + id));
+    }
+
+    if (req.body.id) {
+      return next(errorHandler(400, "Bad Request: Cannot update injection info ai dates id."));
+    }
+
+    if (req.body && Object.keys(req.body).length === 0) {
+      return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
+    }
+
+    const updatedInjectionInfoAndAiDate = await Record.updateInjectionInfoAndAiDate(Number(id), req.body);
+    res.status(200).json({
+      success: true,
+      statusCode: 200,
+      data: {
+        injectionInfoAndAiDate: updatedInjectionInfoAndAiDate
+      }
+    })
+  } catch(err) {
+    next(err);
+  }
 }

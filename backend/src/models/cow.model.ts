@@ -7,7 +7,7 @@ import {
   InjectionInfoAndAiDates,
   InjectionInfoAndAiDatesInDB,
   CowDataToUpdate,
-  InjectionInfoAndAiDatesToUpdate,
+  InjectionInfoAndAiDatesDataToUpdate,
   UpdatedCow
 } from "../utils/types";
 
@@ -78,12 +78,13 @@ async function getInjectionInfoAndAiDatesById(id: number): Promise<InjectionInfo
 
 
 
-async function updateInjectionInfoAndAiDatesById(id: number, injectInfoAndAiDates: InjectionInfoAndAiDatesToUpdate ): Promise<void> {
+async function updateInjectionInfoAndAiDateById(id: number, injectInfoAndAiDates: InjectionInfoAndAiDatesDataToUpdate ): Promise<InjectionInfoAndAiDates> {
   validateId(id, "Injection info and ai dates");
   for (let [key, value] of Object.entries(injectInfoAndAiDates)) {
     const sql = queries.UPDATE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL.replace("<column_name>", key);
     await sqlite3.update(sql, value, id);
   }
+  return await getInjectionInfoAndAiDatesById(id) as InjectionInfoAndAiDates;
 }
 
 
@@ -176,7 +177,7 @@ async function deleteAllCows(): Promise<void> {
 }
 
 
-
+ 
 async function deleteCowsByUserId(userId: number): Promise<void> {
   validateId(userId, "User");
   const cows = await getCowsByUserId(userId);
@@ -222,5 +223,6 @@ export default {
   addNewInjectionInfoAndAiDatesToCow,
   getInjectionInfoAndAiDatesById,
   deleteInjectionInfoAndAiDatesById,
-  updateCowById
+  updateCowById,
+  updateInjectionInfoAndAiDateById
 };

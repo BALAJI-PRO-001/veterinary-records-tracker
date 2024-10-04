@@ -59,12 +59,14 @@ export interface InjectionInfoAndAiDates {
 
 
 
-export interface InjectionInfoAndAiDatesToUpdate {
+export interface InjectionInfoAndAiDatesDataToUpdate {
   id: number;
   name?: string;
   cost?: number;
   date?: string;
 }
+
+
 
 
 

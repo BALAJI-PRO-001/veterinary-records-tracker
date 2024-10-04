@@ -10,6 +10,7 @@ import {
   UserDataToUpdate,
   CowDataToUpdate,
   UpdatedCow,
+  InjectionInfoAndAiDatesDataToUpdate,
 } from "../utils/types";
 
 
@@ -156,6 +157,12 @@ async function updateCowRecordById(id: number, cowDataToUpdate: CowDataToUpdate)
 }
 
 
+
+async function updateInjectionInfoAndAiDate(id: number, injectionInfoAndAiDatesDataToUpdate: InjectionInfoAndAiDatesDataToUpdate) {
+  return await Cow.updateInjectionInfoAndAiDateById(id, injectionInfoAndAiDatesDataToUpdate);
+}
+
+
 export default {
   createNewRecord,
   isPhoneNumberAlreadyInUse,
@@ -170,5 +177,6 @@ export default {
   addNewInjectionInfoAndAiDatesToCow,
   removeInjectionInfoAndAiDatesFromCow,
   updateUserRecordById,
-  updateCowRecordById
+  updateCowRecordById,
+  updateInjectionInfoAndAiDate
 };
