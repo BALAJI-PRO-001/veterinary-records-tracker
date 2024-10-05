@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./backend/dist/index.js",
-    "dev": "nodemon ./backend/src/index.ts",
+    "ts-dev": "nodemon ./backend/src/index.ts",
+    "js-dev": "tsc && nodemon ./backend/dist/index.js",
     "build": "tsc",
     "test": "jest"
   },
