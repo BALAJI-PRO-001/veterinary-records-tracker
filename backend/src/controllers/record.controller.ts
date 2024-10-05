@@ -3,7 +3,7 @@ import Record from "../models/record.model";
 import errorHandler from "../utils/errorHandler";
 import validateUserRequiredData from "../utils/validateUserRequiredData";
 import validateCowRequiredData from "../utils/validateCowRequiredData";
-import validateInjectionInfoAndAiDatesRequiredData from "../utils/validateInjectionInfoAndAiDatesRequiredData";
+import validateInjectionInfoAndAiDateRequiredData from "../utils/validateInjectionInfoAndAiDateRequiredData";
 import validateURLId from "../utils/validateURLId";
 
 
@@ -162,7 +162,7 @@ export async function deleteCowFromUser(req: Request, res: Response, next: NextF
 
 
 
-export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function addNewInjectionInfoAndAiDateToCow(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId, cowId } = req.params;
     validateURLId(userId, "user");
@@ -178,13 +178,13 @@ export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Resp
       return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
     }
 
-    validateInjectionInfoAndAiDatesRequiredData(req.body);
+    validateInjectionInfoAndAiDateRequiredData(req.body);
 
     if (typeof req.body.cost !== "number") {
       return next(errorHandler(400, "Bad Request: Injection cost must be a valid number."));
     }
 
-    await Record.addNewInjectionInfoAndAiDatesToCow(Number(cowId), req.body);
+    await Record.addNewInjectionInfoAndAiDateToCow(Number(cowId), req.body);
     res.status(201).json({
       success: true,
       statusCode: 201,
@@ -197,7 +197,7 @@ export async function addNewInjectionInfoAndAiDatesToCow(req: Request, res: Resp
 
 
 
-export async function removeInjectionInfoAndAiDatesFromCow(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function removeInjectionInfoAndAiDateFromCow(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId, cowId, id } = req.params;
     validateURLId(userId, "user");
@@ -214,12 +214,12 @@ export async function removeInjectionInfoAndAiDatesFromCow(req: Request, res: Re
       return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
     }
 
-    const isInjectionInfoAndAiDatesRecordAvailable = await Record.hasInjectionInfoAndAiDatesRecord(Number(id));
-    if (!isInjectionInfoAndAiDatesRecordAvailable) {
+    const isInjectionInfoAndAiDateRecordAvailable = await Record.hasInjectionInfoAndAiDateRecord(Number(id));
+    if (!isInjectionInfoAndAiDateRecordAvailable) {
       return next(errorHandler(404, "Injection info and ai dates record not found for the specific id: " + id));
     }
 
-    await Record.removeInjectionInfoAndAiDatesFromCow(Number(id));
+    await Record.removeInjectionInfoAndAiDateFromCow(Number(id));
     res.status(204).json({});
   } catch(err) {
     next(err);
@@ -309,7 +309,7 @@ export async function updateCowRecord(req: Request, res: Response, next: NextFun
 
 
 
-export async function updateInjectionInfoAndAiDates(req: Request, res: Response, next: NextFunction) {
+export async function updateInjectionInfoAndAiDate(req: Request, res: Response, next: NextFunction) {
   try {
     const { userId, cowId, id } = req.params;
     validateURLId(userId, "user");
@@ -326,8 +326,8 @@ export async function updateInjectionInfoAndAiDates(req: Request, res: Response,
       return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
     }
 
-    const isInjectionInfoAndAiDatesRecordAvailable = await Record.hasInjectionInfoAndAiDatesRecord(Number(id));
-    if (!isInjectionInfoAndAiDatesRecordAvailable) {
+    const isInjectionInfoAndAiDateRecordAvailable = await Record.hasInjectionInfoAndAiDateRecord(Number(id));
+    if (!isInjectionInfoAndAiDateRecordAvailable) {
       return next(errorHandler(404, "Injection info and ai dates record not found for the specific id: " + id));
     }
 

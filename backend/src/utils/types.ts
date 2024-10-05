@@ -44,13 +44,13 @@ export interface NewCow {
   name: string;
   breed: string;
   bullName: string;
-  injectionInfoAndAiDates: InjectionInfoAndAiDates[];
+  injectionInfoAndAiDates: InjectionInfoAndAiDate[];
 }
 
 
 
 
-export interface InjectionInfoAndAiDates {
+export interface InjectionInfoAndAiDate {
   id: number;
   name: string;
   cost: number;
@@ -59,7 +59,7 @@ export interface InjectionInfoAndAiDates {
 
 
 
-export interface InjectionInfoAndAiDatesDataToUpdate {
+export interface InjectionInfoAndAiDateDataToUpdate {
   id: number;
   name?: string;
   cost?: number;
@@ -70,7 +70,7 @@ export interface InjectionInfoAndAiDatesDataToUpdate {
 
 
 
-export interface InjectionInfoAndAiDatesInDB {
+export interface InjectionInfoAndAiDateInDB {
   id: number;
   cow_id: number;
   name: string;
@@ -86,7 +86,7 @@ export interface Cow {
   name: string;
   breed: string ;
   bullName: string;
-  injectionInfoAndAiDates: InjectionInfoAndAiDates[];
+  injectionInfoAndAiDates: InjectionInfoAndAiDate[];
   createdAt: string;
 }
 
@@ -108,7 +108,7 @@ export interface CowDataToUpdate {
   name?: string;
   breed?: string;
   bullName?: string;
-  injectionInfoAndAiDates?: InjectionInfoAndAiDates[];
+  injectionInfoAndAiDates?: InjectionInfoAndAiDate[];
 }
 
 

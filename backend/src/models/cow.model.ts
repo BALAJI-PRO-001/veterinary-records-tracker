@@ -4,10 +4,10 @@ import {
   NewCow, 
   Cow, 
   CowInDB, 
-  InjectionInfoAndAiDates,
-  InjectionInfoAndAiDatesInDB,
+  InjectionInfoAndAiDate,
+  InjectionInfoAndAiDateInDB,
   CowDataToUpdate,
-  InjectionInfoAndAiDatesDataToUpdate,
+  InjectionInfoAndAiDateDataToUpdate,
   UpdatedCow
 } from "../utils/types";
 
@@ -36,7 +36,7 @@ function validateCost(cost: number): void {
 async function addNewCow(newCow: NewCow): Promise<Cow> {
   await sqlite3.insert(queries.INSERT_COW_RECORD_SQL, newCow.userId, newCow.name, newCow.breed, newCow.bullName);
   const createdCow = await sqlite3.select(queries.SELECT_LAST_COW_RECORD_SQL, false) as CowInDB;
-  let newInjectionInfoAndAiDates = await addNewInjectionInfoAndAiDatesToCow(createdCow.id, newCow.injectionInfoAndAiDates) as InjectionInfoAndAiDates[];
+  let newInjectionInfoAndAiDates = await addNewInjectionInfoAndAiDatesToCow(createdCow.id, newCow.injectionInfoAndAiDates) as InjectionInfoAndAiDate[];
 
   return {
     id: createdCow.id,
@@ -50,7 +50,7 @@ async function addNewCow(newCow: NewCow): Promise<Cow> {
 
 
 
-async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDates[]): Promise<InjectionInfoAndAiDates[]> {
+async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDate[]): Promise<InjectionInfoAndAiDate[]> {
   validateId(cowId, "Cow");
 
   for (let { name, cost, date } of injectionInfoAndAiDates) {
@@ -63,28 +63,28 @@ async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAn
 
 
 
-async function getInjectionInfoAndAiDatesByCowId(cowId: number): Promise<InjectionInfoAndAiDates[]> {
+async function getInjectionInfoAndAiDatesByCowId(cowId: number): Promise<InjectionInfoAndAiDate[]> {
   validateId(cowId, "Cow");
-  return await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_COW_ID_SQL, true, cowId) as InjectionInfoAndAiDates[];
+  return await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_COW_ID_SQL, true, cowId) as InjectionInfoAndAiDate[];
 }
 
 
 
-async function getInjectionInfoAndAiDatesById(id: number): Promise<InjectionInfoAndAiDates | null> {
+async function getInjectionInfoAndAiDateById(id: number): Promise<InjectionInfoAndAiDate | null> {
   validateId(id, "Injection info and ai dates");
-  const injectionInfoAndAiDates =  await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL, false, id) as InjectionInfoAndAiDates;
-  return injectionInfoAndAiDates ? injectionInfoAndAiDates : null;
+  const injectionInfoAndAiDate =  await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL, false, id) as InjectionInfoAndAiDate;
+  return injectionInfoAndAiDate ? injectionInfoAndAiDate : null;
 }
 
 
 
-async function updateInjectionInfoAndAiDateById(id: number, injectInfoAndAiDates: InjectionInfoAndAiDatesDataToUpdate ): Promise<InjectionInfoAndAiDates> {
+async function updateInjectionInfoAndAiDateById(id: number, injectInfoAndAiDate: InjectionInfoAndAiDateDataToUpdate ): Promise<InjectionInfoAndAiDate> {
   validateId(id, "Injection info and ai dates");
-  for (let [key, value] of Object.entries(injectInfoAndAiDates)) {
+  for (let [key, value] of Object.entries(injectInfoAndAiDate)) {
     const sql = queries.UPDATE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL.replace("<column_name>", key);
     await sqlite3.update(sql, value, id);
   }
-  return await getInjectionInfoAndAiDatesById(id) as InjectionInfoAndAiDates;
+  return await getInjectionInfoAndAiDateById(id) as InjectionInfoAndAiDate;
 }
 
 
@@ -96,7 +96,7 @@ async function deleteInjectionInfoAndAiDatesByCowId(cowId: number): Promise<void
 
 
 
-async function deleteInjectionInfoAndAiDatesById(id: number) {
+async function deleteInjectionInfoAndAiDateById(id: number) {
   validateId(id, "Injection info and ai dates");
   await sqlite3.delete(queries.DELETE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL, id);
 }
@@ -105,11 +105,11 @@ async function deleteInjectionInfoAndAiDatesById(id: number) {
 
 async function getAllCows(): Promise<Cow[]> {
   let cows = await sqlite3.select(queries.SELECT_ALL_COWS_RECORDS_SQL, true) as CowInDB[];
-  const injectionInfoAndAiDates = await sqlite3.select(queries.SELECT_ALL_INJECTION_INFO_AND_AI_DATES_RECORDS_WITH_COW_ID_SQL, true) as InjectionInfoAndAiDatesInDB[];
+  const injectionInfoAndAiDates = await sqlite3.select(queries.SELECT_ALL_INJECTION_INFO_AND_AI_DATES_RECORDS_WITH_COW_ID_SQL, true) as InjectionInfoAndAiDateInDB[];
 
   const cowsRecords: Cow[] = [];
   for (let cow of cows) {
-    const cowInjectionInfoAndAiDates: InjectionInfoAndAiDates[] = injectionInfoAndAiDates
+    const cowInjectionInfoAndAiDates: InjectionInfoAndAiDate[] = injectionInfoAndAiDates
       .filter(({cow_id}) => cow_id === cow.id)
       .map(({id, name, cost, date}) => {
           return {id, name, cost, date};
@@ -221,8 +221,8 @@ export default {
   deleteCowById,
   deleteCowsByUserId,
   addNewInjectionInfoAndAiDatesToCow,
-  getInjectionInfoAndAiDatesById,
-  deleteInjectionInfoAndAiDatesById,
+  getInjectionInfoAndAiDateById,
+  deleteInjectionInfoAndAiDateById,
   updateCowById,
   updateInjectionInfoAndAiDateById
 };

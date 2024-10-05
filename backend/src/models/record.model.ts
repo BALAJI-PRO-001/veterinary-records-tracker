@@ -6,11 +6,11 @@ import {
   NewCow,
   NewRecord,
   Record,
-  InjectionInfoAndAiDates,
+  InjectionInfoAndAiDate,
   UserDataToUpdate,
   CowDataToUpdate,
   UpdatedCow,
-  InjectionInfoAndAiDatesDataToUpdate,
+  InjectionInfoAndAiDateDataToUpdate,
 } from "../utils/types";
 
 
@@ -59,9 +59,9 @@ async function hasCowRecord(cowId: number) {
 
 
 
-async function hasInjectionInfoAndAiDatesRecord(id: number): Promise<boolean> {
-  const injectionInfoAndAiDates = await Cow.getInjectionInfoAndAiDatesById(id);
-  return injectionInfoAndAiDates ? true : false;
+async function hasInjectionInfoAndAiDateRecord(id: number): Promise<boolean> {
+  const injectionInfoAndAiDate = await Cow.getInjectionInfoAndAiDateById(id);
+  return injectionInfoAndAiDate ? true : false;
 }
 
 
@@ -134,14 +134,14 @@ async function deleteCowFromUser(cowId: number): Promise<void> {
 
 
 
-async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDates): Promise<void> {
+async function addNewInjectionInfoAndAiDateToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDate): Promise<void> {
    await Cow.addNewInjectionInfoAndAiDatesToCow(cowId, [injectionInfoAndAiDates]);
 }
 
 
 
-async function removeInjectionInfoAndAiDatesFromCow(id: number): Promise<void> {
-  await Cow.deleteInjectionInfoAndAiDatesById(id);
+async function removeInjectionInfoAndAiDateFromCow(id: number): Promise<void> {
+  await Cow.deleteInjectionInfoAndAiDateById(id);
 }
 
 
@@ -158,7 +158,7 @@ async function updateCowRecordById(id: number, cowDataToUpdate: CowDataToUpdate)
 
 
 
-async function updateInjectionInfoAndAiDate(id: number, injectionInfoAndAiDatesDataToUpdate: InjectionInfoAndAiDatesDataToUpdate) {
+async function updateInjectionInfoAndAiDate(id: number, injectionInfoAndAiDatesDataToUpdate: InjectionInfoAndAiDateDataToUpdate) {
   return await Cow.updateInjectionInfoAndAiDateById(id, injectionInfoAndAiDatesDataToUpdate);
 }
 
@@ -169,13 +169,13 @@ export default {
   getAllRecords,
   getRecordByUserId,
   hasUserRecord, hasCowRecord,
-  hasInjectionInfoAndAiDatesRecord,
+  hasInjectionInfoAndAiDateRecord,
   deleteAllRecords,
   deleteRecordByUserId,
   addNewCowToUser,
   deleteCowFromUser,
-  addNewInjectionInfoAndAiDatesToCow,
-  removeInjectionInfoAndAiDatesFromCow,
+  addNewInjectionInfoAndAiDateToCow,
+  removeInjectionInfoAndAiDateFromCow,
   updateUserRecordById,
   updateCowRecordById,
   updateInjectionInfoAndAiDate
