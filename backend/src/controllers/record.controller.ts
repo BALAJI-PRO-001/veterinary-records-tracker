@@ -236,7 +236,7 @@ export async function updateUserRecord(req: Request, res: Response, next: NextFu
 
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
-      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
+      return next(errorHandler(404, `User record not found for the specified user id: ${userId}.`));
     }
 
     if (req.body.id) {
@@ -245,6 +245,12 @@ export async function updateUserRecord(req: Request, res: Response, next: NextFu
 
     if (req.body && Object.keys(req.body).length === 0) {
       return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
+    }
+
+    for (let [key, value] of Object.entries(req.body)) {
+      if (value === "" || value === null || value === undefined) {
+        return next(errorHandler(400, `User ${key} cannot be (empty, null or undefined).`));
+      }
     }
 
     const updatedUser = await Record.updateUserRecordById(Number(userId), req.body);
