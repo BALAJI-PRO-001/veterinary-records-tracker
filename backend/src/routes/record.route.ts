@@ -12,6 +12,7 @@ import {
   updateUserRecord,
   updateCowRecord,
   updateInjectionInfoAndAiDate,
+  exportRecords
 } from "../controllers/record.controller";
 
 import verifyAdminAuthenticationToken from "../utils/verifyAdminAuthenticationToken";
@@ -25,7 +26,8 @@ router.post("", verifyAdminAuthenticationToken, createNewRecord)
       .post("/:userId/cows/:cowId/inject-info-ai-dates", verifyAdminAuthenticationToken, addNewInjectionInfoAndAiDateToCow);
 
 router.get("/all", verifyAdminAuthenticationToken, getAllRecords)
-      .get("/:userId", verifyAdminAuthenticationToken, getRecordByUserId);
+      .get("/export", verifyAdminAuthenticationToken, exportRecords)
+      .get("/:userId", verifyAdminAuthenticationToken, getRecordByUserId)
       // .get("/download", verifyAdminAuthenticationToken, downloadRecords);
 
 router.patch("/users/:userId", verifyAdminAuthenticationToken, updateUserRecord)
