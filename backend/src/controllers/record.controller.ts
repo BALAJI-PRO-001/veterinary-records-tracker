@@ -326,7 +326,7 @@ export async function updateInjectionInfoAndAiDate(req: Request, res: Response, 
     const { userId, cowId, id } = req.params;
     validateURLId(userId, "user");
     validateURLId(cowId, "cow");
-    validateURLId(id, "inject info and ai dates");
+    validateURLId(id, "injection info and ai date");
 
     const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
     if (!isUserRecordAvailable) {
@@ -351,6 +351,12 @@ export async function updateInjectionInfoAndAiDate(req: Request, res: Response, 
       return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
     }
 
+    for (let [key, value] of Object.entries(req.body)) {
+      if (value === "" || value === null || value === undefined) {
+        return next(errorHandler(400, `Bad Request: Injection info and ai date ${key} cannot be (empty, null or undefined).`));
+      }
+    }
+
     const updatedInjectionInfoAndAiDate = await Record.updateInjectionInfoAndAiDate(Number(id), req.body);
     res.status(200).json({
       success: true,
@@ -360,6 +366,10 @@ export async function updateInjectionInfoAndAiDate(req: Request, res: Response, 
       }
     })
   } catch(err) {
+    const errMessage = err instanceof Error ? err.message : String(err);
+    if (errMessage.includes("Cost must be a valid number")) {
+      return next(errorHandler(400, errMessage));
+    }
     next(err);
   }
 }

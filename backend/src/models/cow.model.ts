@@ -25,8 +25,8 @@ function validateId(id: number, name: "Cow" | "User" | "Injection info and ai da
 
 
 
-function validateCost(cost: number): void {
-  if (isNaN(cost)) {
+function validateCost(cost: any): void {
+  if (typeof cost !== "number") {
     throw new Error("Cost must be a valid number.");
   }
 }
@@ -81,6 +81,10 @@ async function getInjectionInfoAndAiDateById(id: number): Promise<InjectionInfoA
 async function updateInjectionInfoAndAiDateById(id: number, injectInfoAndAiDate: InjectionInfoAndAiDateDataToUpdate ): Promise<InjectionInfoAndAiDate> {
   validateId(id, "Injection info and ai dates");
   for (let [key, value] of Object.entries(injectInfoAndAiDate)) {
+    if (key === "cost") {
+      validateCost(value);
+    }
+
     const sql = queries.UPDATE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL.replace("<column_name>", key);
     await sqlite3.update(sql, value, id);
   }
