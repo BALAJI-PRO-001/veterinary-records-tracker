@@ -1,4 +1,6 @@
 import { NewCow } from "./types";
+import validateFieldDataType from "./validateFieldDataType";
+import validateFieldValues from "./validateFieldValues";
 
 
 
@@ -13,35 +15,50 @@ class CowDataValidationError extends Error {
 
 
 export default function validateCowRequiredData(cows: NewCow[]): CowDataValidationError | void {
-  const requiredFields: (keyof NewCow)[] = ["name", "breed", "bullName", "injectionInfoAndAiDates"];
-
   if (cows.length === 0) {
     throw new CowDataValidationError(400, "Bad Request: Cows data must contain at least one cow entry.");
   }  
 
-
   for (let [currentCowIndex, cow] of Object.entries(cows)) {
-
-    if (Object.keys(cow).length !== 4) {
-      throw new CowDataValidationError(400, "Bad Request: Missing required cow data (name, breed, bullName, or injectionInfoAndAiDates).");
+    if (Object.keys(cow).length === 0) {
+      throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] missing required cow data (name, breed, bullName, injectionInfoAndAiDates).`);
     }
 
-    for (let field of requiredFields) {
-      if (cow[field] === undefined || cow[field] === "" || cow[field] === null) {
-        throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] ${field} is required and cannot be (empty, null, or undefined).`);
-      }
+    const fields = [
+      {property: {name: "name", value: cow.name}, dataType: "string"},
+      {property: {name: "breed", value: cow.breed}, dataType: "string"},
+      {property: {name: "bullName", value: cow.bullName}, dataType: "string"},
+      {property: {name: "injectionInfoAndAiDates", value: cow.injectionInfoAndAiDates}, dataType: "object"},
+    ];
 
-      
+    try {
+      validateFieldDataType(fields);
+      validateFieldValues(cow);
+    } catch(err) {
+      const errMessage = err instanceof Error ? err.message : String(err);
+      throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] ` + errMessage);
     }
 
     if (cow.injectionInfoAndAiDates.length === 0) {
       throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] injectionInfoAndAiDates must contain at least one entry for each cow.`);
-    }    
+    }  
 
-    for (let [index, { name, cost, date }] of Object.entries(cow.injectionInfoAndAiDates)) {
-      if (!name || !cost || !date) {
-        const missingField = !name ? 'injection name' : !cost ? 'injection cost' : 'ai date';
-        throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] InjectionInfoAndAiDates[${index}] ${missingField} is required and cannot be (empty, null or undefined).`);
+    for (let [currentIndex, injectionInfoAndAiDate] of Object.entries(cow.injectionInfoAndAiDates)) {
+      if (Object.keys(injectionInfoAndAiDate).length === 0) {
+        throw new CowDataValidationError(400, `Bad Request: InjectionInfoAndAiDate[${currentIndex}] missing required data (name, price, givenAmount, date).`);
+      }
+
+      try {
+        const fields = [
+          {property: {name: "name", value: injectionInfoAndAiDate.name}, dataType: "string"},
+          {property: {name: "cost", value: injectionInfoAndAiDate.cost},  dataType: "number"},
+          {property: {name: "date", value: injectionInfoAndAiDate.date}, dataType: "string"},
+        ];
+        validateFieldDataType(fields);
+        validateFieldValues(injectionInfoAndAiDate);
+      } catch(err) {
+        const errMessage = err instanceof Error ? err.message : String(err);
+        throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] InjectionInfoAndAiDates[${currentIndex}] ` + errMessage);
       }
     }
   }
