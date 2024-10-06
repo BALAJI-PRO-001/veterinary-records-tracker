@@ -9,4 +9,3 @@ export const INDEX_PAGE_FILE_PATH = path.join(__dirname, "../../../client/views/
 export const HOME_PAGE_FILE_PATH = path.join(__dirname, "../../../client/views/pages/home.html");
 export const ADD_NEW_RECORD_PAGE_PATH = path.join(__dirname, "../../../client/views/pages/add-new-record.html");
 export const STATIC_FILE_PATH = path.join(__dirname, "../../../client/public");
- 
