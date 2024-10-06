@@ -1,4 +1,4 @@
-import {NewCow } from "./types";
+import { NewCow } from "./types";
 
 
 
@@ -30,6 +30,8 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
       if (cow[field] === undefined || cow[field] === "" || cow[field] === null) {
         throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] ${field} is required and cannot be (empty, null, or undefined).`);
       }
+
+      
     }
 
     if (cow.injectionInfoAndAiDates.length === 0) {

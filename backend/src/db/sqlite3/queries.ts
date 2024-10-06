@@ -44,8 +44,9 @@ const CREATE_INJECTION_INFO_AND_AI_DATES_TABLE_SQL = `CREATE TABLE IF NOT EXISTS
                                                         ID INTEGER PRIMARY KEY AUTOINCREMENT,
                                                         COW_ID INTEGER NOT NULL,
                                                         NAME VARCHAR(50) NOT NULL,
-                                                        COST DECIMAL(10, 2) NOT NULL,
-                                                        DATE VARCHAR(20) NOT NULL,
+                                                        PRICE DECIMAL(10, 2) NOT NULL,
+                                                        GIVEN_AMOUNT DECIMAL(10, 2) NOT NULL,
+                                                        PENDING_AMOUNT DECIMAL(10, 2) NOT NULL,
                                                         DATE_AND_TIME DATETIME DEFAULT (DATETIME('NOW', 'LOCALTIME')),
                                                         FOREIGN KEY (COW_ID) REFERENCES COWS(ID)                                                     
                                                       )`.toLowerCase();                                 

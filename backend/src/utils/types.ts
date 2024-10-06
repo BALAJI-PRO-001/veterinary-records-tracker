@@ -54,6 +54,9 @@ export interface InjectionInfoAndAiDate {
   id: number;
   name: string;
   cost: number;
+  // price: number;
+  // givenAmount: number;
+  // pendingAmount: number;
   date: string;
 }
 
@@ -133,3 +136,4 @@ export interface Record {
   cows: Cow[];
   recordCreatedAt: string;
 }
+
