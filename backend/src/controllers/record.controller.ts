@@ -300,6 +300,12 @@ export async function updateCowRecord(req: Request, res: Response, next: NextFun
       return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
     }
 
+    for (let [key, value] of Object.entries(req.body)) {
+      if (value === "" || value === null || value === undefined) {
+        return next(errorHandler(400, `Bad Request: Cow ${key} cannot be (empty, null or undefined).`));
+      }
+    }
+
     const updatedCow = await Record.updateCowRecordById(Number(cowId), req.body);
     res.status(200).json({
       success: true,
