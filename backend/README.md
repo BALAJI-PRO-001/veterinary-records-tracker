@@ -84,13 +84,15 @@ BODY: {
         injectionInfoAndAiDates: [
             {
               name: <string>,
-              cost: <number>,
+              price: <number>,
+              givenAmount: <number>,
+              pendingAmount: <number>
               date: <string>
             }, 
-            {}, {}, {} ...... injectionInfoAndAiDates
+            {}, {}, {} ...... injectionInfoAndAiDate
         ]
     }, 
-    {}, {}, {}, ....... cows
+    {}, {}, {}, ....... cow
   ]
 }
 
@@ -139,15 +141,17 @@ Response (Request Based)
               injectionInfoAndAiDates: [
                 {
                   name: <injectionName>,
-                  cost: <injectionCost>,
+                  price: <injectionPrice>,
+                  givenAmount: <givenAmount>,
+                  pendingAmount: <pendingAmount>,
                   date: <aiDate>
                 },
-                {}, {}, {}, ...... injectionInfoAndAiDates
+                {}, {}, {}, ...... injectionInfoAndAiDate
                             
               ],
               createdAt: <dateAndTimeInDb>
             },
-            {}, {}, {}, ..... cows
+            {}, {}, {}, ..... cow
         ],
 
         "recordCreatedAt": "2024-09-17 08:56:07"
@@ -191,15 +195,17 @@ Response (Request Based)
               injectionInfoAndAiDates: [
                 {
                   name: <injectionName>,
-                  cost: <injectionCost>,
+                  price: <injectionPrice>,
+                  givenAmount: <givenAmount>,
+                  pendingAmount: <pendingAmount>,
                   date: <aiDate>
                 },
-                {}, {}, {}, ...... injectionInfoAndAiDates
+                {}, {}, {}, ...... injectionInfoAndAiDate
                             
               ],
               createdAt: <dateAndTimeInDb>
             },
-            {}, {}, {}, ..... cows
+            {}, {}, {}, ..... cow
         ],
 
         "recordCreatedAt": "2024-09-17 08:56:07"
@@ -256,10 +262,12 @@ BODY: {
   injectionInfoAndAiDates: [
     {
       name: <string>,
-      cost: <number>,
+      price: <number>,
+      givenAmount: <number>,
+      pendingAmount: <number>,
       date: <string>
     },
-    {}, {}, {} .....
+    {}, {}, {} ..... injectionInfoAndAiDate
   ]
 }
 
@@ -297,7 +305,9 @@ COOKIE: Admin cookie must
 CONTENT-TYPE: application/json
 BODY: {
   name: <string>,
-  cost: <number>,
+  price: <number>,
+  givenAmount: <number>,
+  pendingAmount: <number>,
   date: <string>
 }
 
@@ -336,6 +346,8 @@ COOKIE: Admin cookie must
 CONTENT-TYPE: application/json
 BODY: {
   // user data to update
+  // Note: You can update only these fields: name, phoneNumber, and address.
+
   <key>: <value>
   ....
 }
@@ -348,7 +360,7 @@ Response (Request Based)
   statusCode: 200,
   data: {
     user: {
-      // updated keys and values
+      // updated keys and values 
       <key>: <value>
       ....
     }
@@ -367,6 +379,8 @@ COOKIE: Admin cookie must
 CONTENT-TYPE: application/json
 BODY: {
   // cow data to update
+  // Note: You can update only these fields: name, breed, and bullName.
+
   <key>: <value>
   ....
 }
@@ -398,6 +412,8 @@ COOKIE: Admin cookie must
 CONTENT-TYPE: application/json
 BODY: {
   // injection info and ai date data to update
+  // Note: You can update only these fields: name, price, givenAmount, pendingAmount and date.
+
   <key>: <value>
   ....
 }
