@@ -1,6 +1,5 @@
 import { NewUser } from "./types";
-import validateFieldDataType from "./validateFieldDataType";
-import validateFieldValues from "./validateFieldValues";
+import validateFieldsDataTypeAndValue from "./validateFieldsDataTypeAndValue";
 
 
 class UserDataValidationError extends Error {
@@ -25,8 +24,7 @@ export default function validateUserRequiredData(user: NewUser): UserDataValidat
   ];
 
   try {
-    validateFieldDataType(fields);
-    validateFieldValues(user);
+    validateFieldsDataTypeAndValue(fields);
   } catch(err) {
     const errMessage = err instanceof Error ? err.message : String(err);
     throw new UserDataValidationError(400, "Bad Request: User " + errMessage);

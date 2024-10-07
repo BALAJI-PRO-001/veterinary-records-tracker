@@ -25,9 +25,9 @@ function validateId(id: number, name: "Cow" | "User" | "Injection info and ai da
 
 
 
-function validateCost(cost: any): void {
-  if (typeof cost !== "number") {
-    throw new Error("Cost must be a valid number.");
+function validateAmount(amount: any, name: "Price" | "Given amount" | "Pending Amount"): void {
+  if (typeof amount !== "number") {
+    throw new Error(`${name} must be a valid number.`);
   }
 }
 
@@ -53,9 +53,11 @@ async function addNewCow(newCow: NewCow): Promise<Cow> {
 async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDate[]): Promise<InjectionInfoAndAiDate[]> {
   validateId(cowId, "Cow");
 
-  for (let { name, cost, date } of injectionInfoAndAiDates) {
-    validateCost(cost);
-    await sqlite3.insert(queries.INSERT_INJECTION_INFO_AND_AI_DATES_RECORD_SQL, cowId, name, cost, date);
+  for (let { name, price, givenAmount, pendingAmount, date } of injectionInfoAndAiDates) {
+    validateAmount(price, "Price");
+    validateAmount(givenAmount, "Given amount");
+    validateAmount(pendingAmount, "Pending Amount");
+    await sqlite3.insert(queries.INSERT_INJECTION_INFO_AND_AI_DATES_RECORD_SQL, cowId, name, price, givenAmount, pendingAmount, date);
   }
   return await getInjectionInfoAndAiDatesByCowId(cowId);
 }
@@ -81,8 +83,12 @@ async function getInjectionInfoAndAiDateById(id: number): Promise<InjectionInfoA
 async function updateInjectionInfoAndAiDateById(id: number, injectInfoAndAiDate: InjectionInfoAndAiDateDataToUpdate ): Promise<InjectionInfoAndAiDate> {
   validateId(id, "Injection info and ai dates");
   for (let [key, value] of Object.entries(injectInfoAndAiDate)) {
-    if (key === "cost") {
-      validateCost(value);
+    if (key === "price") {
+      validateAmount(value, "Price");
+    } else if (key === "givenAmount") {
+      validateAmount(value, "Given amount");
+    } else if (key === "pendingAmount") {
+      validateAmount(value, "Pending Amount");
     }
 
     const sql = queries.UPDATE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL.replace("<column_name>", key);
@@ -115,8 +121,15 @@ async function getAllCows(): Promise<Cow[]> {
   for (let cow of cows) {
     const cowInjectionInfoAndAiDates: InjectionInfoAndAiDate[] = injectionInfoAndAiDates
       .filter(({cow_id}) => cow_id === cow.id)
-      .map(({id, name, cost, date}) => {
-          return {id, name, cost, date};
+      .map(({id, name, price, given_amount, pending_amount, date}) => {
+          return {
+            id: id,
+            name: name,
+            price: price,
+            givenAmount: given_amount,
+            pendingAmount: pending_amount,
+            date: date
+          };
       });
 
     cowsRecords.push({

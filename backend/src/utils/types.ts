@@ -53,10 +53,9 @@ export interface NewCow {
 export interface InjectionInfoAndAiDate {
   id: number;
   name: string;
-  cost: number;
-  // price: number;
-  // givenAmount: number;
-  // pendingAmount: number;
+  price: number;
+  givenAmount: number;
+  pendingAmount: number;
   date: string;
 }
 
@@ -65,7 +64,9 @@ export interface InjectionInfoAndAiDate {
 export interface InjectionInfoAndAiDateDataToUpdate {
   id: number;
   name?: string;
-  cost?: number;
+  price: number;
+  givenAmount: number;
+  pendingAmount: number;
   date?: string;
 }
 
@@ -77,7 +78,9 @@ export interface InjectionInfoAndAiDateInDB {
   id: number;
   cow_id: number;
   name: string;
-  cost: number;
+  price: number;
+  given_amount: number;
+  pending_amount: number;
   date: string;
 }
 

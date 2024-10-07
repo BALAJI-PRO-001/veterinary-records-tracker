@@ -1,6 +1,5 @@
 import { NewCow } from "./types";
-import validateFieldDataType from "./validateFieldDataType";
-import validateFieldValues from "./validateFieldValues";
+import validateFieldsDataTypeAndValue from "./validateFieldsDataTypeAndValue";
 
 
 
@@ -20,7 +19,7 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
   }  
 
   for (let [currentCowIndex, cow] of Object.entries(cows)) {
-    if (Object.keys(cow).length === 0) {
+    if (Object.keys(cow).length !== 4) {
       throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] missing required cow data (name, breed, bullName, injectionInfoAndAiDates).`);
     }
 
@@ -32,8 +31,7 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
     ];
 
     try {
-      validateFieldDataType(fields);
-      validateFieldValues(cow);
+      validateFieldsDataTypeAndValue(fields);
     } catch(err) {
       const errMessage = err instanceof Error ? err.message : String(err);
       throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] ` + errMessage);
@@ -44,18 +42,19 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
     }  
 
     for (let [currentIndex, injectionInfoAndAiDate] of Object.entries(cow.injectionInfoAndAiDates)) {
-      if (Object.keys(injectionInfoAndAiDate).length === 0) {
-        throw new CowDataValidationError(400, `Bad Request: InjectionInfoAndAiDate[${currentIndex}] missing required data (name, price, givenAmount, date).`);
+      if (Object.keys(injectionInfoAndAiDate).length !== 5) {
+        throw new CowDataValidationError(400, `Bad Request: InjectionInfoAndAiDate[${currentIndex}] missing required data (name, price, givenAmount, pendingAmount, date).`);
       }
 
       try {
         const fields = [
           {property: {name: "name", value: injectionInfoAndAiDate.name}, dataType: "string"},
-          {property: {name: "cost", value: injectionInfoAndAiDate.cost},  dataType: "number"},
+          {property: {name: "price", value: injectionInfoAndAiDate.price},  dataType: "number"},
+          {property: {name: "givenAmount", value: injectionInfoAndAiDate.givenAmount},  dataType: "number"},
+          {property: {name: "pendingAmount", value: injectionInfoAndAiDate.pendingAmount},  dataType: "number"},
           {property: {name: "date", value: injectionInfoAndAiDate.date}, dataType: "string"},
         ];
-        validateFieldDataType(fields);
-        validateFieldValues(injectionInfoAndAiDate);
+        validateFieldsDataTypeAndValue(fields);
       } catch(err) {
         const errMessage = err instanceof Error ? err.message : String(err);
         throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] InjectionInfoAndAiDates[${currentIndex}] ` + errMessage);

@@ -1,6 +1,7 @@
 import { InjectionInfoAndAiDate } from "./types";
+import validateFieldsDataTypeAndValue from "./validateFieldsDataTypeAndValue";
 
-class ValidationError extends Error {
+class InjectionInfoAndAiDateDataValidationError extends Error {
   statusCode: number;
   constructor(statusCode: number, message: string) {
     super(message);
@@ -8,20 +9,21 @@ class ValidationError extends Error {
   }
 }
 
-export default function validateInjectionInfoAndAiDateRequiredData(injectionInfoAndAiDates: InjectionInfoAndAiDate): ValidationError | void { 
-  if (Object.keys(injectionInfoAndAiDates).length !== 3) {
-    throw new ValidationError(400, "Bad Request: Missing required injection info and ai dates data (name, cost, date).");
+export default function validateInjectionInfoAndAiDateRequiredData(injectionInfoAndAiDate: InjectionInfoAndAiDate): InjectionInfoAndAiDateDataValidationError | void { 
+  if (Object.keys(injectionInfoAndAiDate).length !== 3) {
+    throw new InjectionInfoAndAiDateDataValidationError(400, "Bad Request: Missing required injection info and ai dates data (name, price, givenAmount, pendingAmount, date).");
   }
 
-  if (injectionInfoAndAiDates.name === "" || injectionInfoAndAiDates.name === null || injectionInfoAndAiDates.name === undefined) {
-    throw new ValidationError(400, "Bad Request: Injection name is required and cannot be (empty, null or undefined).");
-  }
-
-  if (!injectionInfoAndAiDates.cost) {
-    throw new ValidationError(400, "Bad Request: Injection cost is required and cannot be (empty, null or undefined).");
-  }
-
-  if (!injectionInfoAndAiDates.date) {
-    throw new ValidationError(400, "Bad Request: Injection date is required and cannot be (empty, null or undefined).");
+  try {
+    const fields = [
+      {property: {name: "name", value: injectionInfoAndAiDate.name}, dataType: "string"},
+      {property: {name: "price", value: injectionInfoAndAiDate.price}, dataType: "number"},
+      {property: {name: "givenAmount", value: injectionInfoAndAiDate.givenAmount}, dataType: "number"},
+      {property: {name: "pendingAmount", value: injectionInfoAndAiDate.pendingAmount}, dataType: "number"},
+      {property: {name: "date", value: injectionInfoAndAiDate.date}, dataType: "string"}
+    ];
+    validateFieldsDataTypeAndValue(fields);
+  } catch(err) {
+    throw new InjectionInfoAndAiDateDataValidationError(400, "Bad Request: InjectionInfoAndAiDate ");
   }
 }

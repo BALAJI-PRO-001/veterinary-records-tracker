@@ -4,16 +4,8 @@ import validateFieldsDataTypeAndValue from "./validateFieldsDataTypeAndValue";
 
 export default function validateAdminCredentials(req: Request, res: Response, next: NextFunction): void {
   try {
-    if (Object.entries(req.body).length === 0) {
+    if (Object.entries(req.body).length !== 0) {
       return next(errorHandler(400, "Bad Request: Both admin email and password is required."));
-    }
-
-    if (!req.body.email) {
-      return next(errorHandler(400, "Bad Request: Admin email is required and cannot be (empty, null or undefined)."));
-    }
-
-    if (!req.body.password) {
-      return next(errorHandler(400, "Bad Request: Admin password is required and cannot be (empty, null or undefined)."))
     }
 
     const fields = [
