@@ -4,3 +4,4 @@
 /.env
 __tests__/unit/sqlite3/db/database.db
 appArch.drawio
+/backend/src/data
