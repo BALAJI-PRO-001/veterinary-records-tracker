@@ -4,7 +4,7 @@ import validateFieldsDataTypeAndValue from "./validateFieldsDataTypeAndValue";
 
 export default function validateAdminCredentials(req: Request, res: Response, next: NextFunction): void {
   try {
-    if (Object.entries(req.body).length !== 0) {
+    if (Object.entries(req.body).length !== 2) {
       return next(errorHandler(400, "Bad Request: Both admin email and password is required."));
     }
 
