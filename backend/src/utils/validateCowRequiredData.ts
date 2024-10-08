@@ -1,4 +1,4 @@
-import { NewCow } from "./types";
+import { InjectionInfoAndAiDate, NewCow } from "./types";
 import validateFieldsDataTypeAndValue from "./validateFieldsDataTypeAndValue";
 
 
@@ -23,6 +23,13 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
       throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] missing required cow data (name, breed, bullName, injectionInfoAndAiDates).`);
     }
 
+    const requiredFields: (keyof NewCow)[] = ["name", "breed", "bullName", "injectionInfoAndAiDates"];
+    for (let field of requiredFields) {
+      if (!cow[field]) {
+        throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] ${field} is required but missing.`);
+      }
+    }
+
     const fields = [
       {property: {name: "name", value: cow.name}, dataType: "string"},
       {property: {name: "breed", value: cow.breed}, dataType: "string"},
@@ -44,6 +51,13 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
     for (let [currentIndex, injectionInfoAndAiDate] of Object.entries(cow.injectionInfoAndAiDates)) {
       if (Object.keys(injectionInfoAndAiDate).length !== 5) {
         throw new CowDataValidationError(400, `Bad Request: InjectionInfoAndAiDate[${currentIndex}] missing required data (name, price, givenAmount, pendingAmount, date).`);
+      }
+
+      const requiredFields: (keyof InjectionInfoAndAiDate)[] = ["name", "price", "givenAmount", "pendingAmount", "date"];
+      for (let field of requiredFields) {
+        if (!injectionInfoAndAiDate[field]) {
+          throw new CowDataValidationError(400, `Bad Request: Cow[${currentCowIndex}] InjectionInfoAndAiDates[${currentIndex}] ${field} is required but missing.`);
+        }
       }
 
       try {

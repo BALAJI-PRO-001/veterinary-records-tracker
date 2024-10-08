@@ -17,6 +17,13 @@ export default function validateUserRequiredData(user: NewUser): UserDataValidat
     throw new UserDataValidationError(400, "Bad Request: Missing required user data (name, phoneNumber, address).");
   }
 
+  const requiredFields: (keyof NewUser)[] = ["name", "phoneNumber", "address"];
+  for (let field of requiredFields) {
+    if (!user[field]) {
+      throw new UserDataValidationError(400, `Bad Request: The User '${field}' field is required but missing.`);
+    }
+  }
+
   const fields = [
     {property: {name: "name", value: user.name}, dataType: "string"},
     {property: {name: "phoneNumber", value: user.phoneNumber}, dataType: "number"},
