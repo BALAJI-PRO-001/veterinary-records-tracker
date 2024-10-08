@@ -268,7 +268,7 @@ export async function updateUserRecord(req: Request, res: Response, next: NextFu
       const errMessage = err instanceof Error ? err.message : String(err);
       return next(errorHandler(400, "Bad Request: User " + errMessage))
     }
-    
+
     const updatedUser = await Record.updateUserRecordById(Number(userId), req.body);
     res.status(200).json({
       success: true,
@@ -316,10 +316,27 @@ export async function updateCowRecord(req: Request, res: Response, next: NextFun
       return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
     }
 
-    for (let [key, value] of Object.entries(req.body)) {
-      if (value === "" || value === null || value === undefined) {
-        return next(errorHandler(400, `Bad Request: Cow ${key} cannot be (empty, null or undefined).`));
+    const fields: string[] = Object.keys(req.body);
+    for (let field of fields) {
+      if (field !== "name" && field !== "breed" && field !== "bullName") {
+        return next(errorHandler(400, `Bad Request: Invalid field (${field}). Valid fields are (name, breed, bullName).`));
       }
+    }
+
+    try {
+      const fieldsToValidate: any = fields.map((fieldName) => {
+        if (fieldName === "name") {
+          return {property: {name: "name", value: req.body.name}, dataType: "string"}
+        } else if (fieldName === "breed") {
+          return {property: {name: "breed", value: req.body.breed}, dataType: "string"}
+        } else if (fieldName === "bullName") {
+          return {property: {name: "bullName", value: req.body.bullName}, dataType: "string"}
+        }
+      });
+      validateFieldsDataTypeAndValue(fieldsToValidate);
+    } catch(err) {
+      const errMessage = err instanceof Error ? err.message : String(err);
+      return next(errorHandler(400, "Bad Request: Cow " + errMessage));
     }
 
     const updatedCow = await Record.updateCowRecordById(Number(cowId), req.body);
