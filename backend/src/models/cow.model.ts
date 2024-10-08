@@ -67,15 +67,36 @@ async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAn
 
 async function getInjectionInfoAndAiDatesByCowId(cowId: number): Promise<InjectionInfoAndAiDate[]> {
   validateId(cowId, "Cow");
-  return await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_COW_ID_SQL, true, cowId) as InjectionInfoAndAiDate[];
+  const injectionInfoAndAiDatesInDB =  await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_COW_ID_SQL, true, cowId) as InjectionInfoAndAiDateInDB[];
+  const injectionInfoAndAiDates = injectionInfoAndAiDatesInDB.map(({id, name, price, given_amount, pending_amount, date}) => {
+    return {
+      id: id,
+      name: name,
+      price: price,
+      givenAmount: given_amount,
+      pendingAmount: pending_amount,
+      date: date
+    }
+  }) as InjectionInfoAndAiDate[];
+  return injectionInfoAndAiDates;
 }
 
 
 
 async function getInjectionInfoAndAiDateById(id: number): Promise<InjectionInfoAndAiDate | null> {
   validateId(id, "Injection info and ai dates");
-  const injectionInfoAndAiDate =  await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL, false, id) as InjectionInfoAndAiDate;
-  return injectionInfoAndAiDate ? injectionInfoAndAiDate : null;
+  const injectionInfoAndAiDateInDB =  await sqlite3.select(queries.SELECT_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL, false, id) as InjectionInfoAndAiDateInDB;
+  if (!injectionInfoAndAiDateInDB) {
+    return null;
+  }
+  return {
+    id: injectionInfoAndAiDateInDB.id,
+    name: injectionInfoAndAiDateInDB.name,
+    price: injectionInfoAndAiDateInDB.price,
+    givenAmount: injectionInfoAndAiDateInDB.given_amount,
+    pendingAmount: injectionInfoAndAiDateInDB.pending_amount,
+    date: injectionInfoAndAiDateInDB.date
+  }
 }
 
 

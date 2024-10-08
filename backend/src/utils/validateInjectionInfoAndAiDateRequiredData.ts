@@ -10,7 +10,7 @@ class InjectionInfoAndAiDateDataValidationError extends Error {
 }
 
 export default function validateInjectionInfoAndAiDateRequiredData(injectionInfoAndAiDate: InjectionInfoAndAiDate): InjectionInfoAndAiDateDataValidationError | void { 
-  if (Object.keys(injectionInfoAndAiDate).length !== 3) {
+  if (Object.keys(injectionInfoAndAiDate).length !== 5) {
     throw new InjectionInfoAndAiDateDataValidationError(400, "Bad Request: Missing required injection info and ai dates data (name, price, givenAmount, pendingAmount, date).");
   }
 
@@ -24,6 +24,7 @@ export default function validateInjectionInfoAndAiDateRequiredData(injectionInfo
     ];
     validateFieldsDataTypeAndValue(fields);
   } catch(err) {
-    throw new InjectionInfoAndAiDateDataValidationError(400, "Bad Request: InjectionInfoAndAiDate ");
+    const errMessage = err instanceof Error ? err.message : String(err);
+    throw new InjectionInfoAndAiDateDataValidationError(400, "Bad Request: InjectionInfoAndAiDate " + errMessage);
   }
 }

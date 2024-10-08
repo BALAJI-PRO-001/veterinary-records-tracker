@@ -182,15 +182,11 @@ export async function addNewInjectionInfoAndAiDateToCow(req: Request, res: Respo
 
     validateInjectionInfoAndAiDateRequiredData(req.body);
 
-    if (typeof req.body.cost !== "number") {
-      return next(errorHandler(400, "Bad Request: Injection cost must be a valid number."));
-    }
-
     await Record.addNewInjectionInfoAndAiDateToCow(Number(cowId), req.body);
     res.status(201).json({
       success: true,
       statusCode: 201,
-      message: `New injection info and AI dates have been successfully created for cow id: ${cowId}.`
+      message: `New injection info and AI date have been successfully created for cow id: ${cowId}.`
     });
   } catch(err) {
     next(err);
