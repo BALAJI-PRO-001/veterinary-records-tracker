@@ -7,6 +7,7 @@ import validateInjectionInfoAndAiDateRequiredData from "../utils/validateInjecti
 import validateURLId from "../utils/validateURLId";
 import { RECORDS_CSV_FILE_PATH, SQLITE3_DATABASE_DIR_PATH } from "../utils/constants";
 import { access } from "fs/promises";
+import validateFieldsDataTypeAndValue from "../utils/validateFieldsDataTypeAndValue";
 
 
 export async function createNewRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -245,12 +246,29 @@ export async function updateUserRecord(req: Request, res: Response, next: NextFu
       return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
     }
 
-    for (let [key, value] of Object.entries(req.body)) {
-      if (value === "" || value === null || value === undefined) {
-        return next(errorHandler(400, `User ${key} cannot be (empty, null or undefined).`));
+    let fields: string[] = Object.keys(req.body);
+    for (let field of fields) {
+      if (field !== "name" && field !== "phoneNumber" && field !== "address") {
+        return next(errorHandler(400, `Bad Request: Invalid field (${field}). Valid fields are (name, phoneNumber, address).`));
       }
     }
 
+    try {
+      const fieldsToValidate: any = fields.map((fieldName) => {
+        if (fieldName === "name") {
+          return {property: {name: "name", value: req.body.name}, dataType: "string"}
+        } else if (fieldName === "phoneNumber") {
+          return {property: {name: "phoneNumber", value: req.body.phoneNumber}, dataType: "number"}
+        } else if (fieldName === "address") {
+          return {property: {name: "address", value: req.body.address}, dataType: "string"}
+        }
+      });
+      validateFieldsDataTypeAndValue(fieldsToValidate);
+    } catch(err) {
+      const errMessage = err instanceof Error ? err.message : String(err);
+      return next(errorHandler(400, "Bad Request: User " + errMessage))
+    }
+    
     const updatedUser = await Record.updateUserRecordById(Number(userId), req.body);
     res.status(200).json({
       success: true,
