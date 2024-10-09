@@ -1,5 +1,7 @@
 import User from "../models/user.model";
 import Cow from "../models/cow.model";
+import csvWriter from "../utils/csvWriter";
+import { CSV_WRITER_HEADERS } from "../utils/constants";
 import {  
   User as UserRecord,
   Cow as CowRecord,
@@ -164,6 +166,14 @@ async function updateInjectionInfoAndAiDate(id: number, injectionInfoAndAiDatesD
 
 
 
+async function writeRecordsToFile(path: string) {
+  const records = await getAllRecords();
+  console.log(records);
+  csvWriter.writeRecords({distFilePath: path, csvHeader: CSV_WRITER_HEADERS}, records);
+}
+
+
+
 export default {
   createNewRecord,
   isPhoneNumberAlreadyInUse,
@@ -179,5 +189,6 @@ export default {
   removeInjectionInfoAndAiDateFromCow,
   updateUserRecordById,
   updateCowRecordById,
-  updateInjectionInfoAndAiDate
+  updateInjectionInfoAndAiDate,
+  writeRecordsToFile
 };
