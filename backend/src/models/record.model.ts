@@ -207,7 +207,7 @@ async function writeRecordsToFile(path: string) {
       cowNames, cowBreeds, bullNames, injectionNames, 
       injectionPrices, givenAmount, pendingAmount, dates 
     } = extractCowInformation(record.cows);
-    console.log(dates);
+
     return {
       id:record.user.id,
       name:record.user.name,
@@ -221,7 +221,7 @@ async function writeRecordsToFile(path: string) {
       givenAmount: `[${givenAmount}]`,
       pendingAmount: `[${pendingAmount}]`,
       dates: `[${dates}]`,
-      recordCratedAt: record.recordCreatedAt
+      recordCreatedAt: record.recordCreatedAt
     }
   });
   await csvWriter.writeRecords({distFilePath: path, csvHeader: CSV_WRITER_HEADERS}, records);

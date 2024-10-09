@@ -436,7 +436,7 @@ export async function updateInjectionInfoAndAiDate(req: Request, res: Response, 
 export async function downloadRecords(req: Request, res: Response, next: NextFunction) {
   try { 
     await Record.writeRecordsToFile(RECORDS_CSV_FILE_PATH);
-    res.status(200).download(RECORDS_CSV_FILE_PATH)
+    res.status(200).download(RECORDS_CSV_FILE_PATH);
   } catch(err) {
     next(errorHandler(404, "File not found (Unable to provide)."));
   }
