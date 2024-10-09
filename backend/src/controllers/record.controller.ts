@@ -5,8 +5,7 @@ import validateUserRequiredData from "../utils/validateUserRequiredData";
 import validateCowRequiredData from "../utils/validateCowRequiredData";
 import validateInjectionInfoAndAiDateRequiredData from "../utils/validateInjectionInfoAndAiDateRequiredData";
 import validateURLId from "../utils/validateURLId";
-import { RECORDS_CSV_FILE_PATH, SQLITE3_DATABASE_DIR_PATH } from "../utils/constants";
-import { access } from "fs/promises";
+import { RECORDS_CSV_FILE_PATH } from "../utils/constants";
 import validateFieldsDataTypeAndValue from "../utils/validateFieldsDataTypeAndValue";
 
 
@@ -434,23 +433,10 @@ export async function updateInjectionInfoAndAiDate(req: Request, res: Response, 
 
 
 
-export async function exportRecords(req: Request, res: Response, next: NextFunction) {
+export async function downloadRecords(req: Request, res: Response, next: NextFunction) {
   try { 
-    const type = req.query.type;
-    if (type !== "db" && type !== "records") {
-      return next(errorHandler(400, "Bad Request: The 'type' query parameter must be either 'db' or 'records'."));
-    }
-
-    let PATH: string | null = null;
-
-    if (type === "db") {
-      PATH = SQLITE3_DATABASE_DIR_PATH + "database.db"
-    } else if (type === "records") {
-      PATH = RECORDS_CSV_FILE_PATH;
-    }
-
-    await access(PATH!);
-    res.sendFile(PATH!);
+    await Record.writeRecordsToFile(RECORDS_CSV_FILE_PATH);
+    res.status(200).download(RECORDS_CSV_FILE_PATH)
   } catch(err) {
     next(errorHandler(404, "File not found (Unable to provide)."));
   }
