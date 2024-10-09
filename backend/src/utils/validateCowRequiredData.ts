@@ -68,6 +68,12 @@ export default function validateCowRequiredData(cows: NewCow[]): CowDataValidati
           {property: {name: "pendingAmount", value: injectionInfoAndAiDate.pendingAmount},  dataType: "number"},
           {property: {name: "date", value: injectionInfoAndAiDate.date}, dataType: "string"},
         ];
+
+        const dateRegexPattern = /^(0[1-9]|[12][0-9]|3[01])(\/|-)(0[1-9]|1[0-2])(\/|-)(19|20)\d{2}$/;
+        if (!dateRegexPattern.test(injectionInfoAndAiDate.date)) {
+          throw new Error("date invalid. supported format [DD/MM/YYYY or DD-MM-YYYY]");
+        }
+
         validateFieldsDataTypeAndValue(fields);
       } catch(err) {
         const errMessage = err instanceof Error ? err.message : String(err);

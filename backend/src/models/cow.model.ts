@@ -25,9 +25,17 @@ function validateId(id: number, name: "Cow" | "User" | "Injection info and ai da
 
 
 
-function validateAmount(amount: any, name: "Price" | "Given amount" | "Pending Amount"): void {
+function validateAmount(amount: any, name: "Price" | "Given amount" | "Pending Amount"): Error | void {
   if (typeof amount !== "number") {
     throw new Error(`${name} must be a valid number.`);
+  }
+}
+
+
+function validateDate(date: string): Error | void {
+  const dateRegexPattern = /^(0[1-9]|[12][0-9]|3[01])(\/|-)(0[1-9]|1[0-2])(\/|-)(19|20)\d{2}$/;
+  if (!dateRegexPattern.test(date)) {
+    throw new Error("Invalid Date Format. Supported format [DD/MM/YYYY or DD-MM-YYYY]");
   }
 }
 
@@ -57,6 +65,7 @@ async function addNewInjectionInfoAndAiDatesToCow(cowId: number, injectionInfoAn
     validateAmount(price, "Price");
     validateAmount(givenAmount, "Given amount");
     validateAmount(pendingAmount, "Pending Amount");
+    validateDate(date);
     await sqlite3.insert(queries.INSERT_INJECTION_INFO_AND_AI_DATES_RECORD_SQL, cowId, name, price, givenAmount, pendingAmount, date);
   }
   return await getInjectionInfoAndAiDatesByCowId(cowId);
@@ -110,6 +119,8 @@ async function updateInjectionInfoAndAiDateById(id: number, injectInfoAndAiDate:
       validateAmount(value, "Given amount");
     } else if (key === "pendingAmount") {
       validateAmount(value, "Pending Amount");
+    } else if (key === "date") {
+      validateDate(value);
     }
 
     key = key === "givenAmount" ? "given_amount" : key === "pendingAmount" ? "pending_amount" : key;

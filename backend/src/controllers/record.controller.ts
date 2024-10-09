@@ -421,8 +421,12 @@ export async function updateInjectionInfoAndAiDate(req: Request, res: Response, 
     })
   } catch(err) {
     const errMessage = err instanceof Error ? err.message : String(err);
-    if (errMessage.includes("Cost must be a valid number")) {
-      return next(errorHandler(400, errMessage));
+    if (errMessage.includes("must be a valid number")) {
+      return next(errorHandler(400, "Bad Request: " + errMessage));
+    }
+
+    if (errMessage.includes("Invalid Date Format")) {
+      return next(errorHandler(400, "Bad Request: " + errMessage));
     }
     next(err);
   }
