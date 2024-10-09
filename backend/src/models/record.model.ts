@@ -167,9 +167,64 @@ async function updateInjectionInfoAndAiDate(id: number, injectionInfoAndAiDatesD
 
 
 async function writeRecordsToFile(path: string) {
-  const records = await getAllRecords();
-  console.log(records);
-  csvWriter.writeRecords({distFilePath: path, csvHeader: CSV_WRITER_HEADERS}, records);
+  const recordsInDB = await getAllRecords();
+
+  function extractCowInformation(cows: CowRecord[]): {
+    cowNames: string[], cowBreeds: string[], bullNames: string[], injectionNames: string[], 
+    injectionPrices: number[], givenAmount: number[], pendingAmount: number[], dates: string[]
+  } {
+    const cowNames: string[] = [];
+    const cowBreeds: string[] = [];
+    const bullNames: string[] = [];
+    const injectionNames: string[] = [];
+    const injectionPrices: number[] = [];
+    const givenAmount: number[] = [];
+    const pendingAmount: number[] = [];
+    const dates: string[] = [];
+
+    for (let cow of cows) {
+      cowNames.push(cow.name);
+      cowBreeds.push(cow.breed);
+      bullNames.push(cow.bullName);
+
+      for (let injectionInfoAndAiDate of cow.injectionInfoAndAiDates) {
+        injectionNames.push(injectionInfoAndAiDate.name);
+        injectionPrices.push(injectionInfoAndAiDate.price);
+        givenAmount.push(injectionInfoAndAiDate.givenAmount);
+        pendingAmount.push(injectionInfoAndAiDate.pendingAmount);
+        dates.push(injectionInfoAndAiDate.date);
+      }
+    }
+
+    return {
+      cowNames, cowBreeds, bullNames, injectionNames, 
+      injectionPrices, givenAmount, pendingAmount, dates
+    };
+  }
+  
+  const records: any = recordsInDB.map((record) => {
+    const { 
+      cowNames, cowBreeds, bullNames, injectionNames, 
+      injectionPrices, givenAmount, pendingAmount, dates 
+    } = extractCowInformation(record.cows);
+    console.log(dates);
+    return {
+      id:record.user.id,
+      name:record.user.name,
+      phoneNumber:record.user.phoneNumber,
+      address:record.user.address,
+      cowNames: `[${cowNames}]`,
+      cowBreeds: `[${cowBreeds}]`,
+      bullNames: `[${bullNames}]`,
+      injectionNames: `[${injectionNames}]`,
+      injectionPrices: `[${injectionPrices}]`,
+      givenAmount: `[${givenAmount}]`,
+      pendingAmount: `[${pendingAmount}]`,
+      dates: `[${dates}]`,
+      recordCratedAt: record.recordCreatedAt
+    }
+  });
+  await csvWriter.writeRecords({distFilePath: path, csvHeader: CSV_WRITER_HEADERS}, records);
 }
 
 
