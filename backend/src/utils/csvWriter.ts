@@ -16,14 +16,14 @@ async function writeRecords(config: {distFilePath: string, csvHeader: Array<Obje
   } catch(err) {
     await mkdir(path.dirname(config.distFilePath), {recursive: true});
     await writeFile(config.distFilePath, "");
-
-    const csvWriter = createObjectCsvWriter({
-      path: config.distFilePath,
-      header: config.csvHeader as any
-    });
-  
-    await csvWriter.writeRecords(records);
   }
+
+  const csvWriter = createObjectCsvWriter({
+    path: config.distFilePath,
+    header: config.csvHeader as any
+  });
+
+  await csvWriter.writeRecords(records);
 }
 
 export default {
