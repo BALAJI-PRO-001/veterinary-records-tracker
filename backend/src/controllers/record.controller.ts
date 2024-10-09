@@ -238,12 +238,12 @@ export async function updateUserRecord(req: Request, res: Response, next: NextFu
       return next(errorHandler(404, `User record not found for the specified user id: ${userId}.`));
     }
 
-    if (req.body.id) {
-      return next(errorHandler(400, "Bad Request: Cannot update user id."));
-    }
-
     if (req.body && Object.keys(req.body).length === 0) {
       return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
+    }
+
+    if (req.body.id) {
+      return next(errorHandler(400, "Bad Request: Cannot update user id."));
     }
 
     let fields: string[] = Object.keys(req.body);
@@ -308,12 +308,12 @@ export async function updateCowRecord(req: Request, res: Response, next: NextFun
       return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
     }
 
-    if (req.body.id) {
-      return next(errorHandler(400, "Bad Request: Cannot update cow id."));
-    }
-
     if (req.body && Object.keys(req.body).length === 0) {
       return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
+    }
+
+    if (req.body.id) {
+      return next(errorHandler(400, "Bad Request: Cannot update cow id."));
     }
 
     const fields: string[] = Object.keys(req.body);
@@ -376,18 +376,39 @@ export async function updateInjectionInfoAndAiDate(req: Request, res: Response, 
       return next(errorHandler(404, "Injection info and ai dates record not found for the specific id: " + id));
     }
 
-    if (req.body.id) {
-      return next(errorHandler(400, "Bad Request: Cannot update injection info ai dates id."));
-    }
-
     if (req.body && Object.keys(req.body).length === 0) {
       return next(errorHandler(400, "Bad Request: Update failed, no data provided for update."));
     }
 
-    for (let [key, value] of Object.entries(req.body)) {
-      if (value === "" || value === null || value === undefined) {
-        return next(errorHandler(400, `Bad Request: Injection info and ai date ${key} cannot be (empty, null or undefined).`));
+    if (req.body.id) {
+      return next(errorHandler(400, "Bad Request: Cannot update injection info ai dates id."));
+    }
+
+    const fields: string[] = Object.keys(req.body);
+    for (let field of fields) {
+      if (field !== "name" && field !== "price" && field !== "givenAmount" && field !== "pendingAmount" && field !== "date") {
+        return next(errorHandler(400, `Bad Request: Invalid field (${field}). Valid fields are (name, price, givenAmount, pendingAmount, date).`));
       }
+    }
+    
+    try {
+      const fieldsToValidate: any = fields.map((fieldName) => {
+        if (fieldName === "name") {
+          return {property: {name: "name", value: req.body.name}, dataType: "string"}
+        } else if (fieldName === "price") {
+          return {property: {name: "price", value: req.body.price}, dataType: "number"}
+        } else if (fieldName === "givenAmount") {
+          return {property: {name: "givenAmount", value: req.body.givenAmount}, dataType: "number"}
+        } else if (fieldName === "pendingAmount") {
+          return {property: {name: "pendingAmount", value: req.body.pendingAmount}, dataType: "number"}
+        } else if (fieldName === "date") {
+          return {property: {name: "date", value: req.body.date}, dataType: "string"}
+        }
+      });
+      validateFieldsDataTypeAndValue(fieldsToValidate);
+    } catch(err) {
+      const errMessage = err instanceof Error ? err.message : String(err);
+      return next(errorHandler(400, "Bad Request: InjectionInfoAndAiDate " + errMessage));
     }
 
     const updatedInjectionInfoAndAiDate = await Record.updateInjectionInfoAndAiDate(Number(id), req.body);

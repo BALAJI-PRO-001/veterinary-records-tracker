@@ -112,6 +112,7 @@ async function updateInjectionInfoAndAiDateById(id: number, injectInfoAndAiDate:
       validateAmount(value, "Pending Amount");
     }
 
+    key = key === "givenAmount" ? "given_amount" : key === "pendingAmount" ? "pending_amount" : key;
     const sql = queries.UPDATE_INJECTION_INFO_AND_AI_DATES_RECORDS_BY_ID_SQL.replace("<column_name>", key);
     await sqlite3.update(sql, value, id);
   }
