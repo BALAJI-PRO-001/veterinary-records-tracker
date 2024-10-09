@@ -20,9 +20,9 @@ export const CSV_WRITER_HEADERS = [
   {id: "cowBreeds", title: "COW_BREEDS"},
   {id: "bullNames", title: "BULL_NAMES"},
   {id: "injectionNames", title: "INJECTION_NAMES"},
-  {id: "injectionPrices", title: "INJECTION_PRICE"}, 
-  {id: "givenAmount", title: "GIVEN_AMOUNT"},
-  {id: "pendingAmount", title: "PENDING_AMOUNT"},
+  {id: "injectionPrices", title: "INJECTION_PRICES"}, 
+  {id: "givenAmounts", title: "GIVEN_AMOUNTS"},
+  {id: "pendingAmounts", title: "PENDING_AMOUNTS"},
   {id: "dates", title: "AI_DATE"},
   {id: "recordCreatedAt", title: "DATE_AND_TIME_IN_DB"}
 ];

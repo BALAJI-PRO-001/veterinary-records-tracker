@@ -171,15 +171,15 @@ async function writeRecordsToFile(path: string) {
 
   function extractCowInformation(cows: CowRecord[]): {
     cowNames: string[], cowBreeds: string[], bullNames: string[], injectionNames: string[], 
-    injectionPrices: number[], givenAmount: number[], pendingAmount: number[], dates: string[]
+    injectionPrices: number[], givenAmounts: number[], pendingAmounts: number[], dates: string[]
   } {
     const cowNames: string[] = [];
     const cowBreeds: string[] = [];
     const bullNames: string[] = [];
     const injectionNames: string[] = [];
     const injectionPrices: number[] = [];
-    const givenAmount: number[] = [];
-    const pendingAmount: number[] = [];
+    const givenAmounts: number[] = [];
+    const pendingAmounts: number[] = [];
     const dates: string[] = [];
 
     for (let cow of cows) {
@@ -190,22 +190,22 @@ async function writeRecordsToFile(path: string) {
       for (let injectionInfoAndAiDate of cow.injectionInfoAndAiDates) {
         injectionNames.push(injectionInfoAndAiDate.name);
         injectionPrices.push(injectionInfoAndAiDate.price);
-        givenAmount.push(injectionInfoAndAiDate.givenAmount);
-        pendingAmount.push(injectionInfoAndAiDate.pendingAmount);
+        givenAmounts.push(injectionInfoAndAiDate.givenAmount);
+        pendingAmounts.push(injectionInfoAndAiDate.pendingAmount);
         dates.push(injectionInfoAndAiDate.date);
       }
     }
 
     return {
       cowNames, cowBreeds, bullNames, injectionNames, 
-      injectionPrices, givenAmount, pendingAmount, dates
+      injectionPrices, givenAmounts, pendingAmounts, dates
     };
   }
   
   const records: any = recordsInDB.map((record) => {
     const { 
       cowNames, cowBreeds, bullNames, injectionNames, 
-      injectionPrices, givenAmount, pendingAmount, dates 
+      injectionPrices, givenAmounts, pendingAmounts, dates 
     } = extractCowInformation(record.cows);
 
     return {
@@ -218,8 +218,8 @@ async function writeRecordsToFile(path: string) {
       bullNames: `[${bullNames}]`,
       injectionNames: `[${injectionNames}]`,
       injectionPrices: `[${injectionPrices}]`,
-      givenAmount: `[${givenAmount}]`,
-      pendingAmount: `[${pendingAmount}]`,
+      givenAmounts: `[${givenAmounts}]`,
+      pendingAmounts: `[${pendingAmounts}]`,
       dates: `[${dates}]`,
       recordCreatedAt: record.recordCreatedAt
     }
