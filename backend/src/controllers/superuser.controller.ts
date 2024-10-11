@@ -5,6 +5,8 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SQLITE3_DATABASE_DIR_PATH } from "../utils/constants";
 import { access } from "fs/promises";
+import { rename, unlink } from "fs";
+import path from "path";
 import upload from "../utils/multer";
 dotenv.config();
 
@@ -61,7 +63,7 @@ export async function logout(req: Request, res: Response, next: NextFunction): P
 
 
 
-export async function downloadDB(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function downloadDatabase(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     await access(SQLITE3_DATABASE_DIR_PATH + "database.db");
     res.download(SQLITE3_DATABASE_DIR_PATH + "database.db");
@@ -72,15 +74,47 @@ export async function downloadDB(req: Request, res: Response, next: NextFunction
 
 
 
-export async function uploadDB(req: Response, res: Response, next: NextFunction): Promise<void> {
+export async function updateDatabase(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-    upload(req as any, res, (err) => {
+    upload(req, res, async (err) => {
       if (err) {
         return next(err);
-      } 
+      }  
+      
+      if (!req.file) {
+        return next(errorHandler(400, "File not selected."))
+      }
 
+      access(SQLITE3_DATABASE_DIR_PATH + "database.db")
+        .then(() => {
+          unlink(SQLITE3_DATABASE_DIR_PATH + "database.db", (err) => {
+            if (err) {
+              throw err;
+            }
+          });
+
+          const NEW_DB_FILE_PATH = path.join(__dirname, "../uploads/database.db");
+          const OLD_DB_FILE_PATH = SQLITE3_DATABASE_DIR_PATH + "database.db";
+          rename(NEW_DB_FILE_PATH, OLD_DB_FILE_PATH, (err) => {
+            if (err) {
+              throw err;
+            }
+          });
+
+          res.status(200).json({
+            success: true,
+            statusCode: 200,
+            message: "Database updated successfully. Restarting the app...",
+          });
+
+          process.exit(0);
+        })
+        .catch((err) => {
+          return next(errorHandler(404, "Database not found: Old database could not be found."));
+        })
     });
   } catch(err) {
     next(err);
   }
 }
+

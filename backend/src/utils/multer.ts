@@ -1,13 +1,14 @@
 import multer from "multer";
-import { SQLITE3_DATABASE_DIR_PATH } from "./constants";
+import path from "path";
 
 
 const storage = multer.diskStorage({
-  destination: SQLITE3_DATABASE_DIR_PATH,
+  destination: path.join(__dirname, "../uploads"),
   filename: function(req, file, callback) {
-    if (file.originalname !== "database.db") {
-      return callback(new Error("Invalid file extension. Only .db files are allowed"), "");
+    if (path.extname(file.originalname) !== ".db") {
+      return callback(new Error("Invalid file. Only files with the extension '.db' are supported."), "");
     }
+    callback(null, "database.db");
   }
 });
 
