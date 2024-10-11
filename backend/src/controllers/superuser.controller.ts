@@ -5,6 +5,7 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { SQLITE3_DATABASE_DIR_PATH } from "../utils/constants";
 import { access } from "fs/promises";
+import upload from "../utils/multer";
 dotenv.config();
 
 
@@ -45,6 +46,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
 } 
 
 
+
 export async function logout(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     res.status(200).clearCookie("super_user_access_token").json({
@@ -65,5 +67,20 @@ export async function downloadDB(req: Request, res: Response, next: NextFunction
     res.download(SQLITE3_DATABASE_DIR_PATH + "database.db");
   } catch(err) {
     next(errorHandler(404, "File not found. Unable to provide requested file."));
+  }
+}
+
+
+
+export async function uploadDB(req: Response, res: Response, next: NextFunction): Promise<void> {
+  try {
+    upload(req as any, res, (err) => {
+      if (err) {
+        return next(err);
+      } 
+
+    });
+  } catch(err) {
+    next(err);
   }
 }
