@@ -2,6 +2,7 @@ import express, {NextFunction, Request, Response} from "express";
 import adminRouter from "./routes/admin.route";
 import pageRouter from "./routes/page.route";
 import recordRouter from "./routes/record.route";
+import superUserRouter from "./routes/superuser.route";
 import cookieParser from "cookie-parser";
 import { STATIC_FILE_PATH } from "./utils/constants";
 import dotenv from "dotenv";
@@ -14,6 +15,7 @@ app.use(cookieParser());
 
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/records", recordRouter);
+app.use("/api/v1/super-user/", superUserRouter);
 
 app.use(express.static(STATIC_FILE_PATH));
 app.use("/", pageRouter);

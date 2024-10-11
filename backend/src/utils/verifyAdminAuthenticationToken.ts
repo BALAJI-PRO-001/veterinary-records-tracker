@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import errorHandler from "./errorHandler";
 dotenv.config();
@@ -12,7 +12,7 @@ function verifyAdminAuthenticationToken(req: Request, res: Response, next: NextF
     return next(errorHandler(401, "Unauthorized: Admin access token is missing in cookies."));
   }
   
-  jwt.verify(adminAccessToken, process.env.JWT_SECRET_KEY as string, (err: jwt.VerifyErrors | null, decoded: JwtPayload | string | undefined) => {
+  jwt.verify(adminAccessToken, process.env.JWT_SECRET_KEY as string, (err: jwt.VerifyErrors | null, decoded: jwt.JwtPayload | string | undefined) => {
     if (err) {
       return next(errorHandler(403, "Forbidden: Invalid admin access token."));
     } 
