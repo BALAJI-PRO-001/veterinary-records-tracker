@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./backend/dist/index.js",
+    "start": "npm run build && pm2 start ./backend/dist/index.js",
     "ts-dev": "nodemon ./backend/src/index.ts",
     "js-dev": "tsc && nodemon ./backend/dist/index.js",
     "build": "tsc",
@@ -21,6 +21,7 @@
     "generate-password": "^1.7.1",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
+    "pm2": "^5.4.2",
     "random-email": "^1.0.3",
     "sqlite3": "^5.1.7"
   },
