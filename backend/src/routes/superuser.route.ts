@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/login", validateSuperUserCredentials, login);
 
 router.get("/logout", logout)
-      .get("/download/db", validateSuperUserAuthenticationToken, downloadDatabase);
+      .get("/download/db", validateSuperUserAuthenticationToken, downloadDatabase)
 
 router.patch("/update/db", validateSuperUserAuthenticationToken, updateDatabase);
 
