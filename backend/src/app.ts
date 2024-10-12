@@ -4,7 +4,7 @@ import pageRouter from "./routes/page.route";
 import recordRouter from "./routes/record.route";
 import superUserRouter from "./routes/superuser.route";
 import cookieParser from "cookie-parser";
-import { STATIC_FILE_PATH } from "./utils/constants";
+import { STATIC_FILES_PATH } from "./utils/constants";
 import dotenv from "dotenv";
 
 const app = express();
@@ -17,7 +17,7 @@ app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/records", recordRouter);
 app.use("/api/v1/super-user/", superUserRouter);
 
-app.use(express.static(STATIC_FILE_PATH));
+app.use(express.static(STATIC_FILES_PATH));
 app.use("/", pageRouter);
 
 
