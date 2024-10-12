@@ -26,7 +26,7 @@ router.post("", verifyAdminAuthenticationToken, createNewRecord)
       .post("/:userId/cows", verifyAdminAuthenticationToken, addNewCowToUser)
       .post("/:userId/cows/:cowId/inject-info-ai-dates", verifyAdminAuthenticationToken, addNewInjectionInfoAndAiDateToCow);
 
-router.get("/all", verifyAdminAuthenticationToken, getAllRecords)
+router.get("/all", /*verifyAdminAuthenticationToken,*/ getAllRecords)
       .get("/download", verifyAdminAuthenticationToken, downloadRecords)
       .get("/:userId", verifyAdminAuthenticationToken, getRecordByUserId);
 
