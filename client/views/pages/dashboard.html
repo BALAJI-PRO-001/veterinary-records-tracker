@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</head>
+<body>
+  {{HEADER}}
+  <div id="alert-box" class="alert alert-danger d-none fw-bold fs-6" role="alert"></div>
+  <div class="d-flex align-items-center justify-content-center gap-3 mx-auto position-absolute">
+    <p class="fw-bold fs-5 text-secondary">Loading </p>
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <main class="mt-5 mx-auto" style="width: 90%;">
+    <div id="table-container" class="d-flex align-items-center justify-content-between mb-3">
+      <h5 id="record-count" class="text-secondary fw-bold"></h5>
+      <div class="d-flex align-items-center gap-2">
+        <h5 for="search" class="fw-bold text-secondary">Search: </h5>
+        <input type="text" class="form-control border-2" placeholder="Search based on field ....">
+        <select name="" id="" class="form-control border-2">
+          <option value="id">ID</option>
+          <option value="name">NAME</option>
+          <option value="phoneNumber">PHONE NUMBER</option>
+          <option value="address">ADDRESS</option>
+          <option value="injection-name">INJECTION NAME</option>
+          <option value="injection-price">INJECTION PRICE</option>
+          <option value="ai-date">AI DATE</option>
+        </select>
+      </div>
+      <button class="btn btn-danger fw-bold">Logout</button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table" style="font-size: 15px;">
+        <thead class="bg-primary text-white">
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Cow Names</th>
+            <th>Cow Breeds</th>
+            <th>Bull Names</th>
+            <th>Injection Names</th>
+            <th>Injection Prices</th>
+            <th>Given Amount</th>
+            <th>Pending Amount</th>
+            <th>Ai Dates</th>
+            <th>D&T In DB</th>
+          </tr>
+        </thead>
+        <tbody>
+          <td>TempData</td>
+          <td>TempData</td>
+          <td>TempData</td>
+          <td>TempData</td>
+          <td>TempData</td>
+          <td>TempData</td>
+          <td>TempData</td>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <script src="/js/dashboard.js" type="module"></script>
+</body>
+</html>
