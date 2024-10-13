@@ -104,7 +104,7 @@ export async function updateDatabase(req: Request, res: Response, next: NextFunc
           res.status(200).json({
             success: true,
             statusCode: 200,
-            message: "Database updated successfully. Restarting the app...",
+            message: "Database updated successfully. Restarting the server.",
           });
 
           process.exit(0);

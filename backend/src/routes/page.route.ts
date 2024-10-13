@@ -13,7 +13,7 @@ const router = express.Router();
 router.get("/", indexPage)
       .get("/home", homePage)
       .get("/add-new-record", addNewRecordPage)
-      .get("/maintenance/super-user/login", superUserLoginPage)
-      .get("/maintenance/super-user/dashboard", privateRoute , dashboardPage);
+      .get("/super-user/login", superUserLoginPage)
+      .get("/super-user/dashboard", privateRoute , dashboardPage);
  
 export default router;
