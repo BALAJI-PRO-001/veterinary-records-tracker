@@ -10,23 +10,25 @@
 </head>
 <body>
   {{HEADER}}
-  <form class="d-flex flex-column mx-auto mt-5" style="min-width: 100px; max-width: 390px; min-height: 100px;">
-    <h1 class="text-secondary fs-4 fw-bold text-center mb-4">Super User Login</h1>
-    <div class="d-flex flex-column mb-2" style="height: 60px;">
-      <input id="email" type="text" class="form-control form-control-lg fs-6 border-2" placeholder="Email ....">
-      <div class="invalid-feedback mt-0 fw-bold"></div>
-    </div>
-    <div class="d-flex flex-column mb-2" style="height: 60px;">
-      <input id="password" type="password" class="form-control form-control-lg fs-6 border-2" placeholder="Password ....">
-      <div class="invalid-feedback mt-0 fw-bold"></div>
-    </div>
-    <button type="button" class="btn btn-primary fw-bold py-2 mt-1">Login</button>
-    <p class="text-center mt-2 fw-bold text-secondary">
-      Go back to the
-      <a href="/home" class="text-decoration-none">Homepage</a>
-    </p>
-  </form>
-  <h4 id="global-err-element" class="text-center text-danger"></h4>
+  <div class="mx-4">
+    <form class="d-flex flex-column mx-auto mt-5" style="min-width: 100px; max-width: 390px; min-height: 100px;">
+      <h2 class="text-secondary c-fs fw-bold text-center mb-4" style="font-size: x-large;">Super User Login</h2>
+      <div class="d-flex flex-column mb-3" style="height: 60px;">
+        <input id="email" type="text" class="form-control form-control-lg border-2" placeholder="Email ....">
+        <div class="invalid-feedback mt-0 fw-bold"></div>
+      </div>
+      <div class="d-flex flex-column mb-3" style="height: 60px;">
+        <input id="password" type="password" class="form-control form-control-lg border-2" placeholder="Password ....">
+        <div class="invalid-feedback mt-0 fw-bold"></div>
+      </div>
+      <button type="button" class="btn btn-primary fw-bold mt-2" style="height: 50px;">Login</button>
+      <p class="text-center mt-2 fw-bold text-secondary">
+        Go back to the
+        <a href="/home" class="text-decoration-none">Homepage</a>
+      </p>
+    </form>
+    <h4 id="global-err-element" class="text-center text-danger"></h4>
+  </div>
   <script src="/js/superUserLogin.js" type="module"></script>
 </body>
 </html>

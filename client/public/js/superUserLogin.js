@@ -51,7 +51,7 @@ loginBTN.addEventListener("click", async (e) => {
       }
 
       if (data.statusCode === 200) {
-        location.href = "/maintenance/super-user/dashboard"
+        location.href = "/super-user/dashboard"
         return;
       }
       
