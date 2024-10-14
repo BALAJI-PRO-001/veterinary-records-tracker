@@ -6,3 +6,46 @@
 .border-none {
   border: none !important;
 }   
+
+/* custom font size for show record page heading */
+.c-fs-f-srp-h {
+  font-size: 20px;
+}
+
+/* custom font size for show record page paragraph */
+.c-fs-f-srp-p {
+  font-size: 17px !important;
+}
+
+/* custom font size for show record page table */
+.c-fs-f-srp-t {
+  font-size: 13px;
+}
+
+/* custom heigh for show record page table hight */
+.c-max-h-f-srp-t {
+  min-height: 300px;
+}
+
+
+@media  screen and (min-width: 500px) {
+  .c-fs-f-srp-h {
+    font-size: x-large;
+  }
+
+  .c-fs-f-srp-p {
+    font-size: 20px !important;
+  }
+
+  .c-max-h-f-srp-t {
+    min-height: 380px;
+  }
+
+
+}
+
+@media screen and (min-width: 560px) {
+  .c-fs-f-srp-t {
+    font-size: 20px;
+  }
+}
