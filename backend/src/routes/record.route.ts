@@ -28,7 +28,7 @@ router.post("", verifyAdminAuthenticationToken, createNewRecord)
 
 router.get("/all", /*verifyAdminAuthenticationToken,*/ getAllRecords)
       .get("/download", verifyAdminAuthenticationToken, downloadRecords)
-      .get("/:userId", verifyAdminAuthenticationToken, getRecordByUserId);
+      .get("/:userId", /*verifyAdminAuthenticationToken,*/ getRecordByUserId);
 
 router.patch("/users/:userId", verifyAdminAuthenticationToken, updateUserRecord)
       .patch("/:userId/cows/:cowId", verifyAdminAuthenticationToken, updateCowRecord)
