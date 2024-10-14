@@ -1,5 +1,3 @@
-import { extractCowInformation } from "./utils/common.js";
-
 const alertBox = document.getElementById("alert-box");
 
 const dbContainer = document.getElementById("db-container");
@@ -33,11 +31,17 @@ dbInputElement.addEventListener("change", async (e) => {
       dbMessageElement.innerText = data.message; 
       dbMessageElement.innerText = "Connecting to server ....";
 
+      serverStatusElement.classList.replace("text-success", "text-danger");
+      serverStatusElement.innerText = "Deactivated.";
+
       setTimeout(() => {
         fetch("/").then((res) => {
           if (res.ok) {
             dbMessageElement.classList.replace("text-danger", "text-success");
-            dbMessageElement.innerText = "Server restated successfully ...."
+            dbMessageElement.innerText = "Server restated successfully ....";
+
+            serverStatusElement.classList.replace("text-danger", "text-success");
+            serverStatusElement.innerText = "Alive.";
 
             setTimeout(() => {
               dbMessageElement.innerText = "";

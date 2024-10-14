@@ -1,20 +1,22 @@
 module.exports = {
   apps: [
     {
-      "name": "VRT",                    // Application name
-      "script": "node ./backend/dist/index.js",// Command to start the app (can be "index.js" or any other script)
-      "instances": 2,              // Automatically scale to maximum available CPU cores
-      "exec_mode": "cluster",          // Cluster mode for load balancing across multiple CPU cores
-      "max_memory_restart": "500M",    // Restart the app if it exceeds 500MB of memory usage
-      "log_file": "./logs/app.log",    // Combined log file for both stdout and stderr
-      "error_file": "./logs/error.log",// Error log file
-      "out_file": "./logs/output.log", // Output log file
-      "merge_logs": true,              // Combine logs from different instances into a single file
-      "time": true,                    // Append timestamps to log entries
-      "autorestart": true,             // Automatically restart the app if it crashes
-      "restart_delay": 1000,           // Delay between restarts (in milliseconds)
-      "min_uptime": "60s",             // Minimum uptime to consider the app stable
-      "instance_var": "INSTANCE_ID"    // A unique ID for each instance when using clusters
+      name: "VRT",                      // Application name
+      script: "node ./backend/dist/index.js",// Start script path
+      instances: 1,                     // Number of instances (can be set to "max" to use all CPU cores)
+      exec_mode: "cluster",             // Cluster mode for load balancing
+      max_memory_restart: "500M",       // Restart the app if memory exceeds 500MB
+      log_file: "./logs/app.log",       // Combined log for stdout and stderr
+      error_file: "./logs/error.log",   // Error log file
+      out_file: "./logs/output.log",    // Standard output log file
+      pid_file: "./logs/pid.log",       // PID file for the application
+      merge_logs: true,                 // Combine logs from all instances into one file
+      time: true,                       // Include timestamps in logs
+      autorestart: true,                // Automatically restart the app on crash
+      restart_delay: 1000,              // Delay between restarts (1 second)
+      min_uptime: "60s",                // Minimum uptime before considering the app stable
+      instance_var: "INSTANCE_ID"       // Unique identifier for each instance in a cluster
     }
   ]
-}
+};
+
