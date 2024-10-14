@@ -11,35 +11,28 @@
 </head>
 <body>
   {{HEADER}}
+  <div id="alert-box" class="alert alert-danger d-none fw-bold fs-6" role="alert"></div>
+
   <div class="mx-3 mt-5">
     <div class="shadow border rounded mt-5 mx-auto p-1" style="min-height: 80vh; max-width: 1000px;">
       <h4 class="mt-2 ms-2 mb-0 c-fs-f-srp-h">Customer Details</h4>
 
       <div class="d-flex flex-wrap gap-2 gap-lg-3 p-2 overflow-auto">
-        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-user text-primary"></i> Ram</p>
-        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-phone text-primary"></i> 1231231233</p>
-        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-location-dot text-primary"></i> Apt. 492, 7 Cité Du pre Marchais, 12566 Draguignan</p>
-        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"> Pending Amount: <i class="fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 500</p>
+        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-user text-primary"></i> <span id="user-name"></span></p>
+        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-phone text-primary"></i> <span id="phone-number"></span></p>
+        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-location-dot text-primary"></i> <span id="address"></span></p>
+        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"> Pending Amount: <i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> <span id="pending-amount"></span></p>
       </div>
       <hr class="m-0 border border-1 border-dark">
 
       <div class="ms-2 overflow-scroll" style="height: 65px;">
-        <ul class="pagination mt-3 mb-0 text-nowrap">
-          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Previous</a></li>
-          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">cow 1</a></li>
-          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
-          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
-          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
-          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
-          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
-        </ul>
+        <ul id="pagination-list" class="pagination mt-3 mb-0 text-nowrap"></ul>
       </div>
 
       <div class="d-flex">
         <div class="d-flex flex-wrap gap-2 gap-lg-3 p-2 overflow-auto">
-          <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-cow text-primary"></i> cow 1 - BreedName</p>
+          <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-cow text-primary"></i> <span id="cow-name-and "></span></p>
           <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-cow text-danger"></i> Danger Bull</p>
-          <!-- <p class="fs-5 m-0 me-2 fw-bold text-success"><i class="fa-solid fa-calendar-days text-primary"></i> 12/2/2002 </p> -->
         </div>
       </div>
 
@@ -108,7 +101,7 @@
             <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100">Edit</button></li>
             <li class="mx-auto mx-auto" style="width: 90%;"><button class="btn btn-danger fw-bold w-100 mx-auto">Delete</button></li>
           </ul>
-        </div>      </div>
+        </div>      
     </div>
   </div>
   <script src="/js/record.js" type="module"></script>
