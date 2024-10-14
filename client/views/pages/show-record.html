@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Record</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/css/global.css">
+</head>
+<body>
+  {{HEADER}}
+  <div class="mx-3 mt-5">
+    <div class="shadow border rounded mt-5 mx-auto p-1" style="min-height: 80vh; max-width: 1000px;">
+      <h4 class="mt-2 ms-2 mb-0 c-fs-f-srp-h">Customer Details</h4>
+
+      <div class="d-flex flex-wrap gap-2 gap-lg-3 p-2 overflow-auto">
+        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-user text-primary"></i> Ram</p>
+        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-phone text-primary"></i> 1231231233</p>
+        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-location-dot text-primary"></i> Apt. 492, 7 Cité Du pre Marchais, 12566 Draguignan</p>
+        <p class="fs-5 m-0 me-2 c-fs-f-srp-p"> Pending Amount: <i class="fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 500</p>
+      </div>
+      <hr class="m-0 border border-1 border-dark">
+
+      <div class="ms-2 overflow-scroll" style="height: 65px;">
+        <ul class="pagination mt-3 mb-0 text-nowrap">
+          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Previous</a></li>
+          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">cow 1</a></li>
+          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
+          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
+          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
+          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
+          <li class="page-item c-fs-f-srp-p"><a class="page-link" href="#">Next</a></li>
+        </ul>
+      </div>
+
+      <div class="d-flex">
+        <div class="d-flex flex-wrap gap-2 gap-lg-3 p-2 overflow-auto">
+          <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-cow text-primary"></i> cow 1 - BreedName</p>
+          <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-cow text-danger"></i> Danger Bull</p>
+          <!-- <p class="fs-5 m-0 me-2 fw-bold text-success"><i class="fa-solid fa-calendar-days text-primary"></i> 12/2/2002 </p> -->
+        </div>
+      </div>
+
+      <div class="table-responsive overflow-scroll c-max-h-f-srp-t">
+        <table class="table table-sm table-hover table-bordered c-fs-f-srp-t">
+          <thead class="text-nowrap">
+            <th>Name</th>
+            <th>Cost</th>
+            <th>G-Amount</th>
+            <th>P-Amount</th>     
+            <th>Ai-Date</th>  
+          </thead>
+          <tbody>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <hr class="m-0 border border-1 border-dark">
+
+      <div class="d-flex flex-wrap">
+        <div class="btn-group dropdown dropup">
+          <button class="btn btn-secondary dropdown-toggle ms-0 ms-2 mt-3 mb-3 p-2 fw-bold c-fs-f-srp-p" data-bs-toggle="dropdown" >Actions For User</button>
+          <ul class="dropdown-menu" style="width: 98%;">
+            <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100">Edit</button></li>
+            <li class="mx-auto mx-auto" style="width: 90%;"><button class="btn btn-danger fw-bold w-100 mx-auto">Delete</button></li>
+          </ul>
+        </div>
+
+        <div class="btn-group dropdown dropup">
+          <button class="btn btn-secondary dropdown-toggle ms-0 ms-2 mt-3 mb-3 p-2 fw-bold c-fs-f-srp-p" data-bs-toggle="dropdown" >Actions For Cow</button>
+          <ul class="dropdown-menu" style="width: 98%;">
+            <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100">Edit</button></li>
+            <li class="mx-auto mx-auto" style="width: 90%;"><button class="btn btn-danger fw-bold w-100 mx-auto">Delete</button></li>
+          </ul>
+        </div>      </div>
+    </div>
+  </div>
+  <script src="/js/record.js" type="module"></script>
+</body>
+</html>
