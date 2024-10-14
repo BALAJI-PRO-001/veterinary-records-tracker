@@ -118,3 +118,12 @@ export async function updateDatabase(req: Request, res: Response, next: NextFunc
   }
 }
 
+
+
+export async function serverActions(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    console.log("HI");
+  } catch(err) {
+    next(err);
+  }
+}

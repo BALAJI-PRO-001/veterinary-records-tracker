@@ -5,7 +5,8 @@ const alertBox = document.getElementById("alert-box");
 const dbContainer = document.getElementById("db-container");
 const dbInputElement = dbContainer.querySelector("input");
 const dbMessageElement = dbContainer.querySelector("#db-message-element");
-
+const serverStatusElement = document.getElementById("server-status-element");
+const hardResetBTN = document.getElementById("hard-reset-btn");
 
 
 dbInputElement.addEventListener("change", async (e) => {
@@ -27,10 +28,10 @@ dbInputElement.addEventListener("change", async (e) => {
       body: formData
     });
     const data = await res.json();
-
+ 
     if (data.statusCode === 200) {
       dbMessageElement.innerText = data.message; 
-      dbMessageElement.innerText = "Checking ....";
+      dbMessageElement.innerText = "Connecting to server ....";
 
       setTimeout(() => {
         fetch("/").then((res) => {
@@ -46,10 +47,18 @@ dbInputElement.addEventListener("change", async (e) => {
         .catch((err) => {
           dbMessageElement.classList.replace("text-success", "text-danger");
           dbMessageElement.innerText = "Server restarting failed ....";
+          serverStatusElement.classList.replace("text-success", "text-danger");
+          serverStatusElement.innerText = "Deactivated.";
         });
       }, 500);
     }
   } catch(err) {
     alertBox.innerText = "Error: " + err.message;
   }
+});
+
+
+
+hardResetBTN.addEventListener("click", async () => {
+  const res = await fetch("/api/v1/super-user/server-actions", {method: "POST"});
 });
