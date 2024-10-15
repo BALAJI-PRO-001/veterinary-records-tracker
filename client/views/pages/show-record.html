@@ -14,7 +14,7 @@
   <div id="alert-box" class="alert alert-danger d-none fw-bold fs-6" role="alert"></div>
 
   <div class="mx-3 mt-5">
-    <div class="shadow border rounded mt-5 mx-auto p-1" style="min-height: 80vh; max-width: 1000px;">
+    <div class="shadow border rounded mt-5 mx-auto p-1" style="min-height: 500px; max-width: 1000px;">
       <h4 class="mt-2 ms-2 mb-0 c-fs-f-srp-h">Customer Details</h4>
 
       <div class="d-flex flex-wrap gap-2 gap-lg-3 p-2 overflow-auto">
@@ -36,14 +36,16 @@
         </div>
       </div>
 
-      <div class="table-responsive overflow-scroll c-max-h-f-srp-t">
-        <table class="table table-sm table-hover table-bordered c-fs-f-srp-t">
-          <thead class="text-nowrap">
-            <th>Name</th>
-            <th>Cost</th>
-            <th>G-Amount</th>
-            <th>P-Amount</th>     
-            <th>Ai-Date</th>  
+      <div class="table-responsive p-0 m-0 overflow-scroll c-max-h-f-srp-t">
+        <table class="table table-bordered table-sm table-hover c-fs-f-srp-t">
+          <thead>
+            <tr class="text-nowrap position-sticky bg-white" style="top: -1px;">
+              <th>Name</th>
+              <th>Cost</th>
+              <th>G-Amount</th>
+              <th>P-Amount</th>     
+              <th>Ai-Date</th> 
+            </tr>
           </thead>
           <tbody>
             <tr>
@@ -81,25 +83,68 @@
               <td>400</td>
               <td>12/02/2004</td>
             </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+            <tr>
+              <td>injection 1</td>
+              <td>500</td>
+              <td>100</td>
+              <td>400</td>
+              <td>12/02/2004</td>
+            </tr>
+
           </tbody>
         </table>
       </div>
-      <hr class="m-0 border border-1 border-dark">
+      <hr class="m-0 border border-1 border-dark c-d-none">
 
-      <div class="d-flex flex-wrap">
-        <div class="btn-group dropdown dropup">
-          <button class="btn btn-secondary dropdown-toggle ms-0 ms-2 mt-3 mb-3 p-2 fw-bold c-fs-f-srp-p" data-bs-toggle="dropdown" >Actions For User</button>
+      <div class="d-flex px-1 py-2 gap-2 gap-sm-3 mt-1 flex-wrap">
+        <div class="btn-group dropdown dropup c-w-f-srp-b">
+          <button class="btn btn-primary dropdown-toggle ms-0 p-2 fw-bold c-fs-f-srp-b" data-bs-toggle="dropdown" >Actions For User </button>
           <ul class="dropdown-menu" style="width: 98%;">
-            <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100">Edit</button></li>
-            <li class="mx-auto mx-auto" style="width: 90%;"><button class="btn btn-danger fw-bold w-100 mx-auto">Delete</button></li>
+            <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100 c-fs-f-srp-b">Edit</button></li>
+            <li class="mx-auto mx-auto" style="width: 90%;"><button class="btn btn-danger fw-bold w-100 c-fs-f-srp-b">Delete</button></li>
           </ul>
         </div>
 
-        <div class="btn-group dropdown dropup">
-          <button class="btn btn-secondary dropdown-toggle ms-0 ms-2 mt-3 mb-3 p-2 fw-bold c-fs-f-srp-p" data-bs-toggle="dropdown" >Actions For Cow</button>
-          <ul class="dropdown-menu" style="width: 98%;">
-            <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100">Edit</button></li>
-            <li class="mx-auto mx-auto" style="width: 90%;"><button class="btn btn-danger fw-bold w-100 mx-auto">Delete</button></li>
+        <div class="btn-group dropdown dropup c-w-f-srp-b">
+          <button class="btn btn-primary dropdown-toggle ms-0 p-2 fw-bold c-fs-f-srp-b" data-bs-toggle="dropdown" >Actions For Cow </button>
+          <ul class="dropdown-menu" style="width: 10px;">
+            <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100 c-fs-f-srp-b">Edit</button></li>
+            <li class="mx-auto mx-auto" style="width: 90%;"><button class="btn btn-danger fw-bold w-100 c-fs-f-srp-b">Delete</button></li>
           </ul>
         </div>      
     </div>
