@@ -11,10 +11,16 @@
 </head>
 <body>
   {{HEADER}}
+
   <div id="alert-box" class="alert alert-danger d-none fw-bold fs-6" role="alert"></div>
 
-  <div class="mx-3 mt-5">
-    <div class="shadow border rounded mt-5 mx-auto p-1" style="min-height: 500px; max-width: 1000px;">
+  <div id="spinner" class="d-flex align-items-center justify-content-center gap-3 mx-auto position-absolute top-50 start-50 translate-middle">
+    <p class="fw-bold fs-5 m-0">Loading</p>
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>  
+
+  <main id="main-container" class="mx-3 mt-5">
+    <main class="shadow border rounded mt-5 mx-auto p-1" style="min-height: 500px; max-width: 1000px;">
       <h4 class="mt-2 ms-2 mb-0 c-fs-f-srp-h">Customer Details</h4>
 
       <div class="d-flex flex-wrap gap-2 gap-lg-3 p-2 overflow-auto">
@@ -135,7 +141,9 @@
         <div class="btn-group dropdown dropup c-w-f-srp-b">
           <button class="btn btn-primary dropdown-toggle ms-0 p-2 fw-bold c-fs-f-srp-b" data-bs-toggle="dropdown" >Actions For User </button>
           <ul class="dropdown-menu" style="width: 100%; min-width: 0px;">
-            <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100 c-fs-f-srp-b">Edit</button></li>
+            <li class="mx-auto mx-auto mb-2" style="width: 90%;">
+              <button class="btn btn-success fw-bold w-100 c-fs-f-srp-b" data-bs-toggle="modal" data-bs-target="#update-user-record-modal">Edit</button>
+            </li>
             <li class="mx-auto mx-auto" style="width: 90%;"><button class="btn btn-danger fw-bold w-100 c-fs-f-srp-b">Delete</button></li>
           </ul>
         </div>
@@ -143,12 +151,87 @@
         <div class="btn-group dropdown dropup c-w-f-srp-b">
           <button class="btn btn-primary dropdown-toggle ms-0 p-2 fw-bold c-fs-f-srp-b" data-bs-toggle="dropdown" >Actions For Cow </button>
           <ul class="dropdown-menu" style="width: 100%; min-width: 0px;">
-            <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100 c-fs-f-srp-b">Edit</button></li>
+            <li class="mx-auto mx-auto mb-2" style="width: 90%;"><button class="btn btn-success fw-bold w-100 c-fs-f-srp-b" data-bs-toggle="modal" data-bs-target="#update-cow-record-modal">Edit</button></li>
             <li class="mx-auto mx-auto" style="width: 90%;"><button class="btn btn-danger fw-bold w-100 c-fs-f-srp-b">Delete</button></li>
           </ul>
         </div>      
     </div>
-  </div>
+
+    <!-- Update user record modal -->
+    <div id="update-user-record-modal" class="modal fade shadow">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded mx-2 p-2" style="min-height: 300px;">
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <h3 class="c-fs-f-srp-h text-center m-0 w-100 modal-title">Update User Record</h3>
+            <button type="button" style="width: 30px;" class="btn-close" data-bs-dismiss="modal"></button>  
+          </div>  
+
+          <form id="update-user-record-form" class="mx-2">
+            <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
+              <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="New name ....">
+              <div class="invalid-feedback mt-0 fw-bold"></div>
+            </div>  
+            
+            <div class="d-flex flex-column mb-3" style="height: 60px;">
+              <input id="phone-number" type="text" class="form-control form-control-lg border-2" placeholder="New phone number ....">
+              <div class="invalid-feedback mt-0 fw-bold"></div>
+            </div> 
+  
+            <div class="d-flex flex-column mb-3" style="height: 60px;">
+              <input id="address" type="text" class="form-control form-control-lg border-2" placeholder="New address ....">
+              <div class="invalid-feedback mt-0 fw-bold"></div>
+            </div> 
+            
+            <div class="d-flex gap-2 flex-wrap">
+              <button type="button" class="btn btn-success p-2 fw-bold c-w-f-srp-b">Update</button>
+              <button type="reset" class="btn btn-danger p-2 fw-bold c-w-f-srp-b">Clear</button>  
+              <button type="button" class="btn btn-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
+            </div>
+
+            <p id="update-message" class="fw-bold text-success mt-2 mb-0"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+
+
+        <!-- Update cow record modal -->
+        <div id="update-cow-record-modal" class="modal fade shadow">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded mx-2 p-2" style="min-height: 300px;">
+              <div class="d-flex justify-content-between align-items-center w-100">
+                <h3 class="c-fs-f-srp-h text-center m-0 w-100 modal-title">Update Cow Record</h3>
+                <button type="button" style="width: 30px;" class="btn-close" data-bs-dismiss="modal"></button>  
+              </div>  
+    
+              <form id="update-user-record-form" class="mx-2">
+                <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
+                  <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="New cow name ....">
+                  <div class="invalid-feedback mt-0 fw-bold"></div>
+                </div>  
+                
+                <div class="d-flex flex-column mb-3" style="height: 60px;">
+                  <input id="breed" type="text" class="form-control form-control-lg border-2" placeholder="New cow breed ....">
+                  <div class="invalid-feedback mt-0 fw-bold"></div>
+                </div> 
+      
+                <div class="d-flex flex-column mb-3" style="height: 60px;">
+                  <input id="bull-name" type="text" class="form-control form-control-lg border-2" placeholder="New bull name ....">
+                  <div class="invalid-feedback mt-0 fw-bold"></div>
+                </div> 
+                
+                <div class="d-flex gap-2 flex-wrap">
+                  <button type="button" class="btn btn-success p-2 fw-bold c-w-f-srp-b">Update</button>
+                  <button type="reset" class="btn btn-danger p-2 fw-bold c-w-f-srp-b">Clear</button>  
+                  <button type="button" class="btn btn-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
+                </div>
+    
+                <p id="update-message" class="fw-bold text-success mt-2 mb-0"></p>
+              </form>
+            </div>
+          </div>
+        </div>    
+  </main>
   <script src="/js/record.js" type="module"></script>
 </body>
 </html>
