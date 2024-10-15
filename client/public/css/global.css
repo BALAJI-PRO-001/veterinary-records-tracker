@@ -25,7 +25,14 @@
 /* custom heigh for show record page table hight */
 .c-max-h-f-srp-t {
   min-height: 300px;
+  max-height: 300px;
 }
+
+/* custom font size for show record page buttons */
+.c-fs-f-srp-b {
+  font-size: 13px;
+}
+
 
 
 @media  screen and (min-width: 500px) {
@@ -38,14 +45,33 @@
   }
 
   .c-max-h-f-srp-t {
-    min-height: 380px;
+    max-height: 350px !important;
   }
-
 
 }
 
 @media screen and (min-width: 560px) {
   .c-fs-f-srp-t {
     font-size: 20px;
+  }
+}
+
+
+@media screen and (min-width: 370px) {
+  .c-fs-f-srp-b {
+    font-size: 15px;
+  }
+}
+
+
+@media screen and (max-width: 301px) {
+  .c-w-f-srp-b {
+    width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 349px) {
+  .c-d-none {
+    display: none;
   }
 }
