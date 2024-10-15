@@ -45,3 +45,25 @@ export function validatePasswordAndUpdatePasswordInputUI(passwordInputElement) {
   passwordInputElement.nextElementSibling.textContent = "";
   return true;
 }
+
+
+export function toggleElementVisibility(element, hide, toggleClassName) {
+  if (element === null || element === undefined) {
+    throw new Error("Element is null or undefined.");
+  }
+
+  if (!(element instanceof HTMLElement)) {
+    throw new Error(`Expected an HTMLElement, but got (${typeof element}).`);
+  }
+
+  if (typeof hide !== "boolean") {
+    throw new Error(`Expected a boolean value, but received (${typeof hide})`);
+  }
+
+  if (toggleClassName) {
+    element.classList.toggle(toggleClassName);
+  }
+
+  element.style.display = "";
+  hide ? element.style.display = "none" : element.style.display = "block";
+}
