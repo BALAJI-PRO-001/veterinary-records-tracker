@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 .outline-none {
   outline: none !important;
@@ -31,6 +36,12 @@
 /* custom font size for show record page buttons */
 .c-fs-f-srp-b {
   font-size: 13px;
+}
+
+/* header components style */
+.header {
+  height: 6rem;
+  background-color: #103cbe;;
 }
 
 
