@@ -52,3 +52,21 @@ async function updateUI() {
 
 updateUI();
 
+
+
+const popupMenu = document.getElementById("popup-menu");
+const tableContainer = document.getElementById("table-container");
+
+tableContainer.querySelectorAll(".table-row").forEach((row) => {
+  row.addEventListener("click", (e) => {
+    popupMenu.classList.remove("d-none");
+    popupMenu.style.left = `${e.pageX - 100}px`;
+    popupMenu.style.top = `${e.pageY - 40}px`;
+  });
+});
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest(".table-row") && !e.target.closest("#popup-menu")) {
+    popupMenu.classList.add("d-none");
+  }
+});
