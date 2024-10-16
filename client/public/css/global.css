@@ -38,6 +38,11 @@
   background-color: #103cbe;
 }
 
+.navbar-content a {
+  color: rgb(252, 252, 252);
+  text-decoration: none;
+}
+
 .cursor-pointer {
   cursor:  pointer !important;
 }
