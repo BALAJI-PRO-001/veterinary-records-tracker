@@ -182,7 +182,6 @@
             
             <div class="d-flex gap-2 flex-wrap">
               <button type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Update</button>
-              <button type="reset" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b">Clear</button>  
               <button type="button" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
             </div>
 
@@ -219,7 +218,47 @@
             
             <div class="d-flex gap-2 flex-wrap">
               <button type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Update</button>
-              <button type="reset" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b">Clear</button>  
+              <button type="button" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
+            </div>
+            
+            <p id="update-message" class="fw-bold text-success mt-2 mb-0"></p>
+          </form>
+        </div>
+      </div>
+    </div>   
+
+     <!-- Update injection info and ai date record modal -->
+     <div id="update-inject-info-and-ai-date-modal" class="modal fade shadow">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded mx-2 p-2" style="min-height: 300px;">
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <h3 class="c-fs-f-srp-h text-center m-0 w-100 modal-title">Update Injection Information</h3>
+            <button type="button" style="width: 30px;" class="btn-close" data-bs-dismiss="modal"></button>  
+          </div>  
+
+          <form id="update-user-record-form" class="mx-2">
+            <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
+              <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="Injection name ....">
+              <div class="invalid-feedback mt-0 fw-bold"></div>
+            </div>  
+            
+            <div class="d-flex flex-column mb-3" style="height: 60px;">
+              <input id="breed" type="text" class="form-control form-control-lg border-2" placeholder="Injection price ....">
+              <div class="invalid-feedback mt-0 fw-bold"></div>
+            </div> 
+  
+            <div class="d-flex flex-column mb-3" style="height: 60px;">
+              <input id="bull-name" type="text" class="form-control form-control-lg border-2" placeholder="Given Amount ....">
+              <div class="invalid-feedback mt-0 fw-bold"></div>
+            </div> 
+
+            <div class="d-flex flex-column mb-3" style="height: 60px;">
+              <input id="bull-name" type="text" class="form-control form-control-lg border-2" placeholder="Pending Amount ....">
+              <div class="invalid-feedback mt-0 fw-bold"></div>
+            </div> 
+            
+            <div class="d-flex gap-2 flex-wrap">
+              <button type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Update</button>
               <button type="button" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
             </div>
             
@@ -269,10 +308,30 @@
       </div>
     </div>  
 
+     <!-- Delete inject info and ai date record modal -->
+     <div id="delete-inject-info-and-ai-date-modal" class="modal fade shadow">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded mx-2 p-2" style="min-height: 50px;">
+          <div class="d-flex justify-content-between align-items-center w-100">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ms-2" width="24" height="24" fill="red" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+            <h3 class="c-fs-f-srp-h text-center m-0 w-100 modal-title">Delete Injection Information</h3>
+            <button type="button" style="width: 30px;" class="btn-close" data-bs-dismiss="modal"></button>  
+          </div>  
+          <p class="text-secondary fs-5 p-2 m-0">Are you sure you want to delete this injection info and ai date record?.</p>
+          <div class="d-flex gap-2 me-2 flex-wrap justify-content-end">
+            <p class="text-success m-0 p-2 c-fs-f-srp-p">Ok</p>
+            <p class="text-danger m-0 p-2 c-fs-f-srp-p" data-bs-dismiss="modal">Cancel</p>  
+          </div>
+        </div>
+      </div>
+    </div>  
+
     <!-- Custom popup menu -->
     <div id="popup-menu" class="d-flex p-2 gap-2 flex-column position-absolute rounded border bg-white d-none c-fs-f-srp-p" style="min-width: 100px; z-index: 1000;">
-      <p class="m-0 text-success cursor-pointer">Edit</p>
-      <p class="m-0 text-danger cursor-pointer">Delete</p>
+      <p class="m-0 text-success cursor-pointer" data-bs-toggle="modal" data-bs-target="#update-inject-info-and-ai-date-modal">Edit</p>
+      <p class="m-0 text-danger cursor-pointer" data-bs-toggle="modal" data-bs-target="#delete-inject-info-and-ai-date-modal">Delete</p>
     </div>
   </main>
   <script src="/js/record.js" type="module"></script>
