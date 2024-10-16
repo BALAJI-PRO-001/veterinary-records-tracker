@@ -38,6 +38,19 @@
   background-color: #103cbe;;
 }
 
+.cursor-pointer {
+  cursor:  pointer !important;
+}
+
+.btn-hover-success:hover {
+  background-color: #198754;
+  color: white !important;
+}
+
+.btn-hover-danger:hover {
+  background-color: #dc3545;
+  color: white !important;
+}
 
 
 @media  screen and (min-width: 500px) {
