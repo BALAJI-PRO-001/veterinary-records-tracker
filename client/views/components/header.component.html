@@ -1,15 +1,18 @@
-<header class="container-fluid header  position-relative text-white d-flex justify-content-around align-items-center">
-    <div class="logo" style="height: 4rem; width: 4rem; background-color: blanchedalmond;"></div>
-    <div class="search"> 
-        <input type="text" class="form-control">
+<header class="container-fluid header text-white d-flex justify-content-between align-items-center">
+    <div class="logo mx-2">
+        <img src="/images/2.png" alt="">
     </div>
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <button class="navbar-toggler" type="button"><span class="navbar-toggler-icon"></span></button>
-        <div class="d-none d-lg-flex justify-content-around navbar-content" style="width: 300px;">
-            <a href="#">Home</a>
-            <a href="#">About</a>
-            <a href="#">Download</a>
-            <a href="#">Logout </a>
+    <div class="search d-flex mx-3"> 
+        <input type="text" class="form-control">
+        <button class="btn btn-success mx-1"><i class="bi bi-search"></i></button>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark position-relative">
+        <button class="navbar-toggler" type="button"  id="toggler"><span class="navbar-toggler-icon"></span></button>
+        <div class="d-none d-lg-flex flex-column flex-lg-row content" id="toggle-menu" style="z-index: 2;">
+            <a href="#" class="m-3"><i class="bi bi-house-door"></i>Home</a>
+            <a href="#" class="m-3"><i class="bi bi-file-earmark-break"></i>About</a>
+            <a href="#" class="m-3"><i class="bi bi-box-arrow-down"></i>Download</a>
+            <a href="#" class="m-3"><i class="bi bi-box-arrow-right"></i>Logout </a>
         </div>
     </nav>
 

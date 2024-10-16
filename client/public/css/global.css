@@ -38,9 +38,19 @@
   background-color: #103cbe;
 }
 
-.navbar-content a {
+#toggle-menu a {
   color: rgb(252, 252, 252);
   text-decoration: none;
+}
+
+.header .logo {
+  height: 3rem;
+  width: 3rem;
+}
+
+.header .logo > img {
+  height: 100%;
+  width: 100%;
 }
 
 .cursor-pointer {
@@ -56,6 +66,30 @@
   background-color: #dc3545;
   color: white !important;
 }
+
+/* style="width: 200px; top: 4rem; right: 0;" */
+
+@media screen and (max-width: 991px) {
+  #toggle-menu {
+    position: absolute;
+    top: 4rem;
+    right: 0;
+    height: 300px;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.485);
+  }
+
+  #toggle-menu a {
+    color: black;
+    font-weight: 550;
+    text-align: left;
+    padding-left: 20%;
+  }
+}
+
 
 
 @media  screen and (min-width: 500px) {
