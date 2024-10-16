@@ -31,126 +31,34 @@
       </div>
       <hr class="m-0 border border-1 border-dark">
 
-      <div class="ms-2 overflow-auto" style="height: 65px;">
-        <ul id="pagination-list" class="pagination mt-3 mb-0 text-nowrap"></ul>
-      </div>
+      <!-- Pagination List container -->
+      <div id="pagination-container" class="ms-2 overflow-auto" style="height: 65px;"></div>
 
       <div class="d-flex">
         <div class="d-flex flex-wrap gap-2 gap-lg-3 p-2 overflow-auto">
-          <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-cow text-primary"></i> <span id="cow-name-and "></span></p>
-          <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-cow text-danger"></i> Danger Bull</p>
+          <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-cow text-primary"></i> <span id="cow-name-and-breed"></span></p>
+          <p class="fs-5 m-0 me-2 c-fs-f-srp-p"><i class="fa-solid fa-cow text-danger"></i> <span id="bull-name"></span></p>
         </div>
       </div>
 
-      <div id="table-container" class="table-responsive p-0 m-0 overflow-auto c-max-h-f-srp-t">
-        <table class="table table-bordered table-sm table-hover c-fs-f-srp-t">
-          <thead>
-            <tr class="text-nowrap position-sticky bg-white" style="top: -1px;">
-              <th>Name</th>
-              <th>Cost</th>
-              <th>G-Amount</th>
-              <th>P-Amount</th>     
-              <th>Ai-Date</th> 
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr>
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-            <tr class="table-row">
-              <td>injection 1</td>
-              <td>500</td>
-              <td>100</td>
-              <td>400</td>
-              <td>12/02/2004</td>
-            </tr>
-
-          </tbody>
-        </table>
-      </div>
+      <!-- Injection info and ai dates table container -->
+      <div id="table-container" class="table-responsive p-0 m-0 overflow-auto c-max-h-f-srp-t"></div>
       <hr class="m-0 border border-1 border-dark c-d-none">
 
       <div class="d-flex px-1 py-2 gap-2 gap-sm-3 mt-1 flex-wrap">
         <div class="btn-group dropdown dropup c-w-f-srp-b">
           <button class="btn btn-primary dropdown-toggle ms-0 p-2 fw-bold c-fs-f-srp-b" data-bs-toggle="dropdown" >Actions For User </button>
           <ul class="dropdown-menu" style="width: 100%; min-width: 0px;">
-            <li class="mx-auto mb-2 text-success c-fs-f-srp-p m-0" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#update-user-record-modal">Edit</li>
-            <li class="mx-auto mb-2 text-danger c-fs-f-srp-p m-0" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#delete-user-record-modal">Delete</li>
+            <li class="mx-auto mb-2 text-success c-fs-f-srp-p m-0 cursor-pointer" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#update-user-record-modal">Edit</li>
+            <li class="mx-auto mb-2 text-danger c-fs-f-srp-p m-0 cursor-pointer" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#delete-user-record-modal">Delete</li>
           </ul>
         </div>
 
         <div class="btn-group dropdown dropup c-w-f-srp-b">
           <button class="btn btn-primary dropdown-toggle ms-0 p-2 fw-bold c-fs-f-srp-b" data-bs-toggle="dropdown" >Actions For Cow </button>
           <ul class="dropdown-menu" style="width: 100%; min-width: 0px;">
-            <li class="mx-auto mb-2 text-success c-fs-f-srp-p m-0" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#update-cow-record-modal">Edit</li>
-            <li class="mx-auto mb-2 text-danger c-fs-f-srp-p m-0" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#delete-cow-record-modal">Delete</li>
+            <li class="mx-auto mb-2 text-success c-fs-f-srp-p m-0 cursor-pointer" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#update-cow-record-modal">Edit</li>
+            <li class="mx-auto mb-2 text-danger c-fs-f-srp-p m-0 cursor-pointer" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#delete-cow-record-modal">Delete</li>
           </ul>
         </div>  
     </div>
@@ -281,8 +189,8 @@
           </div>  
           <p class="text-secondary fs-5 p-2 m-0">Are you sure you want to delete this user record? This action cannot be undone and will permanently remove the entire record.</p>
           <div class="d-flex gap-2 me-2 flex-wrap justify-content-end">
-            <p class="text-success m-0 p-2 c-fs-f-srp-p">Ok</p>
-            <p class="text-danger m-0 p-2 c-fs-f-srp-p" data-bs-dismiss="modal">Cancel</p>  
+            <p class="text-success m-0 p-2 c-fs-f-srp-p cursor-pointer">Ok</p>
+            <p class="text-danger m-0 p-2 c-fs-f-srp-p cursor-pointer" data-bs-dismiss="modal">Cancel</p>  
           </div>
         </div>
       </div>
@@ -301,8 +209,8 @@
           </div>  
           <p class="text-secondary fs-5 p-2 m-0">Are you sure you want to delete this cow record?.</p>
           <div class="d-flex gap-2 me-2 flex-wrap justify-content-end">
-            <p class="text-success m-0 p-2 c-fs-f-srp-p">Ok</p>
-            <p class="text-danger m-0 p-2 c-fs-f-srp-p" data-bs-dismiss="modal">Cancel</p>  
+            <p class="text-success m-0 p-2 c-fs-f-srp-p cursor-pointer">Ok</p>
+            <p class="text-danger m-0 p-2 c-fs-f-srp-p cursor-pointer" data-bs-dismiss="modal">Cancel</p>  
           </div>
         </div>
       </div>
@@ -321,8 +229,8 @@
           </div>  
           <p class="text-secondary fs-5 p-2 m-0">Are you sure you want to delete this injection info and ai date record?.</p>
           <div class="d-flex gap-2 me-2 flex-wrap justify-content-end">
-            <p class="text-success m-0 p-2 c-fs-f-srp-p">Ok</p>
-            <p class="text-danger m-0 p-2 c-fs-f-srp-p" data-bs-dismiss="modal">Cancel</p>  
+            <p class="text-success m-0 p-2 c-fs-f-srp-p cursor-pointer">Ok</p>
+            <p class="text-danger m-0 p-2 c-fs-f-srp-p cursor-pointer" data-bs-dismiss="modal">Cancel</p>  
           </div>
         </div>
       </div>
