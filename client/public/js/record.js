@@ -14,6 +14,8 @@ const paginationContainer = document.getElementById("pagination-container");
 const mainContainer = document.getElementById("main-container");
 const spinner = document.getElementById("spinner");
 const tableContainer = document.getElementById("table-container");
+const cowActionsBTNContainer = document.getElementById("cow-action-btn-container");
+const cowImgContainer = document.getElementById("cow-img-container");
 
 
 
@@ -44,6 +46,8 @@ function updateCowRecordToUI(cow) {
     throw new Error("Cow is null or undefined.")
   }
 
+  cowNameAndBreedSpan.previousElementSibling.classList.remove("d-none");
+  bullNameSpan.previousElementSibling.classList.remove("d-none");
   cowNameAndBreedSpan.innerText = cow.name + " - " + cow.breed;
   bullNameSpan.innerText = cow.bullName;
 }
@@ -126,33 +130,42 @@ async function fetchRecordAndUpdateUI() {
     
     /* Load default user data to ui. */
     updateUserRecordToUI(record.user);
-    
-    /* Find and update pending amount to ui. */
-    let pendingAmount = record.cows.map((cow, index) => {
-      const amounts = cow.injectionInfoAndAiDates.map(({pendingAmount}) => {
-        return pendingAmount;
+
+    if (record.cows.length <= 0) {
+      cowImgContainer.classList.remove("d-none");
+    } else {
+      cowImgContainer.classList.add("d-none");
+    }
+
+    if (record.cows.length > 0) {
+      /* Find and update pending amount to ui. */
+      let pendingAmount = record.cows.map((cow, index) => {
+        const amounts = cow.injectionInfoAndAiDates.map(({pendingAmount}) => {
+          return pendingAmount;
+        });
+        return amounts.reduce((total, amount) => total + amount, 0);
       });
-      return amounts.reduce((total, amount) => total + amount, 0);
-    });
 
-    pendingAmountSpan.innerText = pendingAmount.reduce((total, amount) => total + amount, 0);
-    /* Load default cow data to ui. */
-    updateCowRecordToUI(record.cows[0]);
+      pendingAmountSpan.innerText = pendingAmount.reduce((total, amount) => total + amount, 0);
+      /* Load default cow data to ui. */
+      updateCowRecordToUI(record.cows[0]);
 
-    paginationContainer.appendChild(createCowsPaginationList(record.cows));
+      paginationContainer.appendChild(createCowsPaginationList(record.cows));
 
-    /* Load default injection info and ai date data to ui. */
-    tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(record.cows[0].injectionInfoAndAiDates));
+      /* Load default injection info and ai date data to ui. */
+      tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(record.cows[0].injectionInfoAndAiDates));
+      cowActionsBTNContainer.classList.remove("d-none");
 
-    /* Listen pagination links is clicked. also update cow and injection info to ui. */
-    document.addEventListener("click", (e) => {
-      if (e.target.id === "page-link") {
-        const cow = record.cows.find((cow) => cow.id === e.target.key);
-        updateCowRecordToUI(cow);
-        tableContainer.innerHTML = "";
-        tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(cow.injectionInfoAndAiDates));
-      }
-    });
+      /* Listen pagination links is clicked. also update cow and injection info to ui. */
+      document.addEventListener("click", (e) => {
+        if (e.target.id === "page-link") {
+          const cow = record.cows.find((cow) => cow.id === e.target.key);
+          updateCowRecordToUI(cow);
+          tableContainer.innerHTML = "";
+          tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(cow.injectionInfoAndAiDates));
+        }
+      });
+    }
 
     toggleElementVisibility(spinner, false, "d-none")
     toggleElementVisibility(mainContainer, false);
