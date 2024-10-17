@@ -26,7 +26,7 @@ export function isValidPassword(password) {
   }
 
   if (password === "") {
-    return { isValid: false, message: "Password cannot be empty." };
+    return { isValid: false, message: "Password field is required." };
   }
 
   if (!UPPERCASE_REGEX_PATTERN.test(password)) {
