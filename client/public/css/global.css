@@ -58,6 +58,10 @@
   cursor:  pointer !important;
 }
 
+#toggle-menu a:hover {
+  background-color: rgba(128, 128, 128, 0.149);
+}
+
 .btn-hover-success:hover {
   background-color: #198754;
   color: white !important;
@@ -71,13 +75,13 @@
 @media screen and (max-width: 991px) {
   #toggle-menu {
     position: absolute;
-    top: 4rem;
-    right: 0;
-    height: 300px;
+    top: 3.8rem;
+    right: -2em;
+    height: 280px;
     width: 250px;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.485);
   }
 
@@ -85,7 +89,6 @@
     color: black;
     font-weight: 550;
     text-align: left;
-    padding-left: 25%;
   }
 }
 

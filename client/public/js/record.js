@@ -186,8 +186,9 @@ const popupMenu = document.getElementById("popup-menu");
 document.addEventListener("click", (e) => {
   if (e.target.parentElement.id === "table-row") {
     popupMenu.classList.remove("d-none");
+    console.log(e.pageY-40);
     popupMenu.style.left = `${e.pageX - 100}px`;
-    popupMenu.style.top = `${e.pageY - 40}px`;
+    popupMenu.style.top = `${e.pageY - 10}px`;
   }
 });
 
