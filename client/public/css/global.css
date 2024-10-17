@@ -68,9 +68,6 @@
   color: white !important;
 }
 
-/* style="width: 200px; top: 4rem; right: 0;" */
-
-
 @media screen and (max-width: 991px) {
   #toggle-menu {
     position: absolute;
