@@ -109,7 +109,7 @@ function createCowsPaginationList(cows) {
     li.id = "page-item";
 
     const a = document.createElement("a");
-    a.className = "page-link";
+    a.className = "page-link cursor-pointer";
     a.id = "page-link";
     a.key = cow.id;
     a.innerText = cow.name;
@@ -187,9 +187,8 @@ const popupMenu = document.getElementById("popup-menu");
 document.addEventListener("click", (e) => {
   if (e.target.parentElement.id === "table-row") {
     popupMenu.classList.remove("d-none");
-    console.log(e.pageY-40);
-    popupMenu.style.left = `${e.pageX - 100}px`;
-    popupMenu.style.top = `${e.pageY - 10}px`;
+    popupMenu.style.left = `${e.pageX}px`;
+    popupMenu.style.top = `${e.pageY - 100}px`;
   }
 });
 
