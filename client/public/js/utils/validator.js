@@ -51,3 +51,34 @@ export function isValidPassword(password) {
 
   return { isValid: true };
 }
+
+
+
+export function isValidName(name) {
+  if (name === undefined || name === null) {
+    throw new Error("Name is null or undefined.");
+  }
+
+  if (name === "") {
+    return { isValid: false, message: "Name field is required."};
+  }
+
+  return { isValid: true };
+}
+
+
+
+export function isValidPhoneNumber(phoneNumber) {
+  if (phoneNumber === null || phoneNumber === undefined) {
+    throw new Error("PhoneNumber is null or undefined.");
+  }
+
+  phoneNumber = String(phoneNumber);
+  if (!NUMERIC_CHARACTER_REGEX_PATTERN.test(phoneNumber)) {
+    return { isValid: false, message: "Please enter a valid phone number using only digits."};
+  }
+
+  if (phoneNumber.length != 10) {
+    return { isValid: false, message: "Phone number must be exactly 10 digits."};
+  }
+}

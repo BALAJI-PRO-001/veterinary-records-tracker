@@ -1,4 +1,6 @@
-import { isValidEmail, isValidPassword } from "./validator.js";
+import { isValidEmail, isValidName, isValidPassword } from "./validator.js";
+
+
 
 export function validateEmailAndUpdateEmailInputUI(emailInputElement) {
   if (emailInputElement === null || emailInputElement === undefined) {
@@ -10,15 +12,17 @@ export function validateEmailAndUpdateEmailInputUI(emailInputElement) {
   }
 
   const { isValid, message } = isValidEmail(emailInputElement.value.trim())
+  const errMessageElement = emailInputElement.parentElement.querySelector("#err-message-element");
+
   if (!isValid) {
     emailInputElement.classList.add("is-invalid");
-    emailInputElement.nextElementSibling.textContent = message;
+    errMessageElement.textContent = message;
     return false;
   }
 
   emailInputElement.classList.remove("is-invalid")
   emailInputElement.classList.add("is-valid");
-  emailInputElement.nextElementSibling.textContent = "";
+  errMessageElement.textContent = "";
   return true;
 }
 
@@ -34,17 +38,46 @@ export function validatePasswordAndUpdatePasswordInputUI(passwordInputElement) {
   }
 
   const { isValid, message } = isValidPassword(passwordInputElement.value.trim());
+  const errMessageElement = passwordInputElement.parentElement.querySelector("#err-message-element");
+
   if (!isValid) {
     passwordInputElement.classList.add("is-invalid");
-    passwordInputElement.nextElementSibling.textContent = message;
+    errMessageElement.textContent = message;
     return false;
   }
 
   passwordInputElement.classList.remove("is-invalid")
   passwordInputElement.classList.add("is-valid");
-  passwordInputElement.nextElementSibling.textContent = "";
+  errMessageElement.textContent = "";
   return true;
 }
+
+
+
+export function validateNameAndUpdateNameInputUI(nameInputElement) {
+  if (nameInputElement === undefined || nameInputElement === null) {
+    throw new Error("Name is null or undefined.");
+  }
+
+  if (!(nameInputElement instanceof HTMLInputElement)) {
+    throw new Error(`Name Input: Expected an HTMLInputElement, but got (${typeof passwordInputElement}).`);
+  }
+
+  const { isValid, message } = isValidName(nameInputElement.value.trim());
+  const errMessageElement = nameInputElement.parentElement.querySelector("#err-message-element");
+
+  if (!isValid) {
+    nameInputElement.classList.remove("is-invalid");
+    errMessageElement.textContent = message;
+    return false;
+  }
+
+  nameInputElement.classList.remove("is-invalid");
+  nameInputElement.classList.add("is-valid");
+  errMessageElement.textContent = "";
+  return true;
+}
+
 
 
 export function toggleElementVisibility(element, hide, toggleClassName) {
@@ -67,6 +100,9 @@ export function toggleElementVisibility(element, hide, toggleClassName) {
   element.style.display = "";
   hide ? element.style.display = "none" : element.style.display = "block";
 }
+
+
+
 
 export function setIcon(element, oldClass, newClass) {
   if(element.classList.contains(oldClass)) {
