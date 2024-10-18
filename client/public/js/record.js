@@ -133,6 +133,7 @@ async function fetchRecordAndUpdateUI() {
 
     if (record.cows.length <= 0) {
       cowImgContainer.classList.remove("d-none");
+      pendingAmountSpan.innerText = "0";
     } else {
       cowImgContainer.classList.add("d-none");
     }
