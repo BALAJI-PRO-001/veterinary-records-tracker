@@ -83,6 +83,7 @@
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.485);
+    background-color: white;
   }
 
   #toggle-menu a {
@@ -130,5 +131,11 @@
 @media screen and (max-width: 349px) {
   .c-d-none {
     display: none;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .header .logo img {
+    width: 48px;
   }
 }

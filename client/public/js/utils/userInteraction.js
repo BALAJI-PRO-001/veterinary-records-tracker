@@ -67,3 +67,14 @@ export function toggleElementVisibility(element, hide, toggleClassName) {
   element.style.display = "";
   hide ? element.style.display = "none" : element.style.display = "block";
 }
+
+export function setIcon(element, oldClass, newClass) {
+  if(element.classList.contains(oldClass)) {
+    element.classList.remove(oldClass);
+    element.classList.add(newClass);
+  }
+  else {
+    element.classList.remove(newClass);
+    element.classList.add(oldClass);
+  }
+}
