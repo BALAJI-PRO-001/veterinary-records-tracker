@@ -74,6 +74,10 @@ export function isValidPhoneNumber(phoneNumber) {
   }
 
   phoneNumber = String(phoneNumber);
+  if (phoneNumber == "") {
+    return { isValid: false, message: "Phone number field is required."};
+  }
+
   if (!NUMERIC_CHARACTER_REGEX_PATTERN.test(phoneNumber)) {
     return { isValid: false, message: "Please enter a valid phone number using only digits."};
   }
@@ -81,4 +85,20 @@ export function isValidPhoneNumber(phoneNumber) {
   if (phoneNumber.length != 10) {
     return { isValid: false, message: "Phone number must be exactly 10 digits."};
   }
+
+  return { isValid: true };
+}
+
+
+
+export function isValidAddress(address) {
+  if (address === undefined || address === null) {
+    throw new Error("Name is null or undefined.");
+  }
+
+  if (address === "") {
+    return { isValid: false, message: "Address field is required."};
+  }
+
+  return { isValid: true };
 }
