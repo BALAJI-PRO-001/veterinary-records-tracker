@@ -26,4 +26,9 @@ input + p {
   .left {
     height: 73% !important;
   }
+
+  #err-message-element {
+    font-size: 8px !important;
+    font-weight: 300;
+  }
 }
