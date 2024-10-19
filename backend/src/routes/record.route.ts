@@ -30,7 +30,7 @@ router.get("/all", /*verifyAdminAuthenticationToken,*/ getAllRecords)
       .get("/download", verifyAdminAuthenticationToken, downloadRecords)
       .get("/:userId", /*verifyAdminAuthenticationToken,*/ getRecordByUserId);
 
-router.patch("/users/:userId", verifyAdminAuthenticationToken, updateUserRecord)
+router.patch("/users/:userId", /*verifyAdminAuthenticationToken,*/ updateUserRecord)
       .patch("/:userId/cows/:cowId", verifyAdminAuthenticationToken, updateCowRecord)
       .patch("/:userId/cows/:cowId/inject-info-ai-dates/:id", verifyAdminAuthenticationToken, updateInjectionInfoAndAiDate);
 
