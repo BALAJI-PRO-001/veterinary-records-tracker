@@ -51,9 +51,22 @@ export function extractCowInformation(cows) {
       dates.push(injectionInfoAndAiDate.date);
     }
   }
-
   return {
     cowNames, cowBreeds, bullNames, injectionNames, 
     injectionPrices, givenAmounts, pendingAmounts, dates
   };
+}
+
+
+export async function logout(reqURL) {
+  try {
+    const res = await fetch(reqURL);
+    const data = await res.json();
+    if(data.statusCode != 200) {
+      throw new Error("Logout request failed.");
+    }
+
+  } catch(err) {
+    throw err;
+  }
 }
