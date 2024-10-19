@@ -1,4 +1,4 @@
-import { isValidEmail, isValidName, isValidPassword } from "./validator.js";
+import { isValidAddress, isValidEmail, isValidName, isValidPassword, isValidPhoneNumber } from "./validator.js";
 
 
 
@@ -34,7 +34,7 @@ export function validatePasswordAndUpdatePasswordInputUI(passwordInputElement) {
   }
 
   if (!(passwordInputElement instanceof HTMLInputElement)) {
-    throw new Error(`Email Input: Expected an HTMLInputElement, but got (${typeof passwordInputElement}).`);
+    throw new Error(`Password Input: Expected an HTMLInputElement, but got (${typeof passwordInputElement}).`);
   }
 
   const { isValid, message } = isValidPassword(passwordInputElement.value.trim());
@@ -67,13 +67,65 @@ export function validateNameAndUpdateNameInputUI(nameInputElement) {
   const errMessageElement = nameInputElement.parentElement.querySelector("#err-message-element");
 
   if (!isValid) {
-    nameInputElement.classList.remove("is-invalid");
+    nameInputElement.classList.add("is-invalid");
     errMessageElement.textContent = message;
     return false;
   }
 
   nameInputElement.classList.remove("is-invalid");
   nameInputElement.classList.add("is-valid");
+  errMessageElement.textContent = "";
+  return true;
+}
+
+
+
+export function validatePhoneNumberAndUpdatePhoneNumberInputUI(phoneNumberInput) {
+  if (phoneNumberInput === undefined || phoneNumberInput === null) {
+    throw new Error("Name is null or undefined.");
+  }
+
+  if (!(phoneNumberInput instanceof HTMLInputElement)) {
+    throw new Error(`PhoneNumber Input: Expected an HTMLInputElement, but got (${typeof passwordInputElement}).`);
+  }
+
+  const { isValid, message } = isValidPhoneNumber(phoneNumberInput.value.trim());
+  const errMessageElement = phoneNumberInput.parentElement.querySelector("#err-message-element");
+
+  if (!isValid) {
+    phoneNumberInput.classList.add("is-invalid");
+    errMessageElement.textContent = message;
+    return false;
+  }
+
+  phoneNumberInput.classList.remove("is-invalid");
+  phoneNumberInput.classList.add("is-valid");
+  errMessageElement.textContent = "";
+  return true;
+}
+
+
+
+export function validateAddressAndUpdateAddressInputUI(addressInputElement) {
+  if (addressInputElement === undefined || addressInputElement === null) {
+    throw new Error("A is null or undefined.");
+  }
+
+  if (!(addressInputElement instanceof HTMLInputElement)) {
+    throw new Error(`Address Input: Expected an HTMLInputElement, but got (${typeof passwordInputElement}).`);
+  }
+
+  const { isValid, message } = isValidAddress(addressInputElement.value.trim());
+  const errMessageElement = addressInputElement.parentElement.querySelector("#err-message-element");
+
+  if (!isValid) {
+    addressInputElement.classList.add("is-invalid");
+    errMessageElement.textContent = message;
+    return false;
+  }
+
+  addressInputElement.classList.remove("is-invalid");
+  addressInputElement.classList.add("is-valid");
   errMessageElement.textContent = "";
   return true;
 }
