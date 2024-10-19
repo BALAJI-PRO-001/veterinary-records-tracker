@@ -16,12 +16,12 @@
 
   <div id="alert-box" class="alert alert-danger d-none fw-bold fs-6" role="alert"></div>
 
-  <div id="spinner" class="d-flex align-items-center justify-content-center gap-3 mx-auto position-absolute top-50 start-50 translate-middle">
+  <div id="spinner" class="d-flex d-none align-items-center justify-content-center gap-3 mx-auto position-absolute top-50 start-50 translate-middle">
     <p class="fw-bold fs-5 m-0">Loading</p>
     <div class="spinner-border text-primary" role="status"></div>
   </div>  
 
-  <main id="main-container" class="mx-3 mt-5">
+  <main id="main-container" class="mx-3 mt-5 d-none">
     <div class="shadow border rounded mt-5 mx-auto p-1 position-relative" style="min-height: 500px; max-width: 1000px;">
       <h4 class="mt-2 ms-2 mb-0 c-fs-f-srp-h">Customer Details</h4>
 
@@ -82,25 +82,25 @@
           <form id="update-user-record-form" class="mx-2">
             <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
               <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="Name ....">
-              <div class="invalid-feedback mt-0 fw-bold"></div>
+              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold" style="padding-top: 2px;"></div>
             </div>  
             
             <div class="d-flex flex-column mb-3" style="height: 60px;">
               <input id="phone-number" type="text" class="form-control form-control-lg border-2" placeholder="Phone Number ....">
-              <div class="invalid-feedback mt-0 fw-bold"></div>
+              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold" style="padding-top: 2px;"></div>
             </div> 
   
             <div class="d-flex flex-column mb-3" style="height: 60px;">
               <input id="address" type="text" class="form-control form-control-lg border-2" placeholder="Address ....">
-              <div class="invalid-feedback mt-0 fw-bold"></div>
+              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold" style="padding-top: 2px;"></div>
             </div> 
             
-            <div class="d-flex gap-2 flex-wrap">
-              <button type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Update</button>
+            <div class="d-flex gap-2 mt-4 flex-wrap">
+              <button id="update-btn" type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Update</button>
               <button type="button" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
             </div>
 
-            <p id="update-message" class="fw-bold text-success mt-2 mb-0"></p>
+            <p id="update-message-element" class="fw-bold text-success mt-3 mb-1"></p>
           </form>
         </div>
       </div>
@@ -131,12 +131,12 @@
               <div class="invalid-feedback mt-0 fw-bold"></div>
             </div> 
             
-            <div class="d-flex gap-2 flex-wrap">
+            <div class="d-flex gap-2 mt-4 flex-wrap">
               <button type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Update</button>
               <button type="button" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
             </div>
             
-            <p id="update-message" class="fw-bold text-success mt-2 mb-0"></p>
+            <p id="update-message-element" class="fw-bold text-success mt-2 mb-0"></p>
           </form>
         </div>
       </div>
