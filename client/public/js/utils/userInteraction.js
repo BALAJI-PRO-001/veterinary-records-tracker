@@ -105,6 +105,11 @@ export function toggleElementVisibility(element, hide, toggleClassName) {
 
 
 export function setIcon(element, oldClass, newClass) {
+
+  if(!element) {
+    throw new Error("Element not found")
+  }
+
   if(element.classList.contains(oldClass)) {
     element.classList.remove(oldClass);
     element.classList.add(newClass);
@@ -113,4 +118,19 @@ export function setIcon(element, oldClass, newClass) {
     element.classList.remove(newClass);
     element.classList.add(oldClass);
   }
+}
+
+
+export function setType(element,oldType,newType) {
+  if(!element) {
+    throw new Error("Element not found")
+  }
+
+  if(element.type == "password") {
+    element.type = "text";
+  }
+  else {
+    element.type = "password";
+  }
+
 }
