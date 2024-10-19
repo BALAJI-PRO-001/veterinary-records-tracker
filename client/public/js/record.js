@@ -159,7 +159,7 @@ async function fetchRecordAndUpdateUI() {
     const id = location.href.split("/").pop(); 
     const record = await getRecordFromServer(Number(id));
     if (!record) {
-      toggleAlertBox(true, "Error: No record found for the specified ID: " + id + ". Please verify the ID and try again.");
+      toggleAlertBox(true, "Error: Something went wrong while fetching the record.");
       toggleElementVisibility(spinner, true, "d-none");
       return;
     }
@@ -242,6 +242,14 @@ async function fetchRecordAndUpdateUI() {
           updateMessageElementForUser.classList.remove("text-success");
           updateMessageElementForUser.classList.add("text-danger");
           return updateMessageElementForUser.innerText = "Your session has expired. Please log out and log back in to continue.";
+        }
+
+        if (data.statusCode === 409) {
+          phoneNumberInput.classList.remove("is-valid");
+          phoneNumberInput.classList.add("is-invalid");
+          phoneNumberInput.nextElementSibling.innerText = "Phone number is already in use.";
+          updateMessageElementForUser.innerText = "";
+          return;
         }
 
         if (data.statusCode === 200) {
