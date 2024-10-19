@@ -1,5 +1,5 @@
-import { toggleElementVisibility } from "./utils/userInteraction.js";
-
+import { toggleElementVisibility, validateAddressAndUpdateAddressInputUI, validateNameAndUpdateNameInputUI, validatePhoneNumberAndUpdatePhoneNumberInputUI } from "./utils/userInteraction.js";
+import { addValidationListenersToInputElement } from "./utils/common.js";
 
 const userNameSpan = document.getElementById("user-name");
 const phoneNumberSpan = document.getElementById("phone-number");
@@ -18,6 +18,14 @@ const cowActionsBTNContainer = document.getElementById("cow-action-btn-container
 const cowImgContainer = document.getElementById("cow-img-container");
 
 
+/* Update user record modal objects */
+const updateUserRecordModal = document.getElementById("update-user-record-modal");
+const userNameInput = updateUserRecordModal.querySelector("#name");
+const phoneNumberInput = updateUserRecordModal.querySelector("#phone-number");
+const addressInput = updateUserRecordModal.querySelector("#address");
+const updateUserRecordBTN = updateUserRecordModal.querySelector("#update-btn");
+const updateMessageElementForUser = updateUserRecordModal.querySelector("#update-message-element");
+
 
 async function getRecordFromServer(id) {
   const res = await fetch(`/api/v1/records/${id}`);
@@ -25,7 +33,9 @@ async function getRecordFromServer(id) {
   if (data.statusCode === 200) {
     return data.data.record;
   }
+  return null;
 }
+
 
 
 
@@ -121,14 +131,40 @@ function createCowsPaginationList(cows) {
 }
 
 
-/* Fetch data from server and update ui based by fetched data. */
+
+function toggleAlertBox(show, message) {
+  if (show) {
+    alertBox.classList.remove("d-none");
+    alertBox.innerText = message;
+  } else {
+    alertBox.classList.add("d-none");
+    alertBox.innerText = "";
+  }
+}
+
+
+
+function resetModalComponents() {
+  userNameInput.classList.remove("is-valid");
+  phoneNumberInput.classList.remove("is-valid");
+  addressInput.classList.remove("is-valid");
+}
+
+
+
 async function fetchRecordAndUpdateUI() {
   try {
-    const id = location.href.split("/").pop();
-    toggleElementVisibility(mainContainer, true);
-    const record = await getRecordFromServer(id);
-    
-    /* Load default user data to ui. */
+    toggleElementVisibility(spinner, false, "d-none");
+
+    const id = location.href.split("/").pop(); 
+    const record = await getRecordFromServer(Number(id));
+    if (!record) {
+      toggleAlertBox(true, "Error: No record found for the specified ID: " + id + ". Please verify the ID and try again.");
+      toggleElementVisibility(spinner, true, "d-none");
+      return;
+    }
+
+    // Update user record to ui.
     updateUserRecordToUI(record.user);
 
     if (record.cows.length <= 0) {
@@ -139,8 +175,8 @@ async function fetchRecordAndUpdateUI() {
     }
 
     if (record.cows.length > 0) {
-      /* Find and update pending amount to ui. */
-      let pendingAmount = record.cows.map((cow, index) => {
+      // Find and update pending amount to ui. 
+      let pendingAmount = record.cows.map((cow) => {
         const amounts = cow.injectionInfoAndAiDates.map(({pendingAmount}) => {
           return pendingAmount;
         });
@@ -148,52 +184,89 @@ async function fetchRecordAndUpdateUI() {
       });
 
       pendingAmountSpan.innerText = pendingAmount.reduce((total, amount) => total + amount, 0);
-      /* Load default cow data to ui. */
+      // Load default cow data to ui. 
       updateCowRecordToUI(record.cows[0]);
 
       paginationContainer.appendChild(createCowsPaginationList(record.cows));
 
-      /* Load default injection info and ai date data to ui. */
+      // Load default injection info and ai date data to ui. 
       tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(record.cows[0].injectionInfoAndAiDates));
       cowActionsBTNContainer.classList.remove("d-none");
 
-      /* Listen pagination links is clicked. also update cow and injection info to ui. */
-      document.addEventListener("click", (e) => {
-        if (e.target.id === "page-link") {
+      // Listen pagination links is clicked. also update cow and injection info to ui. 
+      const pageLinks = paginationContainer.querySelectorAll("#page-link");
+      pageLinks.forEach((pageLink) => {
+        pageLink.addEventListener("click", (e) => {
           const cow = record.cows.find((cow) => cow.id === e.target.key);
           updateCowRecordToUI(cow);
           tableContainer.innerHTML = "";
           tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(cow.injectionInfoAndAiDates));
-        }
+        });
       });
     }
 
-    toggleElementVisibility(spinner, false, "d-none")
-    toggleElementVisibility(mainContainer, false);
+    toggleElementVisibility(spinner, false, "d-none");
+    toggleElementVisibility(mainContainer, false, "d-none");
+
+
+    // Update user record code implementation.
+    userNameInput.value = record.user.name;
+    phoneNumberInput.value = record.user.phoneNumber;
+    addressInput.value = record.user.address;
+
+    addValidationListenersToInputElement(userNameInput, () => validateNameAndUpdateNameInputUI(userNameInput));
+    addValidationListenersToInputElement(phoneNumberInput, () => validatePhoneNumberAndUpdatePhoneNumberInputUI(phoneNumberInput));
+    addValidationListenersToInputElement(addressInput, () => validateAddressAndUpdateAddressInputUI(addressInput));
+
+    updateUserRecordBTN.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const isValidName = validateNameAndUpdateNameInputUI(userNameInput);
+      const isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(phoneNumberInput);
+      const isValidAddress = validateAddressAndUpdateAddressInputUI(addressInput);
+
+      if (isValidName && isValidPhoneNumber && isValidAddress) {
+        updateMessageElementForUser.innerText = "Saving Changes ...."
+
+        const res = await fetch("/api/v1/records/users/" + record.user.id, {
+          headers: { "Content-Type": "application/json" },
+          method: "PATCH",
+          body: JSON.stringify({
+            name: userNameInput.value.trim(),
+            phoneNumber: Number(phoneNumberInput.value.trim()),
+            address: addressInput.value.trim()
+          })
+        });
+        const data = await res.json();
+        
+        if (data.statusCode === 401) {
+          updateMessageElementForUser.classList.remove("text-success");
+          updateMessageElementForUser.classList.add("text-danger");
+          return updateMessageElementForUser.innerText = "Your session has expired. Please log out and log back in to continue.";
+        }
+
+        if (data.statusCode === 200) {
+          updateMessageElementForUser.classList.remove("text-danger");
+          updateMessageElementForUser.classList.add("text-success");
+          updateMessageElementForUser.innerText = "Changes saved successfully.";
+          
+          setTimeout(() => {
+            updateMessageElementForUser.innerText = "";
+            resetModalComponents();
+          }, 2500);
+          return;
+        }
+
+        // If any possible error.
+        updateMessageElementForUser.classList.remove("text-success");
+        updateMessageElementForUser.classList.add("text-danger");
+        updateMessageElementForUser.innerText = data.message;
+      }
+    });
 
   } catch(err) {
-    alertBox.classList.toggle("d-none");
-    alertBox.innerText = "Error :" + err.message;
+    toggleAlertBox(true, "Error: " + err.message);
   }
 }
 
+
 fetchRecordAndUpdateUI();
-
-
-
-/* Add popup menu to table rows. and control show and hide functionality. */
-const popupMenu = document.getElementById("popup-menu");
-
-document.addEventListener("click", (e) => {
-  if (e.target.parentElement.id === "table-row") {
-    popupMenu.classList.remove("d-none");
-    popupMenu.style.left = `${e.pageX}px`;
-    popupMenu.style.top = `${e.pageY - 100}px`;
-  }
-});
-
-document.addEventListener('click', function(e) {
-  if (!e.target.closest("#table-row") && !e.target.closest("#popup-menu")) {
-    popupMenu.classList.add("d-none");
-  }
-});
