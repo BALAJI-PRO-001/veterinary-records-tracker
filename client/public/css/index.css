@@ -1,0 +1,26 @@
+
+input,label,p {
+  font-weight: 550 !important;
+}
+
+input + p {
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 900;
+}
+
+
+@media screen and (max-width: 768px){
+  .right {
+    height: 27% !important;
+  }
+  .right img {
+    height: 75% !important;
+  }
+  .right h1,h2 {
+    display: none;
+  }
+  .left {
+    height: 73% !important;
+  }
+}

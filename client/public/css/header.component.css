@@ -9,10 +9,12 @@
   color: rgb(252, 252, 252);
   text-decoration: none;
   font-weight: 550;
+  padding: 10px 2px !important; 
 }
 
 #toggle-menu a:hover {
   background-color: rgba(128, 128, 128, 0.149);
+  
 }
 
 .header .logo {
@@ -29,7 +31,7 @@
 @media screen and (max-width: 991px) {
   #toggle-menu {
     position: absolute;
-    top: 3.8rem;
+    top: 3.6rem;
     right: -2em;
     height: 280px;
     width: 250px;
@@ -47,10 +49,11 @@
     color: black;
     font-weight: 550;
     text-align: left;
+    margin-top: 10px !important;
   }
 
   #toggle-menu > a:first-child {
-    margin-top: 10px !important;
+    margin-top: 15px !important;
   }
 
 
