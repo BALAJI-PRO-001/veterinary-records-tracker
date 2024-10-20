@@ -16,7 +16,7 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
     }
 
     const adminAccessToken = jwt.sign({email: process.env.ADMIN_EMAIL}, process.env.JWT_SECRET_KEY as string);
-    res.status(200).cookie("admin_access_token", adminAccessToken, {httpOnly: true}).json({
+    res.status(200).cookie("admin_access_token", adminAccessToken, {httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000}).json({
       success: true,
       statusCode: 200,
       message: "Admin logged in successfully."
