@@ -68,6 +68,37 @@ Response (Request Based)
 ```
 
 
+## Download Records File
+**Api usage and request response details**
+``` base
+Request Information
+===================
+URL: /api/v1/super-user/download/records
+METHOD: GET
+COOKIE: Super User cookie must 
+
+
+Response (Request Based)
+=========================
+Body: Records File
+```
+
+## Download Database File
+**Api usage and request response details**
+``` base
+Request Information
+===================
+URL: /api/v1/super-user/download/db
+METHOD: GET
+COOKIE: Super User cookie must 
+
+
+Response (Request Based)
+=========================
+Body: Database File
+```
+
+
 ## Admin Login
 **Api usage and request response details**
 ``` base
