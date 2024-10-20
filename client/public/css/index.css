@@ -13,6 +13,12 @@ input + p {
 
 
 @media screen and (max-width: 768px){
+
+  .container {
+    height: 650px !important;
+    width: 95% !important;
+  }
+
   .right {
     height: 27% !important;
   }
