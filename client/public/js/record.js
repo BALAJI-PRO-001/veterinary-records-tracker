@@ -1,5 +1,11 @@
-import { toggleElementVisibility, validateAddressAndUpdateAddressInputUI, validateNameAndUpdateNameInputUI, validatePhoneNumberAndUpdatePhoneNumberInputUI } from "./utils/userInteraction.js";
 import { addValidationListenersToInputElement } from "./utils/common.js";
+import { 
+  toggleElementVisibility, 
+  validateAddressAndUpdateAddressInputUI, 
+  validateNameAndUpdateNameInputUI, 
+  validatePhoneNumberAndUpdatePhoneNumberInputUI,
+  validateInputAndUpdateUI
+} from "./utils/userInteraction.js";
 
 const userNameSpan = document.getElementById("user-name");
 const phoneNumberSpan = document.getElementById("phone-number");
@@ -24,7 +30,21 @@ const userNameInput = updateUserRecordModal.querySelector("#name");
 const phoneNumberInput = updateUserRecordModal.querySelector("#phone-number");
 const addressInput = updateUserRecordModal.querySelector("#address");
 const updateUserRecordBTN = updateUserRecordModal.querySelector("#update-btn");
-const updateMessageElementForUser = updateUserRecordModal.querySelector("#update-message-element");
+const updateUserRecordModalMessageEl = updateUserRecordModal.querySelector("#message-element");
+
+
+/* Update user record modal objects */
+const updateCowRecordModal = document.getElementById("update-cow-record-modal");
+const cowNameInput = updateCowRecordModal.querySelector("#name");
+const breedInput = updateCowRecordModal.querySelector("#breed");
+const bullNameInput = updateCowRecordModal.querySelector("#bull-name");
+const updateCowRecordBTN = updateCowRecordModal.querySelector("#update-btn");
+const updateCowRecordModalMessageEl = updateCowRecordModal.querySelector("#message-element");
+
+
+/* Delete user record modal objects */
+const deleteUserRecordModal = document.getElementById("delete-user-record-modal");
+const deleteUserRecordOkEl = deleteUserRecordModal.querySelector("#ok-element");
 
 
 async function getRecordFromServer(id) {
@@ -145,12 +165,13 @@ function toggleAlertBox(show, message) {
 
 
 function resetModalComponents() {
-  let components = [userNameInput, phoneNumberInput, addressInput];
+  let components = [userNameInput, phoneNumberInput, addressInput, cowNameInput, breedInput, bullNameInput];
   for (let component of components) {
     component.classList.remove("is-valid", "is-invalid");
     component.parentElement.querySelector("#err-message-element").innerText = "";
   }
-  updateMessageElementForUser.innerText = "";
+  updateUserRecordModalMessageEl.innerText = "";
+  updateCowRecordModalMessageEl.innerText = "";
 }
 
 
@@ -177,6 +198,8 @@ async function fetchRecordAndUpdateUI() {
       cowImgContainer.classList.add("d-none");
     }
 
+    let selectedCow = null;
+    let selectedPageLink = null;
     if (record.cows.length > 0) {
       // Find and update pending amount to ui. 
       let pendingAmount = record.cows.map((cow) => {
@@ -187,10 +210,14 @@ async function fetchRecordAndUpdateUI() {
       });
 
       pendingAmountSpan.innerText = pendingAmount.reduce((total, amount) => total + amount, 0);
-      // Load default cow data to ui. 
-      updateCowRecordToUI(record.cows[0]);
 
+      // Load default cow data. 
+      updateCowRecordToUI(record.cows[0]);
+      selectedCow = record.cows[0];
+
+      // Load pagination list to ui.
       paginationContainer.appendChild(createCowsPaginationList(record.cows));
+      selectedPageLink = paginationContainer.children[0].children[0].children[0];
 
       // Load default injection info and ai date data to ui. 
       tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(record.cows[0].injectionInfoAndAiDates));
@@ -202,8 +229,15 @@ async function fetchRecordAndUpdateUI() {
         pageLink.addEventListener("click", (e) => {
           const cow = record.cows.find((cow) => cow.id === e.target.key);
           updateCowRecordToUI(cow);
+          selectedPageLink = e.target;
           tableContainer.innerHTML = "";
           tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(cow.injectionInfoAndAiDates));
+
+          // Update cow record based on pagination item.
+          selectedCow = cow;
+          cowNameInput.value = cow.name;
+          breedInput.value = cow.breed;
+          bullNameInput.value = cow.bullName;
         });
       });
     }
@@ -235,7 +269,9 @@ async function fetchRecordAndUpdateUI() {
       const isValidAddress = validateAddressAndUpdateAddressInputUI(addressInput);
 
       if (isValidName && isValidPhoneNumber && isValidAddress) {
-        updateMessageElementForUser.innerText = "Saving Changes ...."
+        updateUserRecordModalMessageEl.innerText = "Saving Changes ...."
+        updateUserRecordBTN.setAttribute("disabled", "");
+        updateUserRecordBTN.nextElementSibling.setAttribute("disabled", "");
 
         const res = await fetch("/api/v1/records/users/" + record.user.id, {
           headers: { "Content-Type": "application/json" },
@@ -247,40 +283,139 @@ async function fetchRecordAndUpdateUI() {
           })
         });
         const data = await res.json();
+        updateUserRecordBTN.removeAttribute("disabled");
+        updateUserRecordBTN.nextElementSibling.removeAttribute("disabled");
         
         if (data.statusCode === 401) {
-          updateMessageElementForUser.classList.remove("text-success");
-          updateMessageElementForUser.classList.add("text-danger");
-          return updateMessageElementForUser.innerText = "Your session has expired. Please log out and log back in to continue.";
+          updateUserRecordModalMessageEl.classList.remove("text-success");
+          updateUserRecordModalMessageEl.classList.add("text-danger");
+          return updateUserRecordModalMessageEl.innerText = "Your session has expired. Please log out and log back in to continue.";
         }
 
         if (data.statusCode === 409) {
           phoneNumberInput.classList.remove("is-valid");
           phoneNumberInput.classList.add("is-invalid");
           phoneNumberInput.nextElementSibling.innerText = "Phone number is already in use.";
-          updateMessageElementForUser.innerText = "";
+          updateUserRecordModalMessageEl.innerText = "";
           return;
         }
 
         if (data.statusCode === 200) {
-          updateMessageElementForUser.classList.remove("text-danger");
-          updateMessageElementForUser.classList.add("text-success");
-          updateMessageElementForUser.innerText = "Changes saved successfully.";
+          updateUserRecordModalMessageEl.classList.remove("text-danger");
+          updateUserRecordModalMessageEl.classList.add("text-success");
+          updateUserRecordModalMessageEl.innerText = "Changes saved successfully.";
           updateUserRecordToUI(data.data.user);
+          record.user.name = data.data.user.name;
+          record.user.phoneNumber = data.data.user.phoneNumber;
+          record.user.address = data.data.user.address;
           
           setTimeout(() => {
-            updateMessageElementForUser.innerText = "";
+            updateUserRecordModalMessageEl.innerText = "";
             resetModalComponents();
-          }, 2000);
+          }, 1000);
           return;
         }
 
         // If any possible error.
-        updateMessageElementForUser.classList.remove("text-success");
-        updateMessageElementForUser.classList.add("text-danger");
-        updateMessageElementForUser.innerText = data.message;
+        updateUserRecordModalMessageEl.classList.remove("text-success");
+        updateUserRecordModalMessageEl.classList.add("text-danger");
+        updateUserRecordModalMessageEl.innerText = data.message;
       }
     });
+
+
+    // Update cow modal code
+    if (record.cows.length > 0) {
+      cowNameInput.value = record.cows[0].name;
+      breedInput.value = record.cows[0].breed;
+      bullNameInput.value = record.cows[0].bullName;
+
+      addValidationListenersToInputElement(cowNameInput, () => validateInputAndUpdateUI(cowNameInput));
+      addValidationListenersToInputElement(breedInput, () => validateInputAndUpdateUI(breedInput));
+      addValidationListenersToInputElement(bullNameInput, () => validateInputAndUpdateUI(bullNameInput));      
+      
+      updateCowRecordModal.addEventListener("hidden.bs.modal", () => {
+        resetModalComponents();
+        
+        cowNameInput.value = selectedCow.name;
+        breedInput.value = selectedCow.breed;
+        bullNameInput.value = selectedCow.bullName;
+      });
+
+      updateCowRecordBTN.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const isValidCowName = validateInputAndUpdateUI(cowNameInput);
+        const isValidBreed = validateInputAndUpdateUI(breedInput);
+        const isValidBullName = validateInputAndUpdateUI(bullNameInput);
+
+        if (isValidCowName && isValidBreed && isValidBullName) {
+          updateCowRecordModalMessageEl.innerText = "Saving Changes ....";
+          updateCowRecordBTN.setAttribute("disabled", "");
+          updateCowRecordBTN.nextElementSibling.setAttribute("disabled", "");
+
+          const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {
+            headers: { "Content-Type": "application/json" },
+            method: "PATCH",
+            body: JSON.stringify({
+              name: cowNameInput.value.trim(),
+              breed: breedInput.value.trim(),
+              bullName: bullNameInput.value.trim()
+            })
+          });
+          const data = await res.json();
+          updateCowRecordBTN.removeAttribute("disabled");
+          updateCowRecordBTN.nextElementSibling.removeAttribute("disabled");
+
+          if (data.statusCode === 401) {
+            updateCowRecordModalMessageEl.classList.remove("text-success");
+            updateCowRecordModalMessageEl.classList.add("text-danger");
+            return updateCowRecordModalMessageEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+          }
+          
+          if (data.statusCode === 200) {
+            updateCowRecordModalMessageEl.classList.remove("text-danger");
+            updateCowRecordModalMessageEl.classList.add("text-success");
+            updateCowRecordModalMessageEl.innerText = "Changes saved successfully.";
+            updateCowRecordToUI(data.data.cow);
+            selectedCow.name = data.data.cow.name;
+            selectedCow.breed = data.data.cow.breed;
+            selectedCow.bullName = data.data.cow.bullName;
+
+            // Update pagination link content
+            if (selectedPageLink) {
+              selectedPageLink.innerText = data.data.cow.name;
+            }
+            
+            setTimeout(() => {
+              updateCowRecordModalMessageEl.innerText = "";
+              resetModalComponents();
+            }, 1000);
+            return;
+          }
+
+          // If any possible error.
+          updateCowRecordModalMessageEl.classList.remove("text-success");
+          updateCowRecordModalMessageEl.classList.add("text-danger");
+          updateCowRecordModalMessageEl.innerText = data.message;
+        }
+      });
+    }
+
+
+    // Delete user code
+    deleteUserRecordOkEl.addEventListener("click", async () => {
+      deleteUserRecordOkEl.innerText = "Deleting Record ....";
+      deleteUserRecordOkEl.nextElementSibling.innerText = "";
+      deleteUserRecordOkEl.setAttribute("disabled", "");
+      deleteUserRecordOkEl.nextElementSibling.setAttribute("disabled", "");
+      // const res = await fetch("/api/v1/record/users/" + record.user.id, {method: "DELETE"});
+
+      if (res.status === 401) {
+
+      }
+    });
+
 
   } catch(err) {
     toggleAlertBox(true, "Error: " + err.message);
