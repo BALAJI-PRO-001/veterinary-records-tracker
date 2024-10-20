@@ -2,6 +2,13 @@
 **Below API routes are available for clients to make requests to the backend and access the corresponding services.**
 
 ## API Routes
+- **Super User Routes**
+  - [Super User Login](#super-user-login)
+  - [Super Logout](#super-user-logout)
+  - [Download Records File](#download-records-file)
+  - [Download Database File](#download-database-file)
+  
+
 - **Admin Routes**
   - [Admin Login](#admin-login)
   - [Admin Logout](#admin-logout)
@@ -19,6 +26,46 @@
   - [Update user record](#update-user-record)
   - [Update cow record](#update-cow-record)
   - [Update injection info and ai date record](#update-injection-info-and-ai-date-record)
+
+## Super User Login
+**Api usage and request response details**
+``` base
+Request Information
+===================
+URL: /api/v1/super-user/login
+METHOD: POST
+CONTENT-TYPE: application/json
+BODY: {
+    email: <string>
+    password: <string>
+}
+
+
+Response (Request Based)
+=========================
+{
+  success: true 
+  statusCode: 200  
+  message: "Super user Logged in successfully 
+}
+```
+
+## Super User Logout
+**Api usage and request response details**
+``` base
+Request Information
+===================
+URL: /api/v1/super-user/logout
+METHOD: GET
+
+Response (Request Based)
+=========================
+{
+  success: true 
+  statusCode: 200  
+  message: "Super user has been logged out successfully 
+}
+```
 
 
 ## Admin Login
