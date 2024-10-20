@@ -47,6 +47,7 @@
 }
 
 
+
 @media  screen and (min-width: 500px) {
   .c-fs-f-srp-h {
     font-size: x-large;
@@ -68,6 +69,11 @@
   }
 }
 
+@media screen and (max-width: 401px) {
+  .c-fs-f-err-message {
+    font-size: 12px !important;
+  }
+}
 
 @media screen and (min-width: 370px) {
   .c-fs-f-srp-b {
@@ -79,6 +85,10 @@
 @media screen and (max-width: 301px) {
   .c-w-f-srp-b {
     width: 100% !important;
+  }
+
+  .c-fs-f-err-message {
+    font-size: 10px !important;
   }
 }
 
