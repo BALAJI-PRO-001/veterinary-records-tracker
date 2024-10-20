@@ -13,7 +13,7 @@
     - Route: **/add-new-record**
   - ### **Show Single Record Page**
     - Method: **GET**
-    - Route: **/record/<userId>**
+    - Route: **/record/:userId**
   - ### **Create New Record Page**
     - Method: **GET**
     - Route: **/add-new-record**
