@@ -1,4 +1,4 @@
-## Forentend
+### Frontend
 **Below routes are available for access client side pages.**
 
 ## Page Routes
