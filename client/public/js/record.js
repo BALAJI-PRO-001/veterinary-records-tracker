@@ -265,6 +265,8 @@ async function fetchRecordAndUpdateUI() {
 
       if (isValidName && isValidPhoneNumber && isValidAddress) {
         updateUserRecordModalMessageEl.innerText = "Saving Changes ...."
+        updateUserRecordBTN.setAttribute("disabled", "");
+        updateUserRecordBTN.nextElementSibling.setAttribute("disabled", "");
 
         const res = await fetch("/api/v1/records/users/" + record.user.id, {
           headers: { "Content-Type": "application/json" },
@@ -276,6 +278,8 @@ async function fetchRecordAndUpdateUI() {
           })
         });
         const data = await res.json();
+        updateUserRecordBTN.removeAttribute("disabled");
+        updateUserRecordBTN.nextElementSibling.removeAttribute("disabled");
         
         if (data.statusCode === 401) {
           updateUserRecordModalMessageEl.classList.remove("text-success");
@@ -342,6 +346,8 @@ async function fetchRecordAndUpdateUI() {
 
         if (isValidCowName && isValidBreed && isValidBullName) {
           updateCowRecordModalMessageEl.innerText = "Saving Changes ....";
+          updateCowRecordBTN.setAttribute("disabled", "");
+          updateCowRecordBTN.nextElementSibling.setAttribute("disabled", "");
 
           const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {
             headers: { "Content-Type": "application/json" },
@@ -353,6 +359,8 @@ async function fetchRecordAndUpdateUI() {
             })
           });
           const data = await res.json();
+          updateCowRecordBTN.removeAttribute("disabled");
+          updateCowRecordBTN.nextElementSibling.removeAttribute("disabled");
 
           if (data.statusCode === 401) {
             updateCowRecordModalMessageEl.classList.remove("text-success");
@@ -388,6 +396,8 @@ async function fetchRecordAndUpdateUI() {
         }
       });
     }
+
+
   } catch(err) {
     toggleAlertBox(true, "Error: " + err.message);
   }
