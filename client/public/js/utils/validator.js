@@ -80,7 +80,6 @@ export function isValidPhoneNumber(phoneNumber) {
   }
 
   if (!PHONE_NUMBER_REGEX_PATTERN.test(phoneNumber)) {
-    console.log("HI");
     return { isValid: false, message: "Invalid phone number."};
   }
 
@@ -95,11 +94,25 @@ export function isValidPhoneNumber(phoneNumber) {
 
 export function isValidAddress(address) {
   if (address === undefined || address === null) {
-    throw new Error("Name is null or undefined.");
+    throw new Error("Address is null or undefined.");
   }
 
   if (address === "") {
     return { isValid: false, message: "Address field is required."};
+  }
+
+  return { isValid: true };
+}
+
+
+
+export function isEmpty(string) {
+  if (string === undefined || string === null) {
+    throw new Error("String is null or undefined.");
+  }
+
+  if (string === "") {
+    return { isValid: false, message: "This field is required."};
   }
 
   return { isValid: true };
