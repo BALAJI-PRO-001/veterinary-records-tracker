@@ -34,7 +34,7 @@ input + p {
   }
 
   #err-message-element {
-    font-size: 8.5px !important;
+    font-size: 10px !important;
     font-weight: 300;
   }
 }
