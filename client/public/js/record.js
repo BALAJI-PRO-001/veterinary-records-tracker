@@ -145,9 +145,12 @@ function toggleAlertBox(show, message) {
 
 
 function resetModalComponents() {
-  userNameInput.classList.remove("is-valid");
-  phoneNumberInput.classList.remove("is-valid");
-  addressInput.classList.remove("is-valid");
+  let components = [userNameInput, phoneNumberInput, addressInput];
+  for (let component of components) {
+    component.classList.remove("is-valid", "is-invalid");
+    component.parentElement.querySelector("#err-message-element").innerText = "";
+  }
+  updateMessageElementForUser.innerText = "";
 }
 
 
@@ -208,7 +211,6 @@ async function fetchRecordAndUpdateUI() {
     toggleElementVisibility(spinner, false, "d-none");
     toggleElementVisibility(mainContainer, false, "d-none");
 
-
     // Update user record code implementation.
     userNameInput.value = record.user.name;
     phoneNumberInput.value = record.user.phoneNumber;
@@ -217,6 +219,14 @@ async function fetchRecordAndUpdateUI() {
     addValidationListenersToInputElement(userNameInput, () => validateNameAndUpdateNameInputUI(userNameInput));
     addValidationListenersToInputElement(phoneNumberInput, () => validatePhoneNumberAndUpdatePhoneNumberInputUI(phoneNumberInput));
     addValidationListenersToInputElement(addressInput, () => validateAddressAndUpdateAddressInputUI(addressInput));
+
+    updateUserRecordModal.addEventListener("hidden.bs.modal", () => {
+      resetModalComponents();
+      // Update user record code implementation.
+      userNameInput.value = record.user.name;
+      phoneNumberInput.value = record.user.phoneNumber;
+      addressInput.value = record.user.address;
+    });
 
     updateUserRecordBTN.addEventListener("click", async (e) => {
       e.preventDefault();
@@ -256,11 +266,12 @@ async function fetchRecordAndUpdateUI() {
           updateMessageElementForUser.classList.remove("text-danger");
           updateMessageElementForUser.classList.add("text-success");
           updateMessageElementForUser.innerText = "Changes saved successfully.";
+          updateUserRecordToUI(data.data.user);
           
           setTimeout(() => {
             updateMessageElementForUser.innerText = "";
             resetModalComponents();
-          }, 2500);
+          }, 2000);
           return;
         }
 
