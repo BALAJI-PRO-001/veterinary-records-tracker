@@ -193,7 +193,8 @@ async function fetchRecordAndUpdateUI() {
       cowImgContainer.classList.add("d-none");
     }
 
-    let selectedCow;
+    let selectedCow = null;
+    let selectedPageLink = null;
     if (record.cows.length > 0) {
       // Find and update pending amount to ui. 
       let pendingAmount = record.cows.map((cow) => {
@@ -204,11 +205,14 @@ async function fetchRecordAndUpdateUI() {
       });
 
       pendingAmountSpan.innerText = pendingAmount.reduce((total, amount) => total + amount, 0);
+
       // Load default cow data. 
       updateCowRecordToUI(record.cows[0]);
       selectedCow = record.cows[0];
 
+      // Load pagination list to ui.
       paginationContainer.appendChild(createCowsPaginationList(record.cows));
+      selectedPageLink = paginationContainer.children[0].children[0].children[0];
 
       // Load default injection info and ai date data to ui. 
       tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(record.cows[0].injectionInfoAndAiDates));
@@ -220,6 +224,7 @@ async function fetchRecordAndUpdateUI() {
         pageLink.addEventListener("click", (e) => {
           const cow = record.cows.find((cow) => cow.id === e.target.key);
           updateCowRecordToUI(cow);
+          selectedPageLink = e.target;
           tableContainer.innerHTML = "";
           tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(cow.injectionInfoAndAiDates));
 
@@ -363,6 +368,11 @@ async function fetchRecordAndUpdateUI() {
             selectedCow.name = data.data.cow.name;
             selectedCow.breed = data.data.cow.breed;
             selectedCow.bullName = data.data.cow.bullName;
+
+            // Update pagination link content
+            if (selectedPageLink) {
+              selectedPageLink.innerText = data.data.cow.name;
+            }
             
             setTimeout(() => {
               updateCowRecordModalMessageEl.innerText = "";
@@ -370,6 +380,11 @@ async function fetchRecordAndUpdateUI() {
             }, 1000);
             return;
           }
+
+          // If any possible error.
+          updateCowRecordModalMessageEl.classList.remove("text-success");
+          updateCowRecordModalMessageEl.classList.add("text-danger");
+          updateCowRecordModalMessageEl.innerText = data.message;
         }
       });
     }
