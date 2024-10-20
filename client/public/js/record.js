@@ -42,6 +42,11 @@ const updateCowRecordBTN = updateCowRecordModal.querySelector("#update-btn");
 const updateCowRecordModalMessageEl = updateCowRecordModal.querySelector("#message-element");
 
 
+/* Delete user record modal objects */
+const deleteUserRecordModal = document.getElementById("delete-user-record-modal");
+const deleteUserRecordOkEl = deleteUserRecordModal.querySelector("#ok-element");
+
+
 async function getRecordFromServer(id) {
   const res = await fetch(`/api/v1/records/${id}`);
   const data = await res.json();
@@ -396,6 +401,20 @@ async function fetchRecordAndUpdateUI() {
         }
       });
     }
+
+
+    // Delete user code
+    deleteUserRecordOkEl.addEventListener("click", async () => {
+      deleteUserRecordOkEl.innerText = "Deleting Record ....";
+      deleteUserRecordOkEl.nextElementSibling.innerText = "";
+      deleteUserRecordOkEl.setAttribute("disabled", "");
+      deleteUserRecordOkEl.nextElementSibling.setAttribute("disabled", "");
+      // const res = await fetch("/api/v1/record/users/" + record.user.id, {method: "DELETE"});
+
+      if (res.status === 401) {
+
+      }
+    });
 
 
   } catch(err) {
