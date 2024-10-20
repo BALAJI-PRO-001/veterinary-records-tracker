@@ -3,18 +3,20 @@ import { validateEmailAndUpdateEmailInputUI,validatePasswordAndUpdatePasswordInp
 import { addValidationListenersToInputElement } from "./utils/common.js";
 
 const loginForm = document.forms[0];
-const emailInput = document.getElementById("email-input");  
-const passwordInput = document.getElementById("password-input")
-const rememberMe = document.getElementById("remember-me");
-const eyeIcon = document.getElementById("eye-icon");
-const loginBTN = document.getElementById("login-btn")
-
+const emailInput = loginForm.querySelector("#email-input");  
+const passwordInput = loginForm.querySelector("#password-input")
+const rememberMe = loginForm.querySelector("#remember-me");
+const eyeIcon = loginForm.querySelector("#eye-icon");
+const loginBTN = loginForm.querySelector("#login-btn")
 
 loginForm.reset();
 
-window.addEventListener("load",() => {
-  emailInput.value = localStorage.getItem("admin");
-});
+const adminLoginInformation = JSON.parse(localStorage.getItem("adminLoginInformation"));
+if (adminLoginInformation) {
+  emailInput.value = adminLoginInformation.email;
+  passwordInput.value = adminLoginInformation.password;
+  eyeIcon.setAttribute("hidden", "");
+}
 
 eyeIcon.addEventListener("click",() => {
   setIcon(eyeIcon,"fa-eye","fa-eye-slash");
@@ -34,13 +36,7 @@ loginBTN.addEventListener("click", async (e) => {
 
   if(isValidEmail && isValidPassword) {
     try {
-
-      if(rememberMe.checked) {
-        localStorage.removeItem("admin");
-        localStorage.setItem("admin",emailInput.value);
-      }
-
-      loginBTN.innerText = "Loading...";
+      loginBTN.innerText = "Loading ....";
       const res = await fetch("/api/v1/admin/login",{
         headers: { "Content-Type": "application/json" },
         method: "POST",
@@ -68,15 +64,19 @@ loginBTN.addEventListener("click", async (e) => {
       }
 
       if (data.statusCode === 200) {
+        if(rememberMe.checked) {
+          localStorage.setItem("adminLoginInformation", JSON.stringify({
+            email: emailInput.value.trim(),
+            password: passwordInput.value.trim()
+          }));
+        }
         location.href = "/home"
         return;
       }
-
     } catch(err) {
       console.warn(err);
     }
   }
-
-})
+});
 
 

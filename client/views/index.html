@@ -10,35 +10,38 @@
 </head>
 <body>
     <div class="container-fluid vh-100 vw-100 d-flex justify-content-center align-items-center">
-      <div class="container bg-white shadow border border-2 rounded-5 p-3 row" style="height: 600px; width: 75%; min-width: 330px; ">
+      <div class="container bg-white shadow border border-2 rounded-5 p-3 row" style="height: 630px; width: 75%; min-width: 330px; ">
         <div class="rounded-5 right  text-white col-12 col-md-6 d-flex flex-column justify-content-center align-items-center" style="background-color: #103cbe;">
           
           <img src="/images/cow-img.png" alt="" style="width: 250px; height: 250px;" >
-          <h2 class="mt-5 text-center fw-bold" style="font-family: Arial, Helvetica, sans-serif;">Veterinery Tracker</h2>
+          <h2 class="mt-5 text-center fw-bold" style="font-family: Arial, Helvetica, sans-serif;">Veterinary Tracker</h2>
         </div>
         <div class="bg-white rounded-5 left col-12 col-md-6 d-flex flex-column justify-content-evenly gx-md-5">
-          <div class="mt-3">
+          <div class="mt-5">
             <h3>Welcome,Buddy</h3>
             <p class="mt-3">we are happy to have and so proud</p>
           </div>
-          <form action="">
-            <div>
+          <form>
               <div style="height: 70px;">
-                <input type="text" class="form-control border-2" placeholder="Enter Email.." style="font-weight: 500 !important; height: 45px;" id="email-input">
-                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold" style="padding-top: 3px;"></div>
+                <input type="text" class="form-control form-control-lg border-2" placeholder="Email ...." id="email-input">
+                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
               </div>
-              <div style="height: 70px;" class="position-relative">
-                <input type="password" class="form-control border-2" placeholder="Enter Password.." style="font-weight: 500 !important; height: 45px; background-image: none;" id="password-input">
-                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold" style="padding-top: 3px;"></div>
-                <i class="fa fa-eye position-absolute" style="top: 50%; right: 3%; transform: translateY(-130%); font-weight: 500; z-index: 10;" id="eye-icon"></i>
+
+              <div style="height: 70px;" class="position-relative mt-2">
+                <input type="password" class="form-control form-control-lg border-2" placeholder="Password ...." style=" background-image: none;" id="password-input">
+                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
+                <i class="fa fa-eye position-absolute" style="top: 54%; right: 3%; transform: translateY(-130%); font-weight: 500; z-index: 10;" id="eye-icon"></i>
               </div>
-              <input type="checkbox" class="me-2 fs-6 mb-5" id="remember-me"><label style="font-weight: 400;">Remember me</label>
+
+              <div class="d-flex align-items-center mb-5 mt-2">
+                <input type="checkbox" class="me-2 fs-6" id="remember-me" style="height: 17px; width: 17px;">
+                <label for="remember-me" style="font-weight: 400;">Remember Me</label>
+              </div>              
+            <div>
+              <button type="button" class="btn text-white fw-bold w-100 fs-5 mb-2" style="background-color: #103cbe; height: 50px;" id="login-btn"> Login</button>
+              <p class="text-center fs-6 fw-normal">Don't have Account? <a href="#" class="text-decoration-none">Sign in</a></p>
             </div>
           </form>
-          <div>
-            <button class="btn text-white fw-bold w-100 fs-5 mb-2" style="background-color: #103cbe; height: 50px;" id="login-btn"> Login</button>
-            <p class="text-center fs-6 fw-normal">Don't have Account? <a href="#" class="text-decoration-none">signin</a></p>
-          </div>
         </div>
       </div>
     </div>
