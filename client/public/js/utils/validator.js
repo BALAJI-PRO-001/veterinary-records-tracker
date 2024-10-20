@@ -1,5 +1,6 @@
 
 const NUMERIC_CHARACTER_REGEX_PATTERN = /\d/;
+const PHONE_NUMBER_REGEX_PATTERN = /\d{10}/;
 const EMAIL_REGEX_PATTERN = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 const SPECIAL_CHARACTER_REGEX_PATTERN = /[^a-zA-Z0-9\s]/;
 const UPPERCASE_REGEX_PATTERN = /[A-Z]/;
@@ -78,8 +79,9 @@ export function isValidPhoneNumber(phoneNumber) {
     return { isValid: false, message: "Phone number field is required."};
   }
 
-  if (!NUMERIC_CHARACTER_REGEX_PATTERN.test(phoneNumber)) {
-    return { isValid: false, message: "Please enter a valid phone number using only digits."};
+  if (!PHONE_NUMBER_REGEX_PATTERN.test(phoneNumber)) {
+    console.log("HI");
+    return { isValid: false, message: "Invalid phone number."};
   }
 
   if (phoneNumber.length != 10) {
