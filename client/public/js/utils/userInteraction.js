@@ -1,4 +1,4 @@
-import { isValidAddress, isValidEmail, isValidName, isValidPassword, isValidPhoneNumber } from "./validator.js";
+import { isEmpty, isValidAddress, isValidEmail, isValidName, isValidPassword, isValidPhoneNumber } from "./validator.js";
 
 
 
@@ -155,6 +155,32 @@ export function toggleElementVisibility(element, hide, toggleClassName) {
 
 
 
+export function validateInputAndUpdateUI(inputElement) {
+  if (inputElement === null || inputElement === undefined) {
+    throw new Error("Element is null or undefined.");
+  }
+
+  if (!(inputElement instanceof HTMLElement)) {
+    throw new Error(`Expected an HTMLElement, but got (${typeof element}).`);
+  }
+
+  const { isValid, message } = isEmpty(inputElement.value.trim());
+  const errMessageElement = inputElement.parentElement.querySelector("#err-message-element");
+
+  if (!isValid) {
+    inputElement.classList.add("is-invalid");
+    errMessageElement.textContent = message;
+    return false;
+  }
+
+  inputElement.classList.remove("is-invalid");
+  inputElement.classList.add("is-valid");
+  errMessageElement.textContent = "";
+  return true;
+}
+
+
+
 
 export function setIcon(element, oldClass, newClass) {
 
@@ -184,5 +210,4 @@ export function setType(element,oldType,newType) {
   else {
     element.type = "password";
   }
-
 }
