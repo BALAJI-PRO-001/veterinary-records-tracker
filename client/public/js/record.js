@@ -58,7 +58,6 @@ async function getRecordFromServer(id) {
 
 
 
-
 function updateUserRecordToUI(user) {
   if (user === null || user === undefined) {
     throw new Error("User is null or undefined.");
