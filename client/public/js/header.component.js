@@ -21,7 +21,7 @@ async function logoutUser(e) {
     e.preventDefault();
     try {
         await logout("/api/v1/admin/logout");
-        location.href = "/home";
+        location.href = "/";
     } catch(err) {
         console.warn(err.message);
     }

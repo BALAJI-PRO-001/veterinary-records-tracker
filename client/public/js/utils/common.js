@@ -65,7 +65,6 @@ export async function logout(reqURL) {
     if(data.statusCode != 200) {
       throw new Error("Logout request failed.");
     }
-
   } catch(err) {
     throw err;
   }

@@ -15,7 +15,6 @@ const adminLoginInformation = JSON.parse(localStorage.getItem("adminLoginInforma
 if (adminLoginInformation) {
   emailInput.value = adminLoginInformation.email;
   passwordInput.value = adminLoginInformation.password;
-  eyeIcon.setAttribute("hidden", "");
 }
 
 eyeIcon.addEventListener("click",() => {
