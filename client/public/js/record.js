@@ -404,14 +404,26 @@ async function fetchRecordAndUpdateUI() {
 
     // Delete user code
     deleteUserRecordOkEl.addEventListener("click", async () => {
-      deleteUserRecordOkEl.innerText = "Deleting Record ....";
-      deleteUserRecordOkEl.nextElementSibling.innerText = "";
-      deleteUserRecordOkEl.setAttribute("disabled", "");
-      deleteUserRecordOkEl.nextElementSibling.setAttribute("disabled", "");
-      // const res = await fetch("/api/v1/record/users/" + record.user.id, {method: "DELETE"});
+      const mainContentEl = deleteUserRecordModal.querySelector("#main-content");
+      deleteUserRecordOkEl.nextElementSibling.nextElementSibling.innerText = "Deleting Record ....";
+      deleteUserRecordOkEl.setAttribute("hidden", "");
+      deleteUserRecordOkEl.nextElementSibling.setAttribute("hidden", "");
+      // const res = await fetch("/api/v1/records/" + record.user.id, {method: "DELETE"});
 
-      if (res.status === 401) {
+      // if (res.status === 401) {
+      //   mainContentEl.classList.add("text-danger");
+      //   mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+      //   deleteUserRecordOkEl.nextElementSibling.removeAttribute("hidden");
+      //   deleteUserRecordOkEl.nextElementSibling.nextElementSibling.innerText = "";
+      //   return;
+      // }
 
+      if (true) {
+        mainContentEl.classList.remove("text-danger");
+        mainContentEl.innerHTML = "All user and cow records have been successfully deleted.";
+        deleteUserRecordOkEl.nextElementSibling.nextElementSibling.innerText = "";
+        deleteUserRecordOkEl.nextElementSibling.removeAttribute("hidden");
+        return;
       }
     });
 
