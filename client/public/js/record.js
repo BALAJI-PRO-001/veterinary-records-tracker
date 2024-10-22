@@ -405,24 +405,27 @@ async function fetchRecordAndUpdateUI() {
     // Delete user code
     deleteUserRecordOkEl.addEventListener("click", async () => {
       const mainContentEl = deleteUserRecordModal.querySelector("#main-content");
-      deleteUserRecordOkEl.nextElementSibling.nextElementSibling.innerText = "Deleting Record ....";
+      deleteUserRecordOkEl.nextElementSibling.nextElementSibling.removeAttribute("hidden");
       deleteUserRecordOkEl.setAttribute("hidden", "");
       deleteUserRecordOkEl.nextElementSibling.setAttribute("hidden", "");
-      // const res = await fetch("/api/v1/records/" + record.user.id, {method: "DELETE"});
+      const res = await fetch("/api/v1/records/" + record.user.id, {method: "DELETE"});
 
-      // if (res.status === 401) {
-      //   mainContentEl.classList.add("text-danger");
-      //   mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
-      //   deleteUserRecordOkEl.nextElementSibling.removeAttribute("hidden");
-      //   deleteUserRecordOkEl.nextElementSibling.nextElementSibling.innerText = "";
-      //   return;
-      // }
+      if (res.status === 401) {
+        mainContentEl.classList.add("text-danger");
+        mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+        deleteUserRecordOkEl.nextElementSibling.removeAttribute("hidden");
+        deleteUserRecordOkEl.nextElementSibling.nextElementSibling.innerText = "";
+        return;
+      }
 
-      if (true) {
+      if (res.status === 204) {
+        deleteUserRecordModal.querySelector("#danger-icon").classList.add("d-none");
+        deleteUserRecordModal.querySelector("#success-icon").classList.remove("d-none");
         mainContentEl.classList.remove("text-danger");
         mainContentEl.innerHTML = "All user and cow records have been successfully deleted.";
-        deleteUserRecordOkEl.nextElementSibling.nextElementSibling.innerText = "";
+        deleteUserRecordOkEl.nextElementSibling.nextElementSibling.setAttribute("hidden", "");
         deleteUserRecordOkEl.nextElementSibling.removeAttribute("hidden");
+        deleteUserRecordOkEl.nextElementSibling.innerText = "Go Back";
         return;
       }
     });
