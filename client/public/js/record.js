@@ -426,6 +426,10 @@ async function fetchRecordAndUpdateUI() {
         deleteUserRecordOkEl.nextElementSibling.nextElementSibling.setAttribute("hidden", "");
         deleteUserRecordOkEl.nextElementSibling.removeAttribute("hidden");
         deleteUserRecordOkEl.nextElementSibling.innerText = "Go Back";
+
+        deleteUserRecordModal.addEventListener("hidden.bs.modal", () => {
+          location.href = "/home";
+        });
         return;
       }
     });
