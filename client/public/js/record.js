@@ -46,15 +46,9 @@ const updateCowRecordModalMessageEl = updateCowRecordModal.querySelector("#messa
 const deleteUserRecordModal = document.getElementById("delete-user-record-modal");
 const deleteUserRecordOkEl = deleteUserRecordModal.querySelector("#ok-element");
 
-
-async function getRecordFromServer(id) {
-  const res = await fetch(`/api/v1/records/${id}`);
-  const data = await res.json();
-  if (data.statusCode === 200) {
-    return data.data.record;
-  }
-  return null;
-}
+/* Delete cow record modal objects */
+const deleteCowRecordModal = document.getElementById("delete-cow-record-modal");
+const deleteCowRecordOkEl = deleteCowRecordModal.querySelector("#ok-element");
 
 
 
@@ -180,12 +174,22 @@ async function fetchRecordAndUpdateUI() {
     toggleElementVisibility(spinner, false, "d-none");
 
     const id = location.href.split("/").pop(); 
-    const record = await getRecordFromServer(Number(id));
-    if (!record) {
-      toggleAlertBox(true, "Error: Something went wrong while fetching the record.");
+    const res = await fetch("/api/v1/records/" + Number(id));
+    if (res.status === 401) {
+      toggleAlertBox(true, "Warning: Your session has expired. Please log out and log back in to continue.");
+      // toggleAlertBox(true, "Error: Something went wrong while fetching the record.");
       toggleElementVisibility(spinner, true, "d-none");
       return;
     }
+
+    if (res.status === 404) {
+      toggleAlertBox(true, "Not Found: Record not found for the specific id: " + id + ".");
+      toggleElementVisibility(spinner, true, "d-none");
+      return;
+    }
+
+    const data = await res.json();
+    const record = data.data.record;
 
     // Update user record to ui.
     updateUserRecordToUI(record.user);
@@ -402,10 +406,10 @@ async function fetchRecordAndUpdateUI() {
     }
 
 
-    // Delete user code
+    // Delete user record code
     deleteUserRecordOkEl.addEventListener("click", async () => {
       const mainContentEl = deleteUserRecordModal.querySelector("#main-content");
-      deleteUserRecordOkEl.nextElementSibling.nextElementSibling.removeAttribute("hidden");
+      deleteUserRecordOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
       deleteUserRecordOkEl.setAttribute("hidden", "");
       deleteUserRecordOkEl.nextElementSibling.setAttribute("hidden", "");
       const res = await fetch("/api/v1/records/" + record.user.id, {method: "DELETE"});
@@ -413,8 +417,8 @@ async function fetchRecordAndUpdateUI() {
       if (res.status === 401) {
         mainContentEl.classList.add("text-danger");
         mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+        deleteUserRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
         deleteUserRecordOkEl.nextElementSibling.removeAttribute("hidden");
-        deleteUserRecordOkEl.nextElementSibling.nextElementSibling.innerText = "";
         return;
       }
 
@@ -423,7 +427,7 @@ async function fetchRecordAndUpdateUI() {
         deleteUserRecordModal.querySelector("#success-icon").classList.remove("d-none");
         mainContentEl.classList.remove("text-danger");
         mainContentEl.innerHTML = "All user and cow records have been successfully deleted.";
-        deleteUserRecordOkEl.nextElementSibling.nextElementSibling.setAttribute("hidden", "");
+        deleteUserRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
         deleteUserRecordOkEl.nextElementSibling.removeAttribute("hidden");
         deleteUserRecordOkEl.nextElementSibling.innerText = "Go Back";
 
@@ -431,6 +435,37 @@ async function fetchRecordAndUpdateUI() {
           location.href = "/home";
         });
         return;
+      }
+
+      // If possible error while deleting user record.
+      mainContentEl.classList.add("text-danger");
+      mainContentEl.innerText = "Error: " + data.message;
+      deleteUserRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+      deleteUserRecordOkEl.nextElementSibling.removeAttribute("hidden");
+      return;
+    });
+
+
+    // Delete cow record code
+    deleteCowRecordOkEl.addEventListener("click", async () => {
+      const mainContentEl = deleteCowRecordModal.querySelector("#main-content");
+      deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
+      deleteCowRecordOkEl.setAttribute("hidden", "");
+      deleteCowRecordOkEl.nextElementSibling.setAttribute("hidden", "");
+      // const res = await fetch(`/api/v2/records/${record.user.id}/cows/${selectedCow.id}`, {method: "DELETE"});
+
+      if (res.status === 401) {
+        mainContentEl.classList.add("text-danger");
+        mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+        deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+        deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
+        return;
+      }
+
+      if (true) {
+        deleteCowRecordModal.querySelector("#danger-icon").classList.add("d-none");
+        deleteCowRecordModal.querySelector("#success-icon").classList.remove("d-none");
+        
       }
     });
 
