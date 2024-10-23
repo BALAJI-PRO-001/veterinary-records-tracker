@@ -5,7 +5,7 @@ dotenv.config();
 
 
 
-export default function privateRoute(req: Request, res: Response, next: NextFunction): void {
+export default function privateRouteForSuperUser(req: Request, res: Response, next: NextFunction): void {
   const superUserAccessToken = req.cookies.super_user_access_token;
   if (!superUserAccessToken) {
     return res.redirect("/super-user/login");

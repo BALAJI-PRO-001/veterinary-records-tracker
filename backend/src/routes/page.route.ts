@@ -1,5 +1,6 @@
 import express from "express";
-import privateRoute from "../utils/privateRoute";
+import privateRouteForSuperUser from "../utils/privateRouteForSuperUser";
+import privateRouteForAdmin from "../utils/privateRouteForAdmin";
 import { 
   indexPage, 
   homePage, 
@@ -12,10 +13,10 @@ import {
 const router = express.Router();
 
 router.get("/", indexPage)
-      .get("/home", homePage)
-      .get("/add-new-record", addNewRecordPage)
-      .get("/super-user/login", superUserLoginPage)
-      .get("/super-user/dashboard", privateRoute , dashboardPage)
-      .get("/record/:id", showRecordPage);
+      .get("/home", privateRouteForAdmin, homePage)
+      .get("/add-new-record", privateRouteForAdmin, addNewRecordPage)
+      .get("/super-user/login", privateRouteForAdmin, superUserLoginPage)
+      .get("/super-user/dashboard", privateRouteForSuperUser , dashboardPage)
+      .get("/record/:id", privateRouteForAdmin, showRecordPage);
  
 export default router;
