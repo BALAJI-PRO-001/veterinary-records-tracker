@@ -201,8 +201,10 @@ async function fetchRecordAndUpdateUI() {
       cowImgContainer.classList.add("d-none");
     }
 
+
     let selectedCow = null;
     let selectedPageLink = null;
+
     if (record.cows.length > 0) {
       // Find and update pending amount to ui. 
       let pendingAmount = record.cows.map((cow) => {
@@ -447,12 +449,14 @@ async function fetchRecordAndUpdateUI() {
 
 
     // Delete cow record code
+    
+
     deleteCowRecordOkEl.addEventListener("click", async () => {
       const mainContentEl = deleteCowRecordModal.querySelector("#main-content");
       deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
       deleteCowRecordOkEl.setAttribute("hidden", "");
       deleteCowRecordOkEl.nextElementSibling.setAttribute("hidden", "");
-      // const res = await fetch(`/api/v2/records/${record.user.id}/cows/${selectedCow.id}`, {method: "DELETE"});
+      const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {method: "DELETE"});
 
       if (res.status === 401) {
         mainContentEl.classList.add("text-danger");
@@ -462,10 +466,20 @@ async function fetchRecordAndUpdateUI() {
         return;
       }
 
-      if (true) {
+      if (res.status === 204) {
         deleteCowRecordModal.querySelector("#danger-icon").classList.add("d-none");
         deleteCowRecordModal.querySelector("#success-icon").classList.remove("d-none");
-        
+        mainContentEl.classList.remove("text-danger");
+        mainContentEl.innerText = "The cow record, including injection information and AI (Artificial Insemination) dates, has been successfully deleted.";
+        // Switch to another cow record
+        const currentPageLink = selectedPageLink;
+        if (selectedPageLink.parentElement.nextElementSibling) {
+          selectedPageLink.parentElement.nextElementSibling.children[0].click();
+        }
+        currentPageLink.remove();
+        deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+        deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
+        return;
       }
     });
 
