@@ -46,10 +46,9 @@ const updateCowRecordModalMessageEl = updateCowRecordModal.querySelector("#messa
 const deleteUserRecordModal = document.getElementById("delete-user-record-modal");
 const deleteUserRecordOkEl = deleteUserRecordModal.querySelector("#ok-element");
 
-/* Delete cow record modal objects */
+/*Delete cow record modal objects */
 const deleteCowRecordModal = document.getElementById("delete-cow-record-modal");
 const deleteCowRecordOkEl = deleteCowRecordModal.querySelector("#ok-element");
-
 
 
 function updateUserRecordToUI(user) {
@@ -157,13 +156,23 @@ function toggleAlertBox(show, message) {
 
 
 
-function resetModalComponents() {
-  let components = [userNameInput, phoneNumberInput, addressInput, cowNameInput, breedInput, bullNameInput];
+function resetUserUpdateModalComponents() {
+  let components = [userNameInput, phoneNumberInput, addressInput];
   for (let component of components) {
     component.classList.remove("is-valid", "is-invalid");
     component.parentElement.querySelector("#err-message-element").innerText = "";
   }
   updateUserRecordModalMessageEl.innerText = "";
+}
+
+
+
+function resetUpdateCowModalComponents() {
+  let components = [cowNameInput, breedInput, bullNameInput];
+  for (let component of components) {
+    component.classList.remove("is-valid", "is-invalid");
+    component.parentElement.querySelector("#err-message-element").innerText = "";
+  }
   updateCowRecordModalMessageEl.innerText = "";
 }
 
@@ -177,7 +186,6 @@ async function fetchRecordAndUpdateUI() {
     const res = await fetch("/api/v1/records/" + Number(id));
     if (res.status === 401) {
       toggleAlertBox(true, "Warning: Your session has expired. Please log out and log back in to continue.");
-      // toggleAlertBox(true, "Error: Something went wrong while fetching the record.");
       toggleElementVisibility(spinner, true, "d-none");
       return;
     }
@@ -260,7 +268,7 @@ async function fetchRecordAndUpdateUI() {
     addValidationListenersToInputElement(addressInput, () => validateAddressAndUpdateAddressInputUI(addressInput));
 
     updateUserRecordModal.addEventListener("hidden.bs.modal", () => {
-      resetModalComponents();
+      resetUserUpdateModalComponents();
       // Update user record code implementation.
       userNameInput.value = record.user.name;
       phoneNumberInput.value = record.user.phoneNumber;
@@ -315,8 +323,7 @@ async function fetchRecordAndUpdateUI() {
           record.user.address = data.data.user.address;
           
           setTimeout(() => {
-            updateUserRecordModalMessageEl.innerText = "";
-            resetModalComponents();
+            resetUserUpdateModalComponents();
           }, 1000);
           return;
         }
@@ -340,7 +347,7 @@ async function fetchRecordAndUpdateUI() {
       addValidationListenersToInputElement(bullNameInput, () => validateInputAndUpdateUI(bullNameInput));      
       
       updateCowRecordModal.addEventListener("hidden.bs.modal", () => {
-        resetModalComponents();
+        resetUpdateCowModalComponents();
         
         cowNameInput.value = selectedCow.name;
         breedInput.value = selectedCow.breed;
@@ -393,8 +400,7 @@ async function fetchRecordAndUpdateUI() {
             }
             
             setTimeout(() => {
-              updateCowRecordModalMessageEl.innerText = "";
-              resetModalComponents();
+              resetUpdateCowModalComponents();
             }, 1000);
             return;
           }
@@ -449,8 +455,6 @@ async function fetchRecordAndUpdateUI() {
 
 
     // Delete cow record code
-    
-
     deleteCowRecordOkEl.addEventListener("click", async () => {
       const mainContentEl = deleteCowRecordModal.querySelector("#main-content");
       deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
@@ -486,6 +490,7 @@ async function fetchRecordAndUpdateUI() {
 
   } catch(err) {
     toggleAlertBox(true, "Error: " + err.message);
+    toggleElementVisibility(spinner, false, "d-none");
   }
 }
 
