@@ -25,6 +25,7 @@ const tableContainer = document.getElementById("table-container");
 const cowActionsBTNContainer = document.getElementById("cow-action-btn-container");
 const cowImgContainer = document.getElementById("cow-img-container");
 const cowInfoContainer = document.getElementById("cow-info-container");
+const doctorImgContainer = document.getElementById("doctor-img-container");
 
 
 const updateUserRecordModal = document.getElementById("update-user-record-modal");
@@ -242,14 +243,18 @@ async function fetchRecordAndUpdateUI() {
       // Render first cow record to ui.
       updateCowRecordToUI(record.cows[0]);
       selectedCow = record.cows[0];
+      cowActionsBTNContainer.classList.remove("d-none");
 
       // Render pagination list to ui.
       paginationContainer.appendChild(createCowsPaginationList(record.cows));
       selectedPageLink = paginationContainer.children[0].children[0].children[0];
 
       // Render first injection info and ai date data to ui. 
-      tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(record.cows[0].injectionInfoAndAiDates));
-      cowActionsBTNContainer.classList.remove("d-none");
+      doctorImgContainer.classList.remove("d-none");
+      if (record.cows[0].injectionInfoAndAiDates.length > 0) {
+        tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(record.cows[0].injectionInfoAndAiDates));
+        doctorImgContainer.classList.add("d-none");
+      }
 
       // Listen pagination click event and update cow record based by which link is clicked. 
       const pageLinks = paginationContainer.querySelectorAll("#page-link");
@@ -258,8 +263,14 @@ async function fetchRecordAndUpdateUI() {
           const cow = record.cows.find((cow) => cow.id === e.target.key);
           updateCowRecordToUI(cow);
           selectedPageLink = e.target;
+          
           tableContainer.innerHTML = "";
-          tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(cow.injectionInfoAndAiDates));
+          tableContainer.appendChild(doctorImgContainer);
+          doctorImgContainer.classList.remove("d-none");
+          if (cow.injectionInfoAndAiDates.length > 0) {
+            tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(cow.injectionInfoAndAiDates));
+            doctorImgContainer.classList.add("d-none");
+          }
 
           // Reassign cow records by pagination link clicked.
           selectedCow = cow;
@@ -479,17 +490,17 @@ async function fetchRecordAndUpdateUI() {
       deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
       deleteCowRecordOkEl.setAttribute("hidden", "");
       deleteCowRecordOkEl.nextElementSibling.setAttribute("hidden", "");
-      const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {method: "DELETE"});
+      // const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {method: "DELETE"});
 
-      if (res.status === 401) {
-        mainContentEl.classList.add("text-danger");
-        mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
-        deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
-        deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
-        return;
-      }
+      // if (res.status === 401) {
+      //   mainContentEl.classList.add("text-danger");
+      //   mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+      //   deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+      //   deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
+      //   return;
+      // }
 
-      if (res.status === 204) {
+      if (true) {
         deleteCowRecordModal.querySelector("#danger-icon").classList.add("d-none");
         deleteCowRecordModal.querySelector("#success-icon").classList.remove("d-none");
         mainContentEl.classList.remove("text-danger");
@@ -497,12 +508,17 @@ async function fetchRecordAndUpdateUI() {
         // Switch to another cow record when current cow is deleted.
         const currentPageLink = selectedPageLink;
         record.cows.splice(record.cows.indexOf(selectedCow), 1);
+        pendingAmountSpan.innerText = calculatePendingAmount(record.cows);
         
         if (record.cows.length <= 0) {
           location.reload();
         }
 
-        currentPageLink.remove();
+        if (record.cows.length > 0) {
+          selectedPageLink.parentElement.parentElement.children[0].children[0].click();
+        }
+
+        currentPageLink.parentElement.remove();
         deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
         deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
         return;
