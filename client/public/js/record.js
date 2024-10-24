@@ -24,6 +24,7 @@ const spinner = document.getElementById("spinner");
 const tableContainer = document.getElementById("table-container");
 const cowActionsBTNContainer = document.getElementById("cow-action-btn-container");
 const cowImgContainer = document.getElementById("cow-img-container");
+const cowInfoContainer = document.getElementById("cow-info-container");
 
 
 const updateUserRecordModal = document.getElementById("update-user-record-modal");
@@ -495,14 +496,23 @@ async function fetchRecordAndUpdateUI() {
         mainContentEl.innerText = "The cow record, including injection information and AI (Artificial Insemination) dates, has been successfully deleted.";
         // Switch to another cow record when current cow is deleted.
         const currentPageLink = selectedPageLink;
-        if (selectedPageLink.parentElement.nextElementSibling) {
-          selectedPageLink.parentElement.nextElementSibling.children[0].click();
+        record.cows.splice(record.cows.indexOf(selectedCow), 1);
+        
+        if (record.cows.length <= 0) {
+          location.reload();
         }
+
         currentPageLink.remove();
         deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
         deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
         return;
       }
+
+      // If possible error while deleting cow record.
+      mainContentEl.classList.add("text-danger");
+      mainContentEl.innerText = "Error: " + data.message;
+      deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+      deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
     });
 
 
