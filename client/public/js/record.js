@@ -7,6 +7,8 @@ import {
   validateInputAndUpdateUI
 } from "./utils/userInteraction.js";
 
+
+/* Global Objects */
 const userNameSpan = document.getElementById("user-name");
 const phoneNumberSpan = document.getElementById("phone-number");
 const addressSpan = document.getElementById("address");
@@ -24,7 +26,6 @@ const cowActionsBTNContainer = document.getElementById("cow-action-btn-container
 const cowImgContainer = document.getElementById("cow-img-container");
 
 
-/* Update user record modal objects */
 const updateUserRecordModal = document.getElementById("update-user-record-modal");
 const userNameInput = updateUserRecordModal.querySelector("#name");
 const phoneNumberInput = updateUserRecordModal.querySelector("#phone-number");
@@ -33,7 +34,6 @@ const updateUserRecordBTN = updateUserRecordModal.querySelector("#update-btn");
 const updateUserRecordModalMessageEl = updateUserRecordModal.querySelector("#message-element");
 
 
-/* Update user record modal objects */
 const updateCowRecordModal = document.getElementById("update-cow-record-modal");
 const cowNameInput = updateCowRecordModal.querySelector("#name");
 const breedInput = updateCowRecordModal.querySelector("#breed");
@@ -41,16 +41,14 @@ const bullNameInput = updateCowRecordModal.querySelector("#bull-name");
 const updateCowRecordBTN = updateCowRecordModal.querySelector("#update-btn");
 const updateCowRecordModalMessageEl = updateCowRecordModal.querySelector("#message-element");
 
-
-/* Delete user record modal objects */
 const deleteUserRecordModal = document.getElementById("delete-user-record-modal");
 const deleteUserRecordOkEl = deleteUserRecordModal.querySelector("#ok-element");
 
-/*Delete cow record modal objects */
 const deleteCowRecordModal = document.getElementById("delete-cow-record-modal");
 const deleteCowRecordOkEl = deleteCowRecordModal.querySelector("#ok-element");
 
 
+/* This function used to reset the update user record modal components to old state */
 function updateUserRecordToUI(user) {
   if (user === null || user === undefined) {
     throw new Error("User is null or undefined.");
@@ -62,7 +60,7 @@ function updateUserRecordToUI(user) {
 }
 
 
-
+/* This function used to reset the update cow record modal components to old state */
 function updateCowRecordToUI(cow) {
   if (cow === null || cow === undefined) {
     throw new Error("Cow is null or undefined.")
@@ -75,7 +73,7 @@ function updateCowRecordToUI(cow) {
 }
 
 
-
+/* Create a dynamic inject info and ai dates table based on records */
 function createDynamicInjectionInfoAndAiDatesTable(injectionInfoAndAiDates) {
   if (injectionInfoAndAiDates === null || injectionInfoAndAiDates === undefined) {
     throw new Error("Injection info and ai dates is null or undefined.");
@@ -174,6 +172,15 @@ function resetUpdateCowModalComponents() {
     component.parentElement.querySelector("#err-message-element").innerText = "";
   }
   updateCowRecordModalMessageEl.innerText = "";
+}
+
+
+
+function resetDeleteCowModalComponents() {
+  deleteCowRecordModal.querySelector("#danger-icon").classList.remove("d-none");
+  deleteCowRecordModal.querySelector("#success-icon").classList.add("d-none");
+  deleteCowRecordModal.querySelector("#main-content").innerText = "Are you sure you want to delete this cow record, including the injection information and AI (Artificial Insemination) dates?";
+  deleteCowRecordOkEl.removeAttribute("hidden");
 }
 
 
@@ -455,6 +462,10 @@ async function fetchRecordAndUpdateUI() {
 
 
     // Delete cow record code
+    deleteCowRecordModal.addEventListener("hidden.bs.modal", () => {
+      resetDeleteCowModalComponents();
+    });
+
     deleteCowRecordOkEl.addEventListener("click", async () => {
       const mainContentEl = deleteCowRecordModal.querySelector("#main-content");
       deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
