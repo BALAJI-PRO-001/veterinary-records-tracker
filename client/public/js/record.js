@@ -113,7 +113,7 @@ function createDynamicInjectionInfoAndAiDatesTable(injectionInfoAndAiDates) {
 }
 
 
-
+/* Create Dynamic paginationList based by cow record */
 function createCowsPaginationList(cows) {
   if (cows === null || cows === undefined) {
     throw new Error("Cows is null or undefined.");
@@ -184,6 +184,20 @@ function resetDeleteCowModalComponents() {
 }
 
 
+function calculatePendingAmount(cows) {
+  if (cows === null || cows === undefined) {
+    throw new Error("Cows is null or undefined.");
+  }
+
+  const pendingAmount = cows.map((cow) => {
+    const amounts = cow.injectionInfoAndAiDates.map(({pendingAmount}) => {
+      return pendingAmount;
+    });
+    return amounts.reduce((total, amount) => total + amount, 0);
+  });
+  return pendingAmount.reduce((total, amount) => total + amount, 0)
+}
+
 
 async function fetchRecordAndUpdateUI() {
   try {
@@ -206,7 +220,7 @@ async function fetchRecordAndUpdateUI() {
     const data = await res.json();
     const record = data.data.record;
 
-    // Update user record to ui.
+    // Render user record to ui.
     updateUserRecordToUI(record.user);
 
     if (record.cows.length <= 0) {
@@ -221,29 +235,22 @@ async function fetchRecordAndUpdateUI() {
     let selectedPageLink = null;
 
     if (record.cows.length > 0) {
-      // Find and update pending amount to ui. 
-      let pendingAmount = record.cows.map((cow) => {
-        const amounts = cow.injectionInfoAndAiDates.map(({pendingAmount}) => {
-          return pendingAmount;
-        });
-        return amounts.reduce((total, amount) => total + amount, 0);
-      });
+      // Calculate pending amount and update pending amount to ui. 
+      pendingAmountSpan.innerText = calculatePendingAmount(record.cows);
 
-      pendingAmountSpan.innerText = pendingAmount.reduce((total, amount) => total + amount, 0);
-
-      // Load default cow data. 
+      // Render first cow record to ui.
       updateCowRecordToUI(record.cows[0]);
       selectedCow = record.cows[0];
 
-      // Load pagination list to ui.
+      // Render pagination list to ui.
       paginationContainer.appendChild(createCowsPaginationList(record.cows));
       selectedPageLink = paginationContainer.children[0].children[0].children[0];
 
-      // Load default injection info and ai date data to ui. 
+      // Render first injection info and ai date data to ui. 
       tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(record.cows[0].injectionInfoAndAiDates));
       cowActionsBTNContainer.classList.remove("d-none");
 
-      // Listen pagination links is clicked. also update cow and injection info to ui. 
+      // Listen pagination click event and update cow record based by which link is clicked. 
       const pageLinks = paginationContainer.querySelectorAll("#page-link");
       pageLinks.forEach((pageLink) => {
         pageLink.addEventListener("click", (e) => {
@@ -253,7 +260,7 @@ async function fetchRecordAndUpdateUI() {
           tableContainer.innerHTML = "";
           tableContainer.appendChild(createDynamicInjectionInfoAndAiDatesTable(cow.injectionInfoAndAiDates));
 
-          // Update cow record based on pagination item.
+          // Reassign cow records by pagination link clicked.
           selectedCow = cow;
           cowNameInput.value = cow.name;
           breedInput.value = cow.breed;
@@ -343,7 +350,7 @@ async function fetchRecordAndUpdateUI() {
     });
 
 
-    // Update cow modal code
+    // Update cow record code implementation.
     if (record.cows.length > 0) {
       cowNameInput.value = record.cows[0].name;
       breedInput.value = record.cows[0].breed;
@@ -401,7 +408,7 @@ async function fetchRecordAndUpdateUI() {
             selectedCow.breed = data.data.cow.breed;
             selectedCow.bullName = data.data.cow.bullName;
 
-            // Update pagination link content
+            // Update pagination link content when current cow name updated.
             if (selectedPageLink) {
               selectedPageLink.innerText = data.data.cow.name;
             }
@@ -421,7 +428,7 @@ async function fetchRecordAndUpdateUI() {
     }
 
 
-    // Delete user record code
+    // Delete user record code implementation.
     deleteUserRecordOkEl.addEventListener("click", async () => {
       const mainContentEl = deleteUserRecordModal.querySelector("#main-content");
       deleteUserRecordOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
@@ -461,7 +468,7 @@ async function fetchRecordAndUpdateUI() {
     });
 
 
-    // Delete cow record code
+    // Delete cow record code implementation.
     deleteCowRecordModal.addEventListener("hidden.bs.modal", () => {
       resetDeleteCowModalComponents();
     });
@@ -486,7 +493,7 @@ async function fetchRecordAndUpdateUI() {
         deleteCowRecordModal.querySelector("#success-icon").classList.remove("d-none");
         mainContentEl.classList.remove("text-danger");
         mainContentEl.innerText = "The cow record, including injection information and AI (Artificial Insemination) dates, has been successfully deleted.";
-        // Switch to another cow record
+        // Switch to another cow record when current cow is deleted.
         const currentPageLink = selectedPageLink;
         if (selectedPageLink.parentElement.nextElementSibling) {
           selectedPageLink.parentElement.nextElementSibling.children[0].click();
