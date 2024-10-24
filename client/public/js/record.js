@@ -284,13 +284,14 @@ async function fetchRecordAndUpdateUI() {
     }
 
     // Remove active state from another page links.
-    let activePageLinkEl = paginationContainer.children[0].children[0];
+    let activePageItemEl = paginationContainer.children[0].children[0];
+    activePageItemEl.classList.add("active");
     paginationContainer.addEventListener("click", (e) => {
       if (e.target.id === "page-link") {
-        if (activePageLinkEl !== e.target) {
-          activePageLinkEl.classList.remove("active");
-          e.target.classList.add("active");
-          activePageLinkEl = e.target;
+        if (activePageItemEl !== e.target.parentElement) {
+          activePageItemEl.classList.remove("active");
+          e.target.parentElement.classList.add("active");
+          activePageItemEl = e.target.parentElement;
         }
       }
     });
