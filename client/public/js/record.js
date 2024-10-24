@@ -247,6 +247,7 @@ async function fetchRecordAndUpdateUI() {
 
       // Render pagination list to ui.
       paginationContainer.appendChild(createCowsPaginationList(record.cows));
+      paginationContainer.children[0].children[0].classList.add("active");
       selectedPageLink = paginationContainer.children[0].children[0].children[0];
 
       // Render first injection info and ai date data to ui. 
@@ -260,6 +261,7 @@ async function fetchRecordAndUpdateUI() {
       const pageLinks = paginationContainer.querySelectorAll("#page-link");
       pageLinks.forEach((pageLink) => {
         pageLink.addEventListener("click", (e) => {
+          e.target.parentElement.classList.add("active");
           const cow = record.cows.find((cow) => cow.id === e.target.key);
           updateCowRecordToUI(cow);
           selectedPageLink = e.target;
@@ -280,6 +282,18 @@ async function fetchRecordAndUpdateUI() {
         });
       });
     }
+
+    // Remove active state from another page links.
+    let activePageLinkEl = paginationContainer.children[0].children[0];
+    paginationContainer.addEventListener("click", (e) => {
+      if (e.target.id === "page-link") {
+        if (activePageLinkEl !== e.target) {
+          activePageLinkEl.classList.remove("active");
+          e.target.classList.add("active");
+          activePageLinkEl = e.target;
+        }
+      }
+    });
 
     toggleElementVisibility(spinner, false, "d-none");
     toggleElementVisibility(mainContainer, false, "d-none");
