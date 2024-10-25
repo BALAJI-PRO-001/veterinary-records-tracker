@@ -23,3 +23,4 @@
   - ### **Super User Dashboard**
     - Method: **GET**
     - Route: **/super-user/dashboard**
+
