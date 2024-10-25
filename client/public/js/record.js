@@ -48,6 +48,14 @@ const deleteUserRecordOkEl = deleteUserRecordModal.querySelector("#ok-element");
 const deleteCowRecordModal = document.getElementById("delete-cow-record-modal");
 const deleteCowRecordOkEl = deleteCowRecordModal.querySelector("#ok-element");
 
+const createNewCowRecordModal = document.getElementById("create-cow-record-modal");
+const createCowRecordBTN = createNewCowRecordModal.querySelector("#create-btn");
+const newCowNameInput = createNewCowRecordModal.querySelector("#name");
+const newBreedInput = createNewCowRecordModal.querySelector("#breed");
+const newBullNameInput = createNewCowRecordModal.querySelector("#bull-name");
+const createCowRecordModalMessageEl = createNewCowRecordModal.querySelector("#message-element");
+
+
 
 /* This function used to reset the update user record modal components to old state */
 function updateUserRecordToUI(user) {
@@ -183,6 +191,18 @@ function resetDeleteCowModalComponents() {
   deleteCowRecordModal.querySelector("#main-content").innerText = "Are you sure you want to delete this cow record, including the injection information and AI (Artificial Insemination) dates?";
   deleteCowRecordOkEl.removeAttribute("hidden");
 }
+
+
+
+function resetCreateNewCowRecordModal() {
+  let components = [newCowNameInput, newBreedInput, newBullNameInput];
+  for (let component of components) {
+    component.classList.remove("is-valid", "is-invalid");
+    component.parentElement.querySelector("#err-message-element").innerText = "";
+  }
+  createCowRecordModalMessageEl.innerText = ""
+}
+
 
 
 function calculatePendingAmount(cows) {
@@ -549,6 +569,42 @@ async function fetchRecordAndUpdateUI() {
       deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
     });
 
+
+    // Create cow record code implementation.
+    createNewCowRecordModal.querySelector("form").reset();
+
+    createNewCowRecordModal.addEventListener("hidden.bs.modal", () => {
+      resetCreateNewCowRecordModal();
+    });
+
+    addValidationListenersToInputElement(newCowNameInput, () => validateInputAndUpdateUI(newCowNameInput));
+    addValidationListenersToInputElement(newBreedInput, () => validateInputAndUpdateUI(newBreedInput));
+    addValidationListenersToInputElement(newBullNameInput, () => validateInputAndUpdateUI(newBullNameInput));
+
+    createCowRecordBTN.addEventListener("click", async (e) => {
+      const isValidName = validateInputAndUpdateUI(newCowNameInput);
+      const isValidBreedName = validateInputAndUpdateUI(newBreedInput);
+      const isValidBullName = validateInputAndUpdateUI(newBullNameInput);
+
+      if (isValidName && isValidBreedName && isValidBullName) {
+        const res = await fetch(`/api/v1/records/${record.user.id}/cows`, {
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+          body: JSON.stringify({
+            name: newCowNameInput.value.trim(),
+            breed: newBreedInput.value.trim(),
+            bullName: newBullNameInput.value.trim()
+          })
+        });
+      }
+      const data = await res.json();
+
+      if (data.statusCode === 401) {
+        createCowRecordModalMessageEl.classList.remove("text-success");
+        createCowRecordModalMessageEl.classList.add("text-danger");
+        return createCowRecordModalMessageEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+      }
+    });
 
   } catch(err) {
     toggleAlertBox(true, "Error: " + err.message);
