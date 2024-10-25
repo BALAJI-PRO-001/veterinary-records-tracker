@@ -123,7 +123,7 @@
             <button type="button" style="width: 30px;" class="btn-close" data-bs-dismiss="modal"></button>  
           </div>  
 
-          <form id="update-user-record-form" class="mx-2">
+          <form id="update-cow-record-form" class="mx-2">
             <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
               <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="Cow Name ....">
               <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
@@ -159,7 +159,7 @@
             <button type="button" style="width: 30px;" class="btn-close" data-bs-dismiss="modal"></button>  
           </div>  
 
-          <form id="update-user-record-form" class="mx-2">
+          <form id="update-inject-info-and-ai-date-form" class="mx-2">
             <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
               <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="Injection name ....">
               <div class="invalid-feedback mt-0 fw-bold"></div>
@@ -279,56 +279,63 @@
 
      <!-- Create cow record modal -->
      <div id="create-cow-record-modal" class="modal fade shadow">
-      <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
-        <div class="modal-content rounded mx-2 p-2" style="margin-top: 50px;">
+      <div class="modal-dialog modal-dialog-centered c-w-f-srp-ccm">
+        <div class="modal-content rounded ms-0 mt-5" style="max-height: 600px;">
           <div class="d-flex justify-content-between align-items-center w-100">
-            <h3 class="c-fs-f-srp-h text-center m-0 w-100 modal-title">Cow Record</h3>
+            <h3 class="c-fs-f-srp-h text-center m-0 mt-2 w-100 modal-title">Cow Record</h3>
             <button type="button" style="width: 30px;" class="btn-close" data-bs-dismiss="modal"></button>  
           </div>  
 
-          <form id="update-user-record-form" class="mx-2">
-            <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
-              <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="Cow Name ....">
-              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
-            </div>  
-            
-            <div class="d-flex flex-column mb-3" style="height: 60px;">
-              <input id="breed" type="text" class="form-control form-control-lg border-2" placeholder="Breed ....">
-              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
-            </div> 
-  
-            <div class="d-flex flex-column mb-3" style="height: 60px;">
-              <input id="bull-name" type="text" class="form-control form-control-lg border-2" placeholder="Bull Name ....">
-              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
-            </div> 
+          <div class="w-100 mb-0 overflow-auto px-3" style="max-height: 600px;">
+            <form class="d-flex flex-column justify-content-evenly">
+              <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
+                <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="Cow name ....">
+                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
+              </div>  
+              
+              <div class="d-flex flex-column mb-3" style="height: 60px;">
+                <input id="breed" type="text" class="form-control form-control-lg border-2" placeholder="Breed ....">
+                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
+              </div> 
+    
+              <div class="d-flex flex-column mb-3" style="height: 60px;">
+                <input id="bull-name" type="text" class="form-control form-control-lg border-2" placeholder="Bull name ....">
+                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
+              </div> 
 
-            <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
-              <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="Injection name ....">
-              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
-            </div>  
-            
-            <div class="d-flex flex-column mb-3" style="height: 60px;">
-              <input id="breed" type="text" class="form-control form-control-lg border-2" placeholder="Injection price ....">
-              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
-            </div> 
-  
-            <div class="d-flex flex-column mb-3" style="height: 60px;">
-              <input id="bull-name" type="text" class="form-control form-control-lg border-2" placeholder="Given Amount ....">
-              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
-            </div> 
+              <div class="d-flex flex-column mb-3" style="height: 60px;">
+                <input id="inject-name" type="text" class="form-control form-control-lg border-2" placeholder="Injection name ....">
+                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
+              </div> 
 
-            <div class="d-flex flex-column mb-3" style="height: 60px;">
-              <input id="bull-name" type="text" class="form-control form-control-lg border-2" placeholder="Given Amount ....">
-              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 3px;"></div>
-            </div> 
+              <div class="d-flex flex-column  mb-3" style="height: 60px;">
+                <input id="inject-price" type="text" class="form-control form-control-lg border-2" placeholder="Injection price ....">
+                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
+              </div>  
+              
+              <div class="d-flex flex-column mb-3" style="height: 60px;">
+                <input id="given-amount" type="text" class="form-control form-control-lg border-2" placeholder="Given amount ....">
+                <div id="err-message-element"  class="invalid-feedback mt-0 fw-bold"></div>
+              </div> 
+    
+              <div class="d-flex flex-column mb-3" style="height: 60px;">
+                <input id="pending-amount" type="text" class="form-control form-control-lg border-2" placeholder="Pending amount ....">
+                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
+              </div> 
+
+              <div class="d-flex flex-column mb-3" style="height: 60px;">
+                <input id="date" type="date" class="form-control form-control-lg border-2">
+                <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
+              </div> 
+            </form>
+          </div>
             
-            <div class="d-flex gap-2 mt-4 flex-wrap">
-              <button id="create-btn" type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Create</button>
-              <button type="button" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
-            </div>
-            
-            <p id="message-element" class="fw-bold text-success mt-3 mb-1"></p>
-          </form>
+          <div class="d-flex gap-2 mt-3 flex-wrap px-3">
+            <button id="create-btn" type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Create</button>
+            <button type="button" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
+          </div>
+          
+          <p id="message-element" class="fw-bold text-success mt-3 mb-1"></p>
         </div>
       </div>
     </div>   
