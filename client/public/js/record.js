@@ -24,7 +24,6 @@ const spinner = document.getElementById("spinner");
 const tableContainer = document.getElementById("table-container");
 const cowActionsBTNContainer = document.getElementById("cow-action-btn-container");
 const cowImgContainer = document.getElementById("cow-img-container");
-const cowInfoContainer = document.getElementById("cow-info-container");
 const doctorImgContainer = document.getElementById("doctor-img-container");
 
 
@@ -250,6 +249,7 @@ async function fetchRecordAndUpdateUI() {
       paginationContainer.children[0].children[0].classList.add("active");
       selectedPageLink = paginationContainer.children[0].children[0].children[0];
 
+
       // Render first injection info and ai date data to ui. 
       doctorImgContainer.classList.remove("d-none");
       if (record.cows[0].injectionInfoAndAiDates.length > 0) {
@@ -281,20 +281,21 @@ async function fetchRecordAndUpdateUI() {
           bullNameInput.value = cow.bullName;
         });
       });
-    }
 
-    // Remove active state from another page links.
-    let activePageItemEl = paginationContainer.children[0].children[0];
-    activePageItemEl.classList.add("active");
-    paginationContainer.addEventListener("click", (e) => {
-      if (e.target.id === "page-link") {
-        if (activePageItemEl !== e.target.parentElement) {
-          activePageItemEl.classList.remove("active");
-          e.target.parentElement.classList.add("active");
-          activePageItemEl = e.target.parentElement;
+
+      // Remove active state from another page links.
+      let activePageItemEl = paginationContainer.children[0].children[0];
+      activePageItemEl.classList.add("active");
+      paginationContainer.addEventListener("click", (e) => {
+        if (e.target.id === "page-link") {
+          if (activePageItemEl !== e.target.parentElement) {
+            activePageItemEl.classList.remove("active");
+            e.target.parentElement.classList.add("active");
+            activePageItemEl = e.target.parentElement;
+          }
         }
-      }
-    });
+      });
+    }
 
     toggleElementVisibility(spinner, false, "d-none");
     toggleElementVisibility(mainContainer, false, "d-none");
@@ -505,32 +506,34 @@ async function fetchRecordAndUpdateUI() {
       deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
       deleteCowRecordOkEl.setAttribute("hidden", "");
       deleteCowRecordOkEl.nextElementSibling.setAttribute("hidden", "");
-      // const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {method: "DELETE"});
+      const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {method: "DELETE"});
 
-      // if (res.status === 401) {
-      //   mainContentEl.classList.add("text-danger");
-      //   mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
-      //   deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
-      //   deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
-      //   return;
-      // }
+      if (res.status === 401) {
+        mainContentEl.classList.add("text-danger");
+        mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+        deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+        deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
+        return;
+      }
 
-      if (true) {
+      if (res.status === 204) {
         deleteCowRecordModal.querySelector("#danger-icon").classList.add("d-none");
         deleteCowRecordModal.querySelector("#success-icon").classList.remove("d-none");
         mainContentEl.classList.remove("text-danger");
         mainContentEl.innerText = "The cow record, including injection information and AI (Artificial Insemination) dates, has been successfully deleted.";
         // Switch to another cow record when current cow is deleted.
-        const currentPageLink = selectedPageLink;
+        const currentPageLink = selectedPageLink
         record.cows.splice(record.cows.indexOf(selectedCow), 1);
         pendingAmountSpan.innerText = calculatePendingAmount(record.cows);
         
         if (record.cows.length <= 0) {
           location.reload();
         }
-
-        if (record.cows.length > 0) {
-          selectedPageLink.parentElement.parentElement.children[0].children[0].click();
+  
+        if (selectedPageLink.parentElement.previousElementSibling) {
+          selectedPageLink.parentElement.previousElementSibling.children[0].click();
+        } else if (selectedPageLink.parentElement.nextElementSibling) {
+          selectedPageLink.parentElement.nextElementSibling.children[0].click();
         }
 
         currentPageLink.parentElement.remove();
