@@ -60,7 +60,7 @@ const injectPriceInput = createNewCowRecordModal.querySelector("#inject-price");
 const givenAmountInput = createNewCowRecordModal.querySelector("#given-amount");
 const pendingAmountInput = createNewCowRecordModal.querySelector("#pending-amount");
 const dateInput = createNewCowRecordModal.querySelector("#date");
-const createCowRecordModalMessageEl = createNewCowRecordModal.querySelector("#message-element");
+const createNewCowRecordModalMessageEl = createNewCowRecordModal.querySelector("#message-element");
 
 
 
@@ -202,12 +202,16 @@ function resetDeleteCowModalComponents() {
 
 
 function resetCreateNewCowRecordModal() {
-  let components = [newCowNameInput, newBreedInput, newBullNameInput];
+  let components = [
+    newCowNameInput, newBreedInput, newBullNameInput, 
+    injectNameInput, injectPriceInput, givenAmountInput, 
+    pendingAmountInput, dateInput
+  ];
   for (let component of components) {
     component.classList.remove("is-valid", "is-invalid");
     component.parentElement.querySelector("#err-message-element").innerText = "";
   }
-  createCowRecordModalMessageEl.innerText = ""
+  createNewCowRecordModalMessageEl.innerText = ""
 }
 
 
@@ -566,6 +570,7 @@ async function fetchRecordAndUpdateUI() {
         currentPageLink.parentElement.remove();
         deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
         deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
+        deleteCowRecordOkEl.nextElementSibling.innerText("Go Back");
         return;
       }
 
@@ -591,8 +596,7 @@ async function fetchRecordAndUpdateUI() {
     addValidationListenersToInputElement(injectPriceInput, () => validateAmountAndUpdateAmountInputUI(injectPriceInput));
     addValidationListenersToInputElement(givenAmountInput, () => validateAmountAndUpdateAmountInputUI(givenAmountInput));
     addValidationListenersToInputElement(pendingAmountInput, () => validateAmountAndUpdateAmountInputUI(pendingAmountInput));
-    addValidationListenersToInputElement();
-
+    addValidationListenersToInputElement(dateInput, () => validateDateAndUpdateDataInputUI(dateInput));
 
 
     createCowRecordBTN.addEventListener("click", async (e) => {
@@ -604,27 +608,53 @@ async function fetchRecordAndUpdateUI() {
       const isValidInjectPrice = validateAmountAndUpdateAmountInputUI(injectPriceInput);
       const isValidGivenAmount = validateAmountAndUpdateAmountInputUI(givenAmountInput);
       const isValidPendingAmount = validateAmountAndUpdateAmountInputUI(pendingAmountInput);
-      const isValidDate = validateDateAndUpdateDataInputUI(dateInput, () => validateDateAndUpdateDataInputUI(dateInput));
+      const isValidDate = validateDateAndUpdateDataInputUI(dateInput);
 
+      if (
+        isValidCowName && isValidBreedName && isValidBullName && 
+        isValidInjectName && isValidInjectPrice && givenAmountInput &&
+        isValidPendingAmount 
+      ) {
+        createNewCowRecordModalMessageEl.innerText = "Creating new cow record ....";
+        const res = await fetch(`/api/v1/records/${record.user.id}/cows`, {
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+          body: JSON.stringify({
+            name: newCowNameInput.value.trim(),
+            breed: newBreedInput.value.trim(),
+            bullName: newBullNameInput.value.trim(),
+            injectionInfoAndAiDates: [
+              {
+                name: injectNameInput.value.trim(),
+                price: Number(injectPriceInput.value.trim()),
+                givenAmount: Number(givenAmountInput.value.trim()),
+                pendingAmount: Number(pendingAmountInput.value.trim()),
+                date: "12/02/2004"
+              }
+            ]
+          })
+        });
+        const data = await res.json();
 
-      // if (isValidName && isValidBreedName && isValidBullName) {
-      //   const res = await fetch(`/api/v1/records/${record.user.id}/cows`, {
-      //     headers: { "Content-Type": "application/json" },
-      //     method: "POST",
-      //     body: JSON.stringify({
-      //       name: newCowNameInput.value.trim(),
-      //       breed: newBreedInput.value.trim(),
-      //       bullName: newBullNameInput.value.trim()
-      //     })
-      //   });
-      // }
-      // const data = await res.json();
-
-      // if (data.statusCode === 401) {
-      //   createCowRecordModalMessageEl.classList.remove("text-success");
-      //   createCowRecordModalMessageEl.classList.add("text-danger");
-      //   return createCowRecordModalMessageEl.innerText = "Your session has expired. Please log out and log back in to continue.";
-      // }
+        if (data.statusCode === 401) {
+          createNewCowRecordModalMessageEl.classList.remove("text-success");
+          createNewCowRecordModalMessageEl.classList.add("text-danger");
+          return createNewCowRecordModalMessageEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+        }
+  
+        if (data.statusCode === 201) {
+          createNewCowRecordModalMessageEl.innerText = "Cow record created successfully.";
+          setTimeout(() => {
+            location.reload();
+          }, 1000);
+          return;
+        }
+  
+        // If any possible error while create cow record
+        createNewCowRecordModalMessageEl.classList.remove("text-success");
+        createNewCowRecordModalMessageEl.classList.add("text-danger");
+        createNewCowRecordModalMessageEl.innerText = "Error: " + data.message;
+      }
     });
 
   } catch(err) {
