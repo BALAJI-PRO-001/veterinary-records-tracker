@@ -13,8 +13,10 @@
     {{HEADER}}
     <div id="alert-box" class="alert alert-danger d-none fw-bold fs-6" role="alert"></div>
 
-    <div class="spinner-border text-primary" role="status"></div>
-    <span class="sr-only">Loading...</span>
+    <div id="spinner" class="d-flex d-none align-items-center justify-content-center gap-3 mx-auto position-absolute top-50 start-50 translate-middle">
+        <p class="fw-bold fs-5 m-0">Loading</p>
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
 
     <div class="container-fluid overflow-auto main-container">
         <div class="content d-flex flex-wrap justify-content-evenly" id="content-container">
