@@ -37,12 +37,12 @@
 }
 
 .btn-hover-success:hover {
-  background-color: #198754;
+  background-color: #198754 !important;
   color: white !important;
 }
 
 .btn-hover-danger:hover {
-  background-color: #dc3545;
+  background-color: #dc3545 !important;
   color: white !important;
 }
 
