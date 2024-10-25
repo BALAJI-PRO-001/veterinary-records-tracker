@@ -4,12 +4,12 @@
   font-family: "Poppins", sans-serif;
 }
 
-input + p {
-  font-size: 13px;
-  letter-spacing: 1px;
-  font-weight: 900;
+@media screen and (max-width: 1220px) {
+  #err-message-element {
+    font-size: 10px !important;
+    font-weight: 550 !important;
+  }
 }
-
 
 @media screen and (max-width: 768px){
 
