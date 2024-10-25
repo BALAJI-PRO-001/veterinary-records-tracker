@@ -5,6 +5,8 @@ const EMAIL_REGEX_PATTERN = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
 const SPECIAL_CHARACTER_REGEX_PATTERN = /[^a-zA-Z0-9\s]/;
 const UPPERCASE_REGEX_PATTERN = /[A-Z]/;
 const SPACE_REGEX_PATTERN = /\s/;
+const AMOUNT_REGEX_PATTERN = /^\d+(\.\d+)?$/;
+const DATE_REGEX_PATTERN = /^(0[1-9]|[12][0-9]|3[01])(\/|-)(0[1-9]|1[0-2])(\/|-)(19|20)\d{2}$/;
 
 
 export function isValidEmail(email) {
@@ -27,7 +29,7 @@ export function isValidPassword(password) {
   }
 
   if (password === "") {
-    return { isValid: false, message: "Password field is required." };
+    return { isValid: false, message: "Required." };
   }
 
   if (!UPPERCASE_REGEX_PATTERN.test(password)) {
@@ -61,7 +63,7 @@ export function isValidName(name) {
   }
 
   if (name === "") {
-    return { isValid: false, message: "Name field is required."};
+    return { isValid: false, message: "Required."};
   }
 
   return { isValid: true };
@@ -76,7 +78,7 @@ export function isValidPhoneNumber(phoneNumber) {
 
   phoneNumber = String(phoneNumber);
   if (phoneNumber == "") {
-    return { isValid: false, message: "Phone number field is required."};
+    return { isValid: false, message: "Required."};
   }
 
   if (!PHONE_NUMBER_REGEX_PATTERN.test(phoneNumber)) {
@@ -98,7 +100,7 @@ export function isValidAddress(address) {
   }
 
   if (address === "") {
-    return { isValid: false, message: "Address field is required."};
+    return { isValid: false, message: "Required."};
   }
 
   return { isValid: true };
@@ -112,7 +114,43 @@ export function isEmpty(string) {
   }
 
   if (string === "") {
-    return { isValid: false, message: "This field is required."};
+    return { isValid: false, message: "Required."};
+  }
+
+  return { isValid: true };
+}
+
+
+
+export function isValidAmount(amount) {
+  if (amount === undefined || amount === null) {
+    throw new Error("Amount is null or undefined.");
+  }
+
+  if (amount === "") {
+    return { isValid: false, message: "Required."};
+  }
+
+  if (!AMOUNT_REGEX_PATTERN.test(amount)) {
+    return { isValid: false, message: "Invalid amount."};
+  } 
+
+  return { isValid: true };
+}
+
+
+
+export function isValidDate(date) {
+  if (date === undefined || date === null) {
+    throw new Error("Date is null or undefined.");
+  }
+
+  if (date === "") {
+    return { isValid: false, message: "Required." };
+  }
+
+  if (!DATE_REGEX_PATTERN.test(date)) {
+    return { isValid: false, message: "Invalid Date."};
   }
 
   return { isValid: true };
