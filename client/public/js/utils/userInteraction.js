@@ -1,4 +1,4 @@
-import { isEmpty, isValidAddress, isValidEmail, isValidName, isValidPassword, isValidPhoneNumber } from "./validator.js";
+import { isEmpty, isValidAddress, isValidAmount, isValidDate, isValidEmail, isValidName, isValidPassword, isValidPhoneNumber } from "./validator.js";
 
 
 
@@ -181,9 +181,59 @@ export function validateInputAndUpdateUI(inputElement) {
 
 
 
+export function validateAmountAndUpdateAmountInputUI(amountInputElement) {
+  if (amountInputElement === null || amountInputElement === undefined) {
+    throw new Error("Element is null or undefined.");
+  }
+
+  if (!(amountInputElement instanceof HTMLElement)) {
+    throw new Error(`Expected an HTMLElement, but got (${typeof element}).`);
+  }
+
+  const { isValid, message } = isValidAmount(amountInputElement.value.trim());
+  const errMessageElement = amountInputElement.parentElement.querySelector("#err-message-element");
+
+  if (!isValid) {
+    amountInputElement.classList.add("is-invalid");
+    errMessageElement.textContent = message;
+    return false;
+  }
+
+  amountInputElement.classList.remove("is-invalid");
+  amountInputElement.classList.add("is-valid");
+  errMessageElement.textContent = "";
+  return true;
+}
+
+
+
+export function validateDateAndUpdateDataInputUI(dateInputElement) {
+  if (dateInputElement === null || dateInputElement === undefined) {
+    throw new Error("Element is null or undefined.");
+  }
+
+  if (!(dateInputElement instanceof HTMLElement)) {
+    throw new Error(`Expected an HTMLElement, but got (${typeof element}).`);
+  }
+
+  const { isValid, message } = isValidDate(dateInputElement.value.trim());
+  const errMessageElement = dateInputElement.parentElement.querySelector("#err-message-element");
+
+  if (!isValid) {
+    dateInputElement.classList.add("is-invalid");
+    errMessageElement.textContent = message;
+    return false;
+  }
+
+  dateInputElement.classList.remove("is-invalid");
+  dateInputElement.classList.add("is-valid");
+  errMessageElement.textContent = "";
+  return true;
+}
+
+
 
 export function setIcon(element, oldClass, newClass) {
-
   if(!element) {
     throw new Error("Element not found")
   }
@@ -197,6 +247,8 @@ export function setIcon(element, oldClass, newClass) {
     element.classList.add(oldClass);
   }
 }
+
+
 
 
 export function setType(element,oldType,newType) {
