@@ -4,7 +4,9 @@ import {
   validateAddressAndUpdateAddressInputUI, 
   validateNameAndUpdateNameInputUI, 
   validatePhoneNumberAndUpdatePhoneNumberInputUI,
-  validateInputAndUpdateUI
+  validateInputAndUpdateUI,
+  validateAmountAndUpdateAmountInputUI,
+  validateDateAndUpdateDataInputUI
 } from "./utils/userInteraction.js";
 
 
@@ -53,6 +55,11 @@ const createCowRecordBTN = createNewCowRecordModal.querySelector("#create-btn");
 const newCowNameInput = createNewCowRecordModal.querySelector("#name");
 const newBreedInput = createNewCowRecordModal.querySelector("#breed");
 const newBullNameInput = createNewCowRecordModal.querySelector("#bull-name");
+const injectNameInput = createNewCowRecordModal.querySelector("#inject-name");
+const injectPriceInput = createNewCowRecordModal.querySelector("#inject-price");
+const givenAmountInput = createNewCowRecordModal.querySelector("#given-amount");
+const pendingAmountInput = createNewCowRecordModal.querySelector("#pending-amount");
+const dateInput = createNewCowRecordModal.querySelector("#date");
 const createCowRecordModalMessageEl = createNewCowRecordModal.querySelector("#message-element");
 
 
@@ -580,30 +587,44 @@ async function fetchRecordAndUpdateUI() {
     addValidationListenersToInputElement(newCowNameInput, () => validateInputAndUpdateUI(newCowNameInput));
     addValidationListenersToInputElement(newBreedInput, () => validateInputAndUpdateUI(newBreedInput));
     addValidationListenersToInputElement(newBullNameInput, () => validateInputAndUpdateUI(newBullNameInput));
+    addValidationListenersToInputElement(injectNameInput, () => validateInputAndUpdateUI(injectNameInput));
+    addValidationListenersToInputElement(injectPriceInput, () => validateAmountAndUpdateAmountInputUI(injectPriceInput));
+    addValidationListenersToInputElement(givenAmountInput, () => validateAmountAndUpdateAmountInputUI(givenAmountInput));
+    addValidationListenersToInputElement(pendingAmountInput, () => validateAmountAndUpdateAmountInputUI(pendingAmountInput));
+    addValidationListenersToInputElement();
+
+
 
     createCowRecordBTN.addEventListener("click", async (e) => {
-      const isValidName = validateInputAndUpdateUI(newCowNameInput);
+      e.preventDefault();
+      const isValidCowName = validateInputAndUpdateUI(newCowNameInput);
       const isValidBreedName = validateInputAndUpdateUI(newBreedInput);
       const isValidBullName = validateInputAndUpdateUI(newBullNameInput);
+      const isValidInjectName = validateInputAndUpdateUI(injectNameInput);
+      const isValidInjectPrice = validateAmountAndUpdateAmountInputUI(injectPriceInput);
+      const isValidGivenAmount = validateAmountAndUpdateAmountInputUI(givenAmountInput);
+      const isValidPendingAmount = validateAmountAndUpdateAmountInputUI(pendingAmountInput);
+      const isValidDate = validateDateAndUpdateDataInputUI(dateInput, () => validateDateAndUpdateDataInputUI(dateInput));
 
-      if (isValidName && isValidBreedName && isValidBullName) {
-        const res = await fetch(`/api/v1/records/${record.user.id}/cows`, {
-          headers: { "Content-Type": "application/json" },
-          method: "POST",
-          body: JSON.stringify({
-            name: newCowNameInput.value.trim(),
-            breed: newBreedInput.value.trim(),
-            bullName: newBullNameInput.value.trim()
-          })
-        });
-      }
-      const data = await res.json();
 
-      if (data.statusCode === 401) {
-        createCowRecordModalMessageEl.classList.remove("text-success");
-        createCowRecordModalMessageEl.classList.add("text-danger");
-        return createCowRecordModalMessageEl.innerText = "Your session has expired. Please log out and log back in to continue.";
-      }
+      // if (isValidName && isValidBreedName && isValidBullName) {
+      //   const res = await fetch(`/api/v1/records/${record.user.id}/cows`, {
+      //     headers: { "Content-Type": "application/json" },
+      //     method: "POST",
+      //     body: JSON.stringify({
+      //       name: newCowNameInput.value.trim(),
+      //       breed: newBreedInput.value.trim(),
+      //       bullName: newBullNameInput.value.trim()
+      //     })
+      //   });
+      // }
+      // const data = await res.json();
+
+      // if (data.statusCode === 401) {
+      //   createCowRecordModalMessageEl.classList.remove("text-success");
+      //   createCowRecordModalMessageEl.classList.add("text-danger");
+      //   return createCowRecordModalMessageEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+      // }
     });
 
   } catch(err) {
