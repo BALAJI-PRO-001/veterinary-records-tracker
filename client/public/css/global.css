@@ -81,12 +81,18 @@
 
 
 @media screen and (max-width: 301px) {
-  .c-w-f-srp-b {
-    width: 100% !important;
-  }
-
   .c-fs-f-err-message {
     font-size: 10px !important;
+  }
+}
+
+@media screen and (max-width: 313px) {
+  .c-fs-f-err-message {
+    font-size: 10px !important;
+  }
+
+  .c-w-f-srp-b {
+    width: 100% !important;
   }
 }
 

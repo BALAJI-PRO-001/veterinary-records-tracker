@@ -21,6 +21,13 @@
     <div class="spinner-border text-primary" role="status"></div>
   </div>  
 
+  <!-- Custom popup menu -->
+  <div id="popup-menu" class="d-flex p-2 gap-2 flex-column position-absolute rounded border bg-white d-none c-fs-f-srp-p" style="min-width: 100px; z-index: 5000;">
+    <p class="m-0 ps-2 text-success cursor-pointer" data-bs-toggle="modal" data-bs-target="#update-inject-info-and-ai-date-modal">Add</p>
+    <p class="m-0 ps-2 text-success cursor-pointer" data-bs-toggle="modal" data-bs-target="#update-inject-info-and-ai-date-modal">Edit</p>
+    <p class="m-0 ps-2 text-danger cursor-pointer" data-bs-toggle="modal" data-bs-target="#delete-inject-info-and-ai-date-modal">Delete</p>
+  </div>
+
   <main id="main-container" class="mx-3 mt-5 d-none">
     <div class="shadow border rounded mt-5 mx-auto p-1 position-relative" style="min-height: 500px; max-width: 1000px;">
       <h4 class="mt-2 ms-2 mb-0 c-fs-f-srp-h">Customer Details</h4>
@@ -340,11 +347,6 @@
       </div>
     </div>   
 
-    <!-- Custom popup menu -->
-    <div id="popup-menu" class="d-flex p-2 gap-2 flex-column position-absolute rounded border bg-white d-none c-fs-f-srp-p" style="min-width: 100px; z-index: 2000;">
-      <p class="m-0 text-success cursor-pointer" data-bs-toggle="modal" data-bs-target="#update-inject-info-and-ai-date-modal">Edit</p>
-      <p class="m-0 text-danger cursor-pointer" data-bs-toggle="modal" data-bs-target="#delete-inject-info-and-ai-date-modal">Delete</p>
-    </div>
   </div>
   <script src="/js/record.js" type="module"></script>
 </body>
