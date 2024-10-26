@@ -1,5 +1,7 @@
 import { toggleElementVisibility } from "./utils/userInteraction.js";
 
+
+
 const contentContainer = document.getElementById("content-container");
 const spinner = document.getElementById("spinner");
 
@@ -9,7 +11,6 @@ function calculatePendingAmount(cows) {
   if (cows === null || cows === undefined) {
     throw new Error("Cows is null or undefined.");
   }
-
   const pendingAmount = cows.map((cow) => {
     const amounts = cow.injectionInfoAndAiDates.map(({pendingAmount}) => {
       return pendingAmount;
@@ -29,7 +30,6 @@ async function fetchRecordAndUpdateUI() {
     const data = await res.json();
     toggleElementVisibility(spinner, true, "d-none");
     data.data.records.forEach((data) => {
-      console.log(data);
       const details = `
         <a class="rounded-2 bg-white p-2 shadow m-3 d-flex justify-content-around align-items-center text-decoration-none text-black" style="width: 300px; height: 60px; font-weight: 600;" href="/record/${data.user.id}">
           <span>1.</span>
@@ -43,5 +43,7 @@ async function fetchRecordAndUpdateUI() {
     console.log(err);
   }
 }
+
+
 
 fetchRecordAndUpdateUI();
