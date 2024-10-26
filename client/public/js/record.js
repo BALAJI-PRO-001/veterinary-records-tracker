@@ -27,7 +27,7 @@ const tableContainer = document.getElementById("table-container");
 const cowActionsBTNContainer = document.getElementById("cow-action-btn-container");
 const cowImgContainer = document.getElementById("cow-img-container");
 const doctorImgContainer = document.getElementById("doctor-img-container");
-
+const popupMenu = document.getElementById("popup-menu");
 
 const updateUserRecordModal = document.getElementById("update-user-record-modal");
 const userNameInput = updateUserRecordModal.querySelector("#name");
@@ -661,6 +661,24 @@ async function fetchRecordAndUpdateUI() {
         createNewCowRecordModalMessageEl.innerText = "Error: " + data.message;
       }
     });
+
+
+    // Popup code implementation
+    tableContainer.addEventListener("click", (e) => {
+      if (e.target.parentElement.id === "table-row") {
+        popupMenu.classList.remove("d-none");
+        popupMenu.style.left = `${e.clientX - 100}px`;
+        popupMenu.style.top = `${e.clientY - 40}px`;
+      }
+    });
+
+    // document.addEventListener('click', (event) => {
+    //   const isOutsideClick = !event.target.closest('.table-row') && !event.target.closest('#popupMenu');
+      
+    //   if (isOutsideClick) {
+    //     popupMenu.classList.add("d-none"); // Hide the popup
+    //   }
+    // });
 
   } catch(err) {
     toggleAlertBox(true, "Error: " + err.message);
