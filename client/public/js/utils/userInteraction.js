@@ -216,7 +216,9 @@ export function validateDateAndUpdateDataInputUI(dateInputElement) {
     throw new Error(`Expected an HTMLElement, but got (${typeof element}).`);
   }
 
-  const { isValid, message } = isValidDate(String(dateInputElement.value).trim());
+  const date = dateInputElement.value.split("-").reverse().join("/").trim();
+  console.log(date);
+  const { isValid, message } = isValidDate(date);
   const errMessageElement = dateInputElement.parentElement.querySelector("#err-message-element");
 
   if (!isValid) {
