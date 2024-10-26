@@ -31,7 +31,7 @@ async function fetchRecordAndUpdateUI() {
     toggleElementVisibility(spinner, true, "d-none");
     data.data.records.forEach((data) => {
       const details = `
-        <a class="rounded-2 bg-white p-2 shadow m-3 d-flex justify-content-around align-items-center text-decoration-none text-black" style="width: 300px; height: 60px; font-weight: 600;" href="/record/${data.user.id}">
+        <a class="rounded-2 bg-white p-2 shadow m-2 mt-3 d-flex justify-content-around align-items-center text-decoration-none text-black" style="min-width: 300px; width: 320px; height: 60px; font-weight: 600;" href="/record/${data.user.id}">
           <span>1.</span>
           <span class="text-truncate" style="max-width: 150px;">${data.user.name}</span>
           <span class="text-success">₹${calculatePendingAmount(data.cows)}</span>
