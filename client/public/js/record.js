@@ -530,6 +530,7 @@ async function fetchRecordAndUpdateUI() {
     // Delete cow record code implementation.
     deleteCowRecordModal.addEventListener("hidden.bs.modal", () => {
       resetDeleteCowModalComponents();
+      deleteCowRecordOkEl.nextElementSibling.innerText = "Cancel";
     });
 
     deleteCowRecordOkEl.addEventListener("click", async () => {
@@ -570,7 +571,7 @@ async function fetchRecordAndUpdateUI() {
         currentPageLink.parentElement.remove();
         deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
         deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
-        deleteCowRecordOkEl.nextElementSibling.innerText("Go Back");
+        deleteCowRecordOkEl.nextElementSibling.innerText = "Go Back";
         return;
       }
 
