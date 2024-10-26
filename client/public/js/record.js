@@ -672,13 +672,11 @@ async function fetchRecordAndUpdateUI() {
       }
     });
 
-    // document.addEventListener('click', (event) => {
-    //   const isOutsideClick = !event.target.closest('.table-row') && !event.target.closest('#popupMenu');
-      
-    //   if (isOutsideClick) {
-    //     popupMenu.classList.add("d-none"); // Hide the popup
-    //   }
-    // });
+    document.addEventListener('click', (e) => {
+      if (e.target.nodeName !== "TD") {
+        popupMenu.classList.add("d-none");
+      }
+    });
 
   } catch(err) {
     toggleAlertBox(true, "Error: " + err.message);
