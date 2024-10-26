@@ -589,6 +589,10 @@ async function fetchRecordAndUpdateUI() {
       resetCreateNewCowRecordModal();
     });
 
+    createNewCowRecordModal.addEventListener('shown.bs.modal', () => {
+      newCowNameInput.focus();
+    });
+
     addValidationListenersToInputElement(newCowNameInput, () => validateInputAndUpdateUI(newCowNameInput));
     addValidationListenersToInputElement(newBreedInput, () => validateInputAndUpdateUI(newBreedInput));
     addValidationListenersToInputElement(newBullNameInput, () => validateInputAndUpdateUI(newBullNameInput));
@@ -613,7 +617,7 @@ async function fetchRecordAndUpdateUI() {
       if (
         isValidCowName && isValidBreedName && isValidBullName && 
         isValidInjectName && isValidInjectPrice && givenAmountInput &&
-        isValidPendingAmount 
+        isValidPendingAmount && isValidDate
       ) {
         createNewCowRecordModalMessageEl.innerText = "Creating new cow record ....";
         const res = await fetch(`/api/v1/records/${record.user.id}/cows`, {
@@ -629,7 +633,7 @@ async function fetchRecordAndUpdateUI() {
                 price: Number(injectPriceInput.value.trim()),
                 givenAmount: Number(givenAmountInput.value.trim()),
                 pendingAmount: Number(pendingAmountInput.value.trim()),
-                date: "12/02/2004"
+                date: dateInput.value.split("-").reverse().join("/").trim()
               }
             ]
           })
