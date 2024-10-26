@@ -217,7 +217,6 @@ export function validateDateAndUpdateDataInputUI(dateInputElement) {
   }
 
   const date = dateInputElement.value.split("-").reverse().join("/").trim();
-  console.log(date);
   const { isValid, message } = isValidDate(date);
   const errMessageElement = dateInputElement.parentElement.querySelector("#err-message-element");
 
