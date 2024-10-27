@@ -49,7 +49,8 @@ const deleteUserRecordModal = document.getElementById("delete-user-record-modal"
 const deleteUserRecordOkEl = deleteUserRecordModal.querySelector("#ok-element");
 
 const deleteCowRecordModal = document.getElementById("delete-cow-record-modal");
-const deleteCowRecordOkEl = deleteCowRecordModal.querySelector("#ok-element");
+const deleteCowRecordModalOkEl = deleteCowRecordModal.querySelector("#ok-element");
+const deleteCowRecordModalCheckBox = deleteCowRecordModal.querySelector("#checkbox");
 
 const createNewCowRecordModal = document.getElementById("create-cow-record-modal");
 const createCowRecordBTN = createNewCowRecordModal.querySelector("#create-btn");
@@ -206,7 +207,7 @@ function resetDeleteCowModalComponents() {
   deleteCowRecordModal.querySelector("#danger-icon").classList.remove("d-none");
   deleteCowRecordModal.querySelector("#success-icon").classList.add("d-none");
   deleteCowRecordModal.querySelector("#main-content").innerText = "Are you sure you want to delete this cow record, including the injection information and AI (Artificial Insemination) dates?";
-  deleteCowRecordOkEl.removeAttribute("hidden");
+  deleteCowRecordModalOkEl.removeAttribute("hidden");
 }
 
 
@@ -553,21 +554,25 @@ async function fetchRecordAndUpdateUI() {
     // Delete cow record code implementation.
     deleteCowRecordModal.addEventListener("hidden.bs.modal", () => {
       resetDeleteCowModalComponents();
-      deleteCowRecordOkEl.nextElementSibling.innerText = "Cancel";
+      deleteCowRecordModalOkEl.nextElementSibling.innerText = "Cancel";
     });
 
-    deleteCowRecordOkEl.addEventListener("click", async () => {
+    deleteCowRecordModalCheckBox.addEventListener("change", (e) => {
+      console.log(e.target.checked);
+    });
+
+    deleteCowRecordModalOkEl.addEventListener("click", async () => {
       const mainContentEl = deleteCowRecordModal.querySelector("#main-content");
-      deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
-      deleteCowRecordOkEl.setAttribute("hidden", "");
-      deleteCowRecordOkEl.nextElementSibling.setAttribute("hidden", "");
+      deleteCowRecordModalOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
+      deleteCowRecordModalOkEl.setAttribute("hidden", "");
+      deleteCowRecordModalOkEl.nextElementSibling.setAttribute("hidden", "");
       const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {method: "DELETE"});
 
       if (res.status === 401) {
         mainContentEl.classList.add("text-danger");
         mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
-        deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
-        deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
+        deleteCowRecordModalOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+        deleteCowRecordModalOkEl.nextElementSibling.removeAttribute("hidden");
         return;
       }
 
@@ -592,17 +597,17 @@ async function fetchRecordAndUpdateUI() {
         }
 
         currentPageLink.parentElement.remove();
-        deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
-        deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
-        deleteCowRecordOkEl.nextElementSibling.innerText = "Go Back";
+        deleteCowRecordModalOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+        deleteCowRecordModalOkEl.nextElementSibling.removeAttribute("hidden");
+        deleteCowRecordModalOkEl.nextElementSibling.innerText = "Go Back";
         return;
       }
 
       // If possible error while deleting cow record.
       mainContentEl.classList.add("text-danger");
       mainContentEl.innerText = "Error: " + data.message;
-      deleteCowRecordOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
-      deleteCowRecordOkEl.nextElementSibling.removeAttribute("hidden");
+      deleteCowRecordModalOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+      deleteCowRecordModalOkEl.nextElementSibling.removeAttribute("hidden");
     });
 
 
@@ -640,7 +645,7 @@ async function fetchRecordAndUpdateUI() {
 
       if (
         isValidCowName && isValidBreedName && isValidBullName && 
-        isValidInjectName && isValidInjectPrice && givenAmountInput &&
+        isValidInjectName && isValidInjectPrice && isValidGivenAmount &&
         isValidPendingAmount && isValidDate
       ) {
         createNewCowRecordModalMessageEl.innerText = "Creating new cow record ....";
@@ -774,7 +779,7 @@ async function fetchRecordAndUpdateUI() {
           }, 1500);
         }
 
-              // If any possible error while creating record.
+        // If any possible error while creating record.
         createNewInjectInfoAndAiDateModalMessageEl.classList.remove("text-success");
         createNewInjectInfoAndAiDateModalMessageEl.classList.add("text-danger");
         createNewInjectInfoAndAiDateModalMessageEl.innerText = "Error: " + data.message;
