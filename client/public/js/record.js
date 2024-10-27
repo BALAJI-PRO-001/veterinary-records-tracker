@@ -93,6 +93,7 @@ function updateCowRecordToUI(cow) {
 
   cowNameAndBreedSpan.previousElementSibling.classList.remove("d-none");
   bullNameSpan.previousElementSibling.classList.remove("d-none");
+  pendingAmountSpan.parentElement.classList.remove("d-none");
   cowNameAndBreedSpan.innerText = cow.name + " - " + cow.breed;
   bullNameSpan.innerText = cow.bullName;
 }
@@ -248,6 +249,7 @@ function calculatePendingAmount(cows) {
   });
   return pendingAmount.reduce((total, amount) => total + amount, 0)
 }
+
 
 
 async function fetchRecordAndUpdateUI() {
