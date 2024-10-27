@@ -62,6 +62,14 @@ const pendingAmountInput = createNewCowRecordModal.querySelector("#pending-amoun
 const dateInput = createNewCowRecordModal.querySelector("#date");
 const createNewCowRecordModalMessageEl = createNewCowRecordModal.querySelector("#message-element");
 
+const createNewInjectInfoAndAiDateModal = document.getElementById("create-inject-info-and-ai-date-modal");
+const newInjectNameInput = createNewInjectInfoAndAiDateModal.querySelector("#inject-name");
+const newInjectPriceInput = createNewInjectInfoAndAiDateModal.querySelector("#inject-price");
+const newGivenAmountInput = createNewInjectInfoAndAiDateModal.querySelector("#given-amount");
+const newPendingAmountInput = createNewInjectInfoAndAiDateModal.querySelector("#pending-amount");
+const newDateInput = createNewInjectInfoAndAiDateModal.querySelector("#date");
+const createNewInjectInfoAndAiDateModalMessageEl = createNewInjectInfoAndAiDateModal.querySelector("#message-element");
+const createNewInjectInfoAndAiDateBTN = createNewInjectInfoAndAiDateModal.querySelector("#create-btn");
 
 
 /* This function used to reset the update user record modal components to old state */
@@ -214,6 +222,16 @@ function resetCreateNewCowRecordModal() {
   createNewCowRecordModalMessageEl.innerText = ""
 }
 
+
+
+function resetCreateNewInjectInfoAndAiDateModalComponents() {
+  let components = [newInjectNameInput, newInjectPriceInput, newGivenAmountInput, newPendingAmountInput, newDateInput];
+  for (let component of components) {
+    component.classList.remove("is-valid", "is-invalid");
+    component.parentElement.querySelector("#err-message-element").innerText = "";
+  }
+  createNewInjectInfoAndAiDateModalMessageEl.innerText = ""
+}
 
 
 function calculatePendingAmount(cows) {
@@ -668,13 +686,93 @@ async function fetchRecordAndUpdateUI() {
       if (e.target.parentElement.id === "table-row") {
         popupMenu.classList.remove("d-none");
         popupMenu.style.left = `${e.clientX - 100}px`;
-        popupMenu.style.top = `${e.clientY - 40}px`;
+        popupMenu.style.top = `${e.clientY - 60}px`;
       }
     });
 
     document.addEventListener('click', (e) => {
       if (e.target.nodeName !== "TD") {
         popupMenu.classList.add("d-none");
+      }
+    });
+
+
+    // Add new injection record code implementation
+    createNewInjectInfoAndAiDateModal.querySelector("form").reset();
+
+    createNewInjectInfoAndAiDateModal.addEventListener("hidden.bs.modal", () => {
+      resetCreateNewInjectInfoAndAiDateModalComponents();
+    });
+
+    createNewInjectInfoAndAiDateModal.querySelector("#reset-btn").addEventListener("click", () => {
+      resetCreateNewInjectInfoAndAiDateModalComponents();
+    });
+
+    addValidationListenersToInputElement(newInjectNameInput, () => validateInputAndUpdateUI(newInjectNameInput));
+    addValidationListenersToInputElement(newInjectPriceInput, () => validateAmountAndUpdateAmountInputUI(newInjectPriceInput));
+    addValidationListenersToInputElement(newGivenAmountInput, () => validateAmountAndUpdateAmountInputUI(newGivenAmountInput));
+    addValidationListenersToInputElement(newPendingAmountInput, () => validateAmountAndUpdateAmountInputUI(newPendingAmountInput));
+    addValidationListenersToInputElement(newDateInput, () => validateDateAndUpdateDataInputUI(newDateInput));
+
+    createNewInjectInfoAndAiDateBTN.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const isValidInjectName = validateInputAndUpdateUI(newInjectNameInput);
+      const isValidInjectPrice = validateAmountAndUpdateAmountInputUI(newInjectPriceInput);
+      const isValidGivenAmount = validateAmountAndUpdateAmountInputUI(newGivenAmountInput);
+      const isValidPendingAmount = validateAmountAndUpdateAmountInputUI(newPendingAmountInput);
+      const isValidDate = validateDateAndUpdateDataInputUI(newDateInput);
+
+      if (
+        isValidInjectName && isValidInjectPrice && isValidGivenAmount &&
+        isValidPendingAmount && isValidDate
+      ) {
+        createNewInjectInfoAndAiDateModalMessageEl.innerText = "Creating new injection record ....";
+        const newInjectionInfoAndAiDates = {
+          name: newInjectNameInput.value,
+          price: Number(newInjectPriceInput.value),
+          givenAmount: Number(newGivenAmountInput.value),
+          pendingAmount: Number(newPendingAmountInput.value),
+          date: newDateInput.value.split("-").reverse().join("/")
+        };
+
+        const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}/inject-info-ai-dates`, {
+          headers: { "Content-Type": "application/json" },
+          method: "POST",
+          body: JSON.stringify(newInjectionInfoAndAiDates)
+        });
+        const data = await res.json();
+        
+        if (data.statusCode === 401) {
+          createNewInjectInfoAndAiDateModalMessageEl.classList.remove("text-success");
+          createNewInjectInfoAndAiDateModalMessageEl.classList.add("text-danger");
+          return createNewInjectInfoAndAiDateModalMessageEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+        }
+
+        if (data.statusCode === 201) {
+          createNewInjectInfoAndAiDateModalMessageEl.classList.remove("text-danger");
+          createNewInjectInfoAndAiDateModalMessageEl.classList.add("text-success");
+          createNewInjectInfoAndAiDateModalMessageEl.innerText = "New injection record created successfully.";
+
+          return setTimeout(() => {
+            createNewInjectInfoAndAiDateModalMessageEl.innerText = "";
+            resetCreateNewInjectInfoAndAiDateModalComponents();
+            doctorImgContainer.classList.add("d-none");
+            const injectionInfoAndAiDatesTable = tableContainer.children[1];
+            const newInjectionInfoAndAiDatesTable = createDynamicInjectionInfoAndAiDatesTable([newInjectionInfoAndAiDates]);
+            record.cows.find((cow) => cow.id === selectedCow.id).injectionInfoAndAiDates.push(newInjectionInfoAndAiDates);
+
+            if (!injectionInfoAndAiDatesTable) {
+              tableContainer.appendChild(newInjectionInfoAndAiDatesTable);
+            } else {
+              tableContainer.children[1].children[1].append(...newInjectionInfoAndAiDatesTable.children[1].children);
+            }
+          }, 1500);
+        }
+
+              // If any possible error while creating record.
+        createNewInjectInfoAndAiDateModalMessageEl.classList.remove("text-success");
+        createNewInjectInfoAndAiDateModalMessageEl.classList.add("text-danger");
+        createNewInjectInfoAndAiDateModalMessageEl.innerText = "Error: " + data.message;
       }
     });
 
