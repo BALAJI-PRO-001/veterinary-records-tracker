@@ -22,7 +22,7 @@
   width: 3rem;
 }
 
-.header .logo > img {
+.header .logo > a,img {
   height: 100%;
   width: 100%;
 }
