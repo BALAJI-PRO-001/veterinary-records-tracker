@@ -4,14 +4,29 @@ import { logout } from "./utils/common.js";
 const downloadBTN = document.getElementById("download");
 const logoutBTN = document.getElementById("logout");
 const toggleBTN =  document.getElementById("toggler");
+const allChild = document.querySelectorAll("header ~ *");
+
+console.log(allChild);
+
+allChild.forEach((element) => {
+    element.addEventListener("click" , () => {
+        const icon = document.getElementById("bars");
+        navigationMenu.classList.add("d-none");  
+        setIcon(icon,'fa-bars','fa-times')
+    })
+})
 
 const navigationMenu = document.getElementById("toggle-menu");
+
+
 
 toggleBTN.addEventListener("click",() => {
     const icon = document.getElementById("bars");
     navigationMenu.classList.toggle("d-none");  
     setIcon(icon,'fa-bars','fa-times')
 })
+
+
 
 downloadBTN.addEventListener("click",() => {
     location.href = "/home"
