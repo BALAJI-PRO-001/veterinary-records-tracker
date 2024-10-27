@@ -19,6 +19,7 @@ const bullNameSpan = document.getElementById("bull-name");
 
 
 const alertBox = document.getElementById("alert-box");
+const totalPendingAmountSpan = document.getElementById("total-pending-amount");
 const pendingAmountSpan = document.getElementById("pending-amount");
 const paginationContainer = document.getElementById("pagination-container");
 const mainContainer = document.getElementById("main-container");
@@ -275,7 +276,7 @@ async function fetchRecordAndUpdateUI() {
 
     if (record.cows.length <= 0) {
       cowImgContainer.classList.remove("d-none");
-      pendingAmountSpan.innerText = "0";
+      totalPendingAmountSpan.innerText = "0";
     } else {
       cowImgContainer.classList.add("d-none");
     }
@@ -286,7 +287,8 @@ async function fetchRecordAndUpdateUI() {
 
     if (record.cows.length > 0) {
       // Calculate pending amount and update pending amount to ui. 
-      pendingAmountSpan.innerText = calculatePendingAmount(record.cows);
+      totalPendingAmountSpan.innerText = calculatePendingAmount(record.cows);
+      pendingAmountSpan.innerText = calculatePendingAmount([record.cows[0]]);
 
       // Render first cow record to ui.
       updateCowRecordToUI(record.cows[0]);
@@ -313,6 +315,7 @@ async function fetchRecordAndUpdateUI() {
           e.target.parentElement.classList.add("active");
           const cow = record.cows.find((cow) => cow.id === e.target.key);
           updateCowRecordToUI(cow);
+          pendingAmountSpan.innerText = calculatePendingAmount([cow]);
           selectedPageLink = e.target;
           
           tableContainer.innerHTML = "";
@@ -574,7 +577,7 @@ async function fetchRecordAndUpdateUI() {
         // Switch to another cow record when current cow is deleted.
         const currentPageLink = selectedPageLink
         record.cows.splice(record.cows.indexOf(selectedCow), 1);
-        pendingAmountSpan.innerText = calculatePendingAmount(record.cows);
+        totalPendingAmountSpan.innerText = calculatePendingAmount(record.cows);
         
         if (record.cows.length <= 0) {
           location.reload();
