@@ -82,7 +82,6 @@
             <li class="ms-4 mb-2 text-success c-fs-f-srp-p m-0 cursor-pointer" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#create-cow-record-modal">Add</li>
             <li class="ms-4 mb-2 text-success c-fs-f-srp-p m-0 cursor-pointer" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#update-cow-record-modal">Edit</li>
             <li class="ms-4 mb-2 text-danger c-fs-f-srp-p m-0 cursor-pointer" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#delete-cow-record-modal">Delete</li>
-            <li class="ms-4 mb-2 text-danger c-fs-f-srp-p m-0 cursor-pointer" style="width: 90%;" data-bs-toggle="modal" data-bs-target="#delete-cow-record-modal">Delete All</li>
           </ul>
         </div>  
     </div>
@@ -253,6 +252,12 @@
             <button type="button" style="width: 30px;" class="btn-close" data-bs-dismiss="modal"></button>  
           </div>  
           <p id="main-content" class="text-secondary fs-5 p-2 m-0">Are you sure you want to delete this cow record, including the injection information and AI (Artificial Insemination) dates?</p>
+
+          <div class="form-check ms-2 d-flex align-items-center gap-2 p-0">
+            <input class="form-check-input m-0 border border-2" type="checkbox" id="checkbox" style="height: 20px; width: 20px;">
+            <label class="form-check-label fs-5 text-secondary" for="checkbox">Delete All</label>
+          </div>
+
           <div class="d-flex gap-2 me-2 flex-wrap justify-content-end">
             <p id="ok-element" class="text-danger m-0 p-2 c-fs-f-srp-p cursor-pointer">Ok</p>
             <p class="text-success m-0 p-2 c-fs-f-srp-p cursor-pointer" data-bs-dismiss="modal">Cancel</p>  
