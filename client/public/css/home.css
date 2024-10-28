@@ -13,7 +13,7 @@
 }
 
 @media screen and (max-width: 500px) {
-  .content div {
+  .content a {
     width: 100% !important;
     min-width: 300px;
   }
