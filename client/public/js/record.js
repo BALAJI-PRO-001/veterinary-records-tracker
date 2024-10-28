@@ -238,6 +238,7 @@ function resetCreateNewInjectInfoAndAiDateModalComponents() {
 }
 
 
+
 function calculatePendingAmount(cows) {
   if (cows === null || cows === undefined) {
     throw new Error("Cows is null or undefined.");
