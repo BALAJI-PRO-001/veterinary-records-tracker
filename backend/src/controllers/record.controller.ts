@@ -164,6 +164,25 @@ export async function deleteCowFromUser(req: Request, res: Response, next: NextF
 
 
 
+export async function deleteAllCowsFromUser(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { userId } = req.params;
+    validateURLId(userId, "user");
+
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
+    }
+
+    await Record.deleteAllCowsFromUser(Number(userId));
+    res.status(204).json({});
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+
 export async function addNewInjectionInfoAndAiDateToCow(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { userId, cowId } = req.params;

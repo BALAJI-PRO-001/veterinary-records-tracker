@@ -208,6 +208,7 @@ function resetDeleteCowModalComponents() {
   deleteCowRecordModal.querySelector("#success-icon").classList.add("d-none");
   deleteCowRecordModal.querySelector("#main-content").innerText = "Are you sure you want to delete this cow record, including the injection information and AI (Artificial Insemination) dates?";
   deleteCowRecordModalOkEl.removeAttribute("hidden");
+  deleteCowRecordModalCheckBox.checked = false;
 }
 
 
@@ -558,7 +559,12 @@ async function fetchRecordAndUpdateUI() {
     });
 
     deleteCowRecordModalCheckBox.addEventListener("change", (e) => {
-      console.log(e.target.checked);
+      const mainContentEl = deleteCowRecordModal.querySelector("#main-content");
+      if (e.target.checked) {
+        mainContentEl.innerHTML = "Are you sure you want to delete <span class='text-danger'>All Cow Records</span>, including injection information and AI (Artificial Insemination) dates?";
+      } else {
+        mainContentEl.innerText = "Are you sure you want to delete this cow record, including the injection information and AI (Artificial Insemination) dates?";
+      }
     });
 
     deleteCowRecordModalOkEl.addEventListener("click", async () => {
@@ -566,7 +572,9 @@ async function fetchRecordAndUpdateUI() {
       deleteCowRecordModalOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
       deleteCowRecordModalOkEl.setAttribute("hidden", "");
       deleteCowRecordModalOkEl.nextElementSibling.setAttribute("hidden", "");
-      const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {method: "DELETE"});
+      const requestURL = deleteCowRecordModalCheckBox.checked ? `/api/v1/records/${record.user.id}/cows/all` : `/api/v1/records/${record.user.id}/cows/${selectedCow.id}`;
+
+      const res = await fetch(requestURL, {method: "DELETE"});
 
       if (res.status === 401) {
         mainContentEl.classList.add("text-danger");
@@ -574,6 +582,10 @@ async function fetchRecordAndUpdateUI() {
         deleteCowRecordModalOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
         deleteCowRecordModalOkEl.nextElementSibling.removeAttribute("hidden");
         return;
+      }
+
+      if (res.status === 204 && deleteCowRecordModalCheckBox.checked) {
+        return location.reload();
       }
 
       if (res.status === 204) {
