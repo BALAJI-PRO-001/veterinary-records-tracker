@@ -6,7 +6,7 @@ import {
   validatePhoneNumberAndUpdatePhoneNumberInputUI,
   validateInputAndUpdateUI,
   validateAmountAndUpdateAmountInputUI,
-  validateDateAndUpdateDataInputUI
+  validateDateAndUpdateDateInputUI
 } from "./utils/userInteraction.js";
 
 
@@ -642,7 +642,7 @@ async function fetchRecordAndUpdateUI() {
     addValidationListenersToInputElement(injectPriceInput, () => validateAmountAndUpdateAmountInputUI(injectPriceInput));
     addValidationListenersToInputElement(givenAmountInput, () => validateAmountAndUpdateAmountInputUI(givenAmountInput));
     addValidationListenersToInputElement(pendingAmountInput, () => validateAmountAndUpdateAmountInputUI(pendingAmountInput));
-    addValidationListenersToInputElement(dateInput, () => validateDateAndUpdateDataInputUI(dateInput));
+    addValidationListenersToInputElement(dateInput, () => validateDateAndUpdateDateInputUI(dateInput));
 
 
     createCowRecordBTN.addEventListener("click", async (e) => {
@@ -654,7 +654,7 @@ async function fetchRecordAndUpdateUI() {
       const isValidInjectPrice = validateAmountAndUpdateAmountInputUI(injectPriceInput);
       const isValidGivenAmount = validateAmountAndUpdateAmountInputUI(givenAmountInput);
       const isValidPendingAmount = validateAmountAndUpdateAmountInputUI(pendingAmountInput);
-      const isValidDate = validateDateAndUpdateDataInputUI(dateInput);
+      const isValidDate = validateDateAndUpdateDateInputUI(dateInput);
 
       if (
         isValidCowName && isValidBreedName && isValidBullName && 
@@ -735,7 +735,7 @@ async function fetchRecordAndUpdateUI() {
     addValidationListenersToInputElement(newInjectPriceInput, () => validateAmountAndUpdateAmountInputUI(newInjectPriceInput));
     addValidationListenersToInputElement(newGivenAmountInput, () => validateAmountAndUpdateAmountInputUI(newGivenAmountInput));
     addValidationListenersToInputElement(newPendingAmountInput, () => validateAmountAndUpdateAmountInputUI(newPendingAmountInput));
-    addValidationListenersToInputElement(newDateInput, () => validateDateAndUpdateDataInputUI(newDateInput));
+    addValidationListenersToInputElement(newDateInput, () => validateDateAndUpdateDateInputUI(newDateInput));
 
     createNewInjectInfoAndAiDateBTN.addEventListener("click", async (e) => {
       e.preventDefault();
@@ -743,7 +743,7 @@ async function fetchRecordAndUpdateUI() {
       const isValidInjectPrice = validateAmountAndUpdateAmountInputUI(newInjectPriceInput);
       const isValidGivenAmount = validateAmountAndUpdateAmountInputUI(newGivenAmountInput);
       const isValidPendingAmount = validateAmountAndUpdateAmountInputUI(newPendingAmountInput);
-      const isValidDate = validateDateAndUpdateDataInputUI(newDateInput);
+      const isValidDate = validateDateAndUpdateDateInputUI(newDateInput);
 
       if (
         isValidInjectName && isValidInjectPrice && isValidGivenAmount &&

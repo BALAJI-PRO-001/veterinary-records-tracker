@@ -160,7 +160,7 @@ export function validateInputAndUpdateUI(inputElement) {
     throw new Error("Element is null or undefined.");
   }
 
-  if (!(inputElement instanceof HTMLElement)) {
+  if (!(inputElement instanceof HTMLInputElement)) {
     throw new Error(`Expected an HTMLElement, but got (${typeof element}).`);
   }
 
@@ -186,7 +186,7 @@ export function validateAmountAndUpdateAmountInputUI(amountInputElement) {
     throw new Error("Element is null or undefined.");
   }
 
-  if (!(amountInputElement instanceof HTMLElement)) {
+  if (!(amountInputElement instanceof HTMLInputElement)) {
     throw new Error(`Expected an HTMLElement, but got (${typeof element}).`);
   }
 
@@ -207,12 +207,12 @@ export function validateAmountAndUpdateAmountInputUI(amountInputElement) {
 
 
 
-export function validateDateAndUpdateDataInputUI(dateInputElement) {
+export function validateDateAndUpdateDateInputUI(dateInputElement) {
   if (dateInputElement === null || dateInputElement === undefined) {
     throw new Error("Element is null or undefined.");
   }
 
-  if (!(dateInputElement instanceof HTMLElement)) {
+  if (!(dateInputElement instanceof HTMLInputElement)) {
     throw new Error(`Expected an HTMLElement, but got (${typeof element}).`);
   }
 
