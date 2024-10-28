@@ -36,6 +36,7 @@ router.patch("/users/:userId", verifyAdminAuthenticationToken, updateUserRecord)
 
 router.delete("/all", verifyAdminAuthenticationToken, deleteAllRecords)
       .delete("/:userId", verifyAdminAuthenticationToken, deleteRecord)
+      .delete("/:userId/cows/all", verifyAdminAuthenticationToken, () => console.log("Hi"))
       .delete("/:userId/cows/:cowId", verifyAdminAuthenticationToken, deleteCowFromUser)
       .delete("/:userId/cows/:cowId/inject-info-ai-dates/:id", verifyAdminAuthenticationToken, removeInjectionInfoAndAiDateFromCow);
 
