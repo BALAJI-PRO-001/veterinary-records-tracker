@@ -885,6 +885,7 @@ async function fetchRecordAndUpdateUI() {
           const injectionInfoAndAiDate = cow.injectionInfoAndAiDates.find(({id}) => id == selectedInjectInfoAndAiDateId);
           if (injectionInfoAndAiDate) {
             const index = cow.injectionInfoAndAiDates.indexOf(injectionInfoAndAiDate);
+            pendingAmountSpan.innerText = Number(pendingAmountSpan.innerText) - injectionInfoAndAiDate.pendingAmount;
             cow.injectionInfoAndAiDates.splice(index, 1);
 
             if (cow.injectionInfoAndAiDates.length === 0) {
@@ -913,6 +914,8 @@ async function fetchRecordAndUpdateUI() {
       mainContentEl.classList.add("text-danger");
       mainContentEl.innerText  = "Error: " + data.message;
       deleteInjectInfoAndAiDateModalCheckbox.parentElement.classList.add("d-none");
+      deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+      deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.removeAttribute("hidden");
     });
 
   } catch(err) {
