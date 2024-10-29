@@ -52,6 +52,10 @@ const deleteCowRecordModal = document.getElementById("delete-cow-record-modal");
 const deleteCowRecordModalOkEl = deleteCowRecordModal.querySelector("#ok-element");
 const deleteCowRecordModalCheckBox = deleteCowRecordModal.querySelector("#checkbox");
 
+const deleteInjectInfoAndAiDateModal = document.getElementById("delete-inject-info-and-ai-date-modal");
+const deleteInjectInfoAndAiDateModalOKEl = deleteInjectInfoAndAiDateModal.querySelector("#ok-element");
+const deleteInjectInfoAndAiDateModalCheckbox = deleteInjectInfoAndAiDateModal.querySelector("#checkbox");
+
 const createNewCowRecordModal = document.getElementById("create-cow-record-modal");
 const createCowRecordBTN = createNewCowRecordModal.querySelector("#create-btn");
 const newCowNameInput = createNewCowRecordModal.querySelector("#name");
@@ -209,6 +213,10 @@ function resetDeleteCowModalComponents() {
   deleteCowRecordModal.querySelector("#main-content").innerText = "Are you sure you want to delete this cow record, including the injection information and AI (Artificial Insemination) dates?";
   deleteCowRecordModalOkEl.removeAttribute("hidden");
   deleteCowRecordModalCheckBox.checked = false;
+  deleteCowRecordModalOkEl.nextElementSibling.innerText = "Cancel";
+  deleteCowRecordModalCheckBox.parentElement.classList.remove("d-none");
+  deleteCowRecordModalCheckBox.removeAttribute("disabled");
+  deleteCowRecordModal.querySelector("#main-content").classList.remove("text-danger");
 }
 
 
@@ -235,6 +243,23 @@ function resetCreateNewInjectInfoAndAiDateModalComponents() {
     component.parentElement.querySelector("#err-message-element").innerText = "";
   }
   createNewInjectInfoAndAiDateModalMessageEl.innerText = ""
+}
+
+
+
+function resetDeleteInjectInfoAndAiDateModalComponents() {
+  deleteInjectInfoAndAiDateModal.querySelector("#danger-icon").classList.remove("d-none");
+  deleteInjectInfoAndAiDateModal.querySelector("#success-icon").classList.add("d-none");
+  const mainContentEl = deleteInjectInfoAndAiDateModal.querySelector("#main-content");
+  mainContentEl.classList.remove("text-danger");
+  mainContentEl.innerText = "Are you sure you want to delete this injection info and ai date record?.";
+  deleteInjectInfoAndAiDateModalCheckbox.parentElement.classList.remove("d-none");
+  deleteInjectInfoAndAiDateModalCheckbox.checked = false;
+  deleteInjectInfoAndAiDateModalCheckbox.removeAttribute("disabled");
+  deleteInjectInfoAndAiDateModalOKEl.removeAttribute("hidden");
+  deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.removeAttribute("hidden");
+  deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.innerText = "Cancel";
+  deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.nextElementSibling.classList.add("d-none");
 }
 
 
@@ -556,7 +581,6 @@ async function fetchRecordAndUpdateUI() {
     // Delete cow record code implementation.
     deleteCowRecordModal.addEventListener("hidden.bs.modal", () => {
       resetDeleteCowModalComponents();
-      deleteCowRecordModalOkEl.nextElementSibling.innerText = "Cancel";
     });
 
     deleteCowRecordModalCheckBox.addEventListener("change", (e) => {
@@ -573,6 +597,7 @@ async function fetchRecordAndUpdateUI() {
       deleteCowRecordModalOkEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
       deleteCowRecordModalOkEl.setAttribute("hidden", "");
       deleteCowRecordModalOkEl.nextElementSibling.setAttribute("hidden", "");
+      deleteCowRecordModalCheckBox.setAttribute("disabled", "");
       const requestURL = deleteCowRecordModalCheckBox.checked ? `/api/v1/records/${record.user.id}/cows/all` : `/api/v1/records/${record.user.id}/cows/${selectedCow.id}`;
 
       const res = await fetch(requestURL, {method: "DELETE"});
@@ -582,6 +607,7 @@ async function fetchRecordAndUpdateUI() {
         mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";
         deleteCowRecordModalOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
         deleteCowRecordModalOkEl.nextElementSibling.removeAttribute("hidden");
+        deleteCowRecordModalCheckBox.parentElement.classList.add("d-none");
         return;
       }
 
@@ -594,6 +620,7 @@ async function fetchRecordAndUpdateUI() {
         deleteCowRecordModal.querySelector("#success-icon").classList.remove("d-none");
         mainContentEl.classList.remove("text-danger");
         mainContentEl.innerText = "The cow record, including injection information and AI (Artificial Insemination) dates, has been successfully deleted.";
+        deleteCowRecordModalCheckBox.parentElement.classList.add("d-none");
         // Switch to another cow record when current cow is deleted.
         const currentPageLink = selectedPageLink
         record.cows.splice(record.cows.indexOf(selectedCow), 1);
@@ -621,6 +648,7 @@ async function fetchRecordAndUpdateUI() {
       mainContentEl.innerText = "Error: " + data.message;
       deleteCowRecordModalOkEl.nextElementSibling.nextElementSibling.classList.add("d-none");
       deleteCowRecordModalOkEl.nextElementSibling.removeAttribute("hidden");
+      deleteCowRecordModalCheckBox.parentElement.classList.add("d-none");
     });
 
 
@@ -705,11 +733,13 @@ async function fetchRecordAndUpdateUI() {
 
 
     // Popup code implementation
+    let selectedInjectInfoAndAiDateRow = null;
     tableContainer.addEventListener("click", (e) => {
       if (e.target.parentElement.id === "table-row") {
         popupMenu.classList.remove("d-none");
         popupMenu.style.left = `${e.clientX - 100}px`;
         popupMenu.style.top = `${e.clientY - 60}px`;
+        selectedInjectInfoAndAiDateRow = e.target.parentElement;
       }
     });
 
@@ -749,6 +779,11 @@ async function fetchRecordAndUpdateUI() {
         isValidInjectName && isValidInjectPrice && isValidGivenAmount &&
         isValidPendingAmount && isValidDate
       ) {
+        createNewInjectInfoAndAiDateBTN.setAttribute("disabled", "");
+        createNewInjectInfoAndAiDateBTN.nextElementSibling.setAttribute("disabled", "");
+        createNewInjectInfoAndAiDateBTN.nextElementSibling.nextElementSibling.setAttribute("disabled", "");
+
+
         createNewInjectInfoAndAiDateModalMessageEl.innerText = "Creating new injection record ....";
         const newInjectionInfoAndAiDates = {
           name: newInjectNameInput.value,
@@ -763,7 +798,12 @@ async function fetchRecordAndUpdateUI() {
           method: "POST",
           body: JSON.stringify(newInjectionInfoAndAiDates)
         });
+
         const data = await res.json();
+        createNewInjectInfoAndAiDateBTN.removeAttribute("disabled");
+        createNewInjectInfoAndAiDateBTN.nextElementSibling.removeAttribute("disabled");
+        createNewInjectInfoAndAiDateBTN.nextElementSibling.nextElementSibling.removeAttribute("disabled");
+
         
         if (data.statusCode === 401) {
           createNewInjectInfoAndAiDateModalMessageEl.classList.remove("text-success");
@@ -783,12 +823,15 @@ async function fetchRecordAndUpdateUI() {
             const injectionInfoAndAiDatesTable = tableContainer.children[1];
             const newInjectionInfoAndAiDatesTable = createDynamicInjectionInfoAndAiDatesTable([newInjectionInfoAndAiDates]);
             record.cows.find((cow) => cow.id === selectedCow.id).injectionInfoAndAiDates.push(newInjectionInfoAndAiDates);
-
+            
             if (!injectionInfoAndAiDatesTable) {
               tableContainer.appendChild(newInjectionInfoAndAiDatesTable);
             } else {
               tableContainer.children[1].children[1].append(...newInjectionInfoAndAiDatesTable.children[1].children);
             }
+
+            totalPendingAmountSpan.innerText = Number(totalPendingAmountSpan.innerText) + Number(newPendingAmountInput.value);
+            pendingAmountSpan.innerText = Number(pendingAmountSpan.innerText) + Number(newPendingAmountInput.value);
           }, 1500);
         }
 
@@ -797,6 +840,82 @@ async function fetchRecordAndUpdateUI() {
         createNewInjectInfoAndAiDateModalMessageEl.classList.add("text-danger");
         createNewInjectInfoAndAiDateModalMessageEl.innerText = "Error: " + data.message;
       }
+    });
+
+
+    // Delete inject info and ai date code implementation.
+    deleteInjectInfoAndAiDateModal.addEventListener("hidden.bs.modal", () => {
+      resetDeleteInjectInfoAndAiDateModalComponents();
+    });
+
+    deleteInjectInfoAndAiDateModalCheckbox.addEventListener("change", (e) => {
+      const mainContentEl = deleteInjectInfoAndAiDateModal.querySelector("#main-content");
+      if (e.target.checked) {
+        mainContentEl.innerHTML = `Are you sure you want to delete <span class='text-danger'> All Injection Information and AI Date </span> records?`;
+      } else {
+        mainContentEl.innerText = "Are you sure you want to delete this injection info and ai date record?.";
+      }
+    });
+
+    deleteInjectInfoAndAiDateModalOKEl.addEventListener("click", async (e) => {
+      const mainContentEl = deleteInjectInfoAndAiDateModal.querySelector("#main-content");
+      deleteInjectInfoAndAiDateModalOKEl.setAttribute("hidden", "");
+      deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.setAttribute("hidden", "");
+      deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.nextElementSibling.classList.remove("d-none");
+      deleteInjectInfoAndAiDateModalCheckbox.setAttribute("disabled", "");
+      const requestURL = deleteInjectInfoAndAiDateModalCheckbox.checked ? `/api/v1/records/${record.user.id}/cows/${selectedCow.id}/inject-info-ai-dates/all`  : `/api/v1/records/${record.user.id}/cows/${selectedCow.id}/inject-info-ai-dates/${selectedInjectInfoAndAiDateRow.getAttribute("key")}`;
+      
+      const res = await fetch(requestURL, { method: "DELETE" });
+
+      if (res.status === 401) {
+        mainContentEl.classList.add("text-danger");
+        deleteInjectInfoAndAiDateModalCheckbox.parentElement.classList.add("d-none");
+        deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.removeAttribute("hidden");
+        deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+        return mainContentEl.innerText = "Your session has expired. Please log out and log back in to continue.";;
+      }
+
+      if (res.status === 204 && deleteInjectInfoAndAiDateModalCheckbox.checked) {
+        return location.reload();
+      }
+
+      if (res.status === 204) {
+        record.cows.forEach((cow) => {
+          const selectedInjectInfoAndAiDateId = selectedInjectInfoAndAiDateRow.getAttribute("key");
+          const injectionInfoAndAiDate = cow.injectionInfoAndAiDates.find(({id}) => id == selectedInjectInfoAndAiDateId);
+          if (injectionInfoAndAiDate) {
+            const index = cow.injectionInfoAndAiDates.indexOf(injectionInfoAndAiDate);
+            pendingAmountSpan.innerText = Number(pendingAmountSpan.innerText) - injectionInfoAndAiDate.pendingAmount;
+            cow.injectionInfoAndAiDates.splice(index, 1);
+
+            if (cow.injectionInfoAndAiDates.length === 0) {
+              return location.reload();
+            }
+          }
+        });
+
+        selectedInjectInfoAndAiDateRow.remove();
+
+        deleteInjectInfoAndAiDateModal.querySelector("#danger-icon").classList.add("d-none");
+        deleteInjectInfoAndAiDateModal.querySelector("#success-icon").classList.remove("d-none");
+
+        mainContentEl.classList.remove("text-danger");
+        mainContentEl.innerText = `The injection information and AI date record has been successfully deleted.`;
+
+        deleteInjectInfoAndAiDateModalCheckbox.parentElement.classList.add("d-none");
+        deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+        deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.removeAttribute("hidden");
+        deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.innerText = "Go Back";
+        return;
+      }
+
+      // If any possible errors.
+      mainContentEl.classList.remove("text-success");
+      mainContentEl.classList.add("text-danger");
+      mainContentEl.innerText  = "Error: " + data.message;
+      deleteInjectInfoAndAiDateModalCheckbox.parentElement.classList.add("d-none");
+      deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.nextElementSibling.classList.add("d-none");
+      deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.removeAttribute("hidden");
     });
 
   } catch(err) {
