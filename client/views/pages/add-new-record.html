@@ -69,12 +69,19 @@
             </div>
         </div>
         <div class="d-flex flex-column flex-lg-row flex my-3">
-            <button class="btn btn-success col-12 col-lg-6 me-2 mb-2 mb-sm-0 fw-bold" style="width: 200px; height: 60px;">Add New Cow</button>
-            <button class="btn btn-secondary col-12 col-lg-6 fw-bold" style="width: 200px; height: 60px;">Add New Injection</button>
+            <button class="btn btn-success col-12 col-lg-6 me-2 mb-2 mb-sm-0 fw-bold" style="width: 200px; height: 60px;" id="add-new-cow">Add New Cow</button>
+            <button class="btn btn-secondary col-12 col-lg-6 fw-bold" style="width: 200px; height: 60px;" id="add-new-injection">Add New Injection</button>
         </div>
 
-        <div class="w-100">
+        <div class="w-100 d-flex justify-content-between">
             <button class="btn btn-danger mb-2" style="width: 200px; height: 60px;">SUBMIT</button>
+            <button type="button" class="btn btn-primary position-relative me-3" style="width: 200px; height: 60px;">
+                Cows
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  99+
+                  <span class="visually-hidden">unread messages</span>
+                </span>
+              </button>
         </div>
     </div>
 </body>
