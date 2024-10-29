@@ -52,6 +52,10 @@ const deleteCowRecordModal = document.getElementById("delete-cow-record-modal");
 const deleteCowRecordModalOkEl = deleteCowRecordModal.querySelector("#ok-element");
 const deleteCowRecordModalCheckBox = deleteCowRecordModal.querySelector("#checkbox");
 
+const deleteInjectInfoAndAiDateModal = document.getElementById("delete-inject-info-and-ai-date-modal");
+const deleteInjectInfoAndAiDateModalOKEl = deleteInjectInfoAndAiDateModal.querySelector("#ok-element");
+const deleteInjectInfoAndAiDateModalCheckbox = deleteInjectInfoAndAiDateModal.querySelector("#checkbox");
+
 const createNewCowRecordModal = document.getElementById("create-cow-record-modal");
 const createCowRecordBTN = createNewCowRecordModal.querySelector("#create-btn");
 const newCowNameInput = createNewCowRecordModal.querySelector("#name");
@@ -749,6 +753,11 @@ async function fetchRecordAndUpdateUI() {
         isValidInjectName && isValidInjectPrice && isValidGivenAmount &&
         isValidPendingAmount && isValidDate
       ) {
+        createNewInjectInfoAndAiDateBTN.setAttribute("disabled", "");
+        createNewInjectInfoAndAiDateBTN.nextElementSibling.setAttribute("disabled", "");
+        createNewInjectInfoAndAiDateBTN.nextElementSibling.nextElementSibling.setAttribute("disabled", "");
+
+
         createNewInjectInfoAndAiDateModalMessageEl.innerText = "Creating new injection record ....";
         const newInjectionInfoAndAiDates = {
           name: newInjectNameInput.value,
@@ -763,7 +772,12 @@ async function fetchRecordAndUpdateUI() {
           method: "POST",
           body: JSON.stringify(newInjectionInfoAndAiDates)
         });
+
         const data = await res.json();
+        createNewInjectInfoAndAiDateBTN.removeAttribute("disabled");
+        createNewInjectInfoAndAiDateBTN.nextElementSibling.removeAttribute("disabled");
+        createNewInjectInfoAndAiDateBTN.nextElementSibling.nextElementSibling.removeAttribute("disabled");
+
         
         if (data.statusCode === 401) {
           createNewInjectInfoAndAiDateModalMessageEl.classList.remove("text-success");
@@ -783,12 +797,15 @@ async function fetchRecordAndUpdateUI() {
             const injectionInfoAndAiDatesTable = tableContainer.children[1];
             const newInjectionInfoAndAiDatesTable = createDynamicInjectionInfoAndAiDatesTable([newInjectionInfoAndAiDates]);
             record.cows.find((cow) => cow.id === selectedCow.id).injectionInfoAndAiDates.push(newInjectionInfoAndAiDates);
-
+            
             if (!injectionInfoAndAiDatesTable) {
               tableContainer.appendChild(newInjectionInfoAndAiDatesTable);
             } else {
               tableContainer.children[1].children[1].append(...newInjectionInfoAndAiDatesTable.children[1].children);
             }
+
+            totalPendingAmountSpan.innerText = Number(totalPendingAmountSpan.innerText) + Number(newPendingAmountInput.value);
+            pendingAmountSpan.innerText = Number(pendingAmountSpan.innerText) + Number(newPendingAmountInput.value);
           }, 1500);
         }
 
@@ -797,6 +814,25 @@ async function fetchRecordAndUpdateUI() {
         createNewInjectInfoAndAiDateModalMessageEl.classList.add("text-danger");
         createNewInjectInfoAndAiDateModalMessageEl.innerText = "Error: " + data.message;
       }
+    });
+
+
+    // Delete inject info and ai date code implementation.
+    deleteInjectInfoAndAiDateModal.addEventListener("hidden.bs.modal", () => {
+      deleteInjectInfoAndAiDateModalCheckbox.checked = false;
+    });
+
+    deleteInjectInfoAndAiDateModalCheckbox.addEventListener("change", (e) => {
+      const mainContentEl = deleteInjectInfoAndAiDateModal.querySelector("#main-content");
+      if (e.target.checked) {
+        mainContentEl.innerHTML = `Are you sure you want to delete <span class='text-danger'> All Injection Information and AI Date </span> records?`;
+      } else {
+        mainContentEl.innerText = "Are you sure you want to delete this injection info and ai date record?.";
+      }
+    });
+
+    deleteInjectInfoAndAiDateModalOKEl.addEventListener("click", (e) => {
+      
     });
 
   } catch(err) {
