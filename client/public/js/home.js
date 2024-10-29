@@ -24,6 +24,7 @@ function calculatePendingAmount(cows) {
 
 async function fetchRecordAndUpdateUI() {
   try {
+    let index = 0;
     contentContainer.innerText = "";
     toggleElementVisibility(spinner, false, "d-none");
     const res = await fetch("/api/v1/records/all");
@@ -31,10 +32,10 @@ async function fetchRecordAndUpdateUI() {
     toggleElementVisibility(spinner, true, "d-none");
     data.data.records.forEach((data) => {
       const details = `
-        <a class="rounded-2 bg-white p-2 shadow m-2 mt-3 d-flex justify-content-around align-items-center text-decoration-none text-black" style="min-width: 300px; width: 320px; height: 60px; font-weight: 600;" href="/record/${data.user.id}">
-          <span>1.</span>
+        <a class="rounded-2 bg-white p-2 shadow mt-3 ms-sm-4 d-flex justify-content-between align-items-center text-decoration-none text-black" style="min-width: 300px; width: 320px; height: 60px; font-weight: 600;" href="/record/${data.user.id}">
+          <span class="ms-3">${++index}</span>
           <span class="text-truncate" style="max-width: 150px;">${data.user.name}</span>
-          <span class="text-success">₹${calculatePendingAmount(data.cows)}</span>
+          <span class="text-success me-3">₹${calculatePendingAmount(data.cows)}</span>
         </a>
       `
       contentContainer.innerHTML += details;
