@@ -201,11 +201,13 @@ export async function addNewInjectionInfoAndAiDateToCow(req: Request, res: Respo
 
     validateInjectionInfoAndAiDateRequiredData(req.body);
 
-    await Record.addNewInjectionInfoAndAiDateToCow(Number(cowId), req.body);
+    const injectionInfoAndAiDate = await Record.addNewInjectionInfoAndAiDateToCow(Number(cowId), req.body);
     res.status(201).json({
       success: true,
       statusCode: 201,
-      message: `New injection info and AI date have been successfully created for cow id: ${cowId}.`
+      data: {
+        injectionInfoAndAiDate: injectionInfoAndAiDate
+      }
     });
   } catch(err) {
     next(err);

@@ -141,8 +141,9 @@ async function deleteAllCowsFromUser(userId: number) {
 
 
 
-async function addNewInjectionInfoAndAiDateToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDate): Promise<void> {
-   await Cow.addNewInjectionInfoAndAiDatesToCow(cowId, [injectionInfoAndAiDates]);
+async function addNewInjectionInfoAndAiDateToCow(cowId: number, injectionInfoAndAiDates: InjectionInfoAndAiDate): Promise<InjectionInfoAndAiDate> {
+  const injectionInfoAndAiDate =  await Cow.addNewInjectionInfoAndAiDatesToCow(cowId, [injectionInfoAndAiDates]);
+  return injectionInfoAndAiDate[injectionInfoAndAiDate.length -1];
 }
 
 
