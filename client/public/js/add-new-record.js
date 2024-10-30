@@ -7,8 +7,6 @@ import {
   validateInputAndUpdateUI,
   validatePhoneNumberAndUpdatePhoneNumberInputUI
 } from "./utils/userInteraction.js";
-import { isValidDate } from "./utils/validator.js";
-
     
 const container = document.getElementById("main-container");
 
@@ -56,7 +54,7 @@ addValidationListenersToInputElement(injectionDateInput, () => validateDateAndUp
 
 const record = {};
 
-function submit(e) {
+function handleSubmit(e) {
   e.preventDefault();
   if(Object.keys(record).length === 0) {
     const user = {};
@@ -80,7 +78,6 @@ function submit(e) {
       cow.name = cowNameInput.value,
       cow.breed = cowBreedInput.value,
       cow.bullName = bullNameInput.value
-
       record.cows = [cow];
     }
     
@@ -96,30 +93,18 @@ function submit(e) {
       injection.givenAmount = givenAmountInput.value,
       injection.pendingAmount = pendingAmountInput.value,
       injection.date = injectionDateInput.value
-
-      cow.injectionInfoAndAiDateds = [injection];
+      cow.injectionInfoAndAiDates = [injection];
     }
-
-
-    console.log(record.pretty());
-
+    const prettyJson = JSON.stringify(record,null,2).replace(/"/g, ' ');    
+    showRecordsModal.querySelector(".modal-body").innerText = prettyJson;
   }
+  
+
 }
 
-submitBTN.addEventListener("click",submit);
+submitBTN.addEventListener("click",handleSubmit);
 
 addNewCowBTN.addEventListener("click",() => {
-  cowForm.reset();
-  cowForm.querySelectorAll("input").forEach((input) => {
-    input.value = "";
-    input.classList.remove("is-invalid","is-valid");
-  })
-  injectionForm.querySelectorAll("input").forEach((input) => {
-    input.value = "";
-    input.classList.remove("is-invalid","is-valid");
-  })
-  if(Object.keys(record).length === 0) {
-    alert("add before save the previous cow data");
-  }
+
 });
 
