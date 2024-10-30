@@ -33,24 +33,22 @@ const submitBTN = document.getElementById("submit");
 const addNewCowBTN = document.getElementById("add-new-cow");
 const addNewInjectionBTN = document.getElementById("add-new-injection");
 
-const btnContainer = document.getElementById("button-container");
-
 userForm.reset();
 cowForm.reset();
 injectionForm.reset();
 
-addValidationListenersToInputElement(userNameInput,() => validateNameAndUpdateNameInputUI(userNameInput));
-addValidationListenersToInputElement(userPhoneNumberInput,() => validatePhoneNumberAndUpdatePhoneNumberInputUI(userPhoneNumberInput));
-addValidationListenersToInputElement(userAddressInput,() => validateAddressAndUpdateAddressInputUI(userAddressInput));
+addValidationListenersToInputElement(userNameInput, () => validateNameAndUpdateNameInputUI(userNameInput));
+addValidationListenersToInputElement(userPhoneNumberInput, () => validatePhoneNumberAndUpdatePhoneNumberInputUI(userPhoneNumberInput));
+addValidationListenersToInputElement(userAddressInput, () => validateAddressAndUpdateAddressInputUI(userAddressInput));
 
-addValidationListenersToInputElement(cowNameInput,() => validateInputAndUpdateUI(cowNameInput));
-addValidationListenersToInputElement(cowBreedInput,() => validateInputAndUpdateUI(cowBreedInput));
-addValidationListenersToInputElement(bullNameInput,() => validateInputAndUpdateUI(bullNameInput));
+addValidationListenersToInputElement(cowNameInput, () => validateInputAndUpdateUI(cowNameInput));
+addValidationListenersToInputElement(cowBreedInput, () => validateInputAndUpdateUI(cowBreedInput));
+addValidationListenersToInputElement(bullNameInput, () => validateInputAndUpdateUI(bullNameInput));
 
-addValidationListenersToInputElement(injectionNameInput,() => validateInputAndUpdateUI(injectionNameInput));
-addValidationListenersToInputElement(injectionPriceInput,() => validateAmountAndUpdateAmountInputUI(injectionPriceInput));
-addValidationListenersToInputElement(givenAmountInput,() => validateAmountAndUpdateAmountInputUI(givenAmountInput));
-addValidationListenersToInputElement(pendingAmountInput,() => validateAmountAndUpdateAmountInputUI(pendingAmountInput));
+addValidationListenersToInputElement(injectionNameInput, () => validateInputAndUpdateUI(injectionNameInput));
+addValidationListenersToInputElement(injectionPriceInput, () => validateAmountAndUpdateAmountInputUI(injectionPriceInput));
+addValidationListenersToInputElement(givenAmountInput, () => validateAmountAndUpdateAmountInputUI(givenAmountInput));
+addValidationListenersToInputElement(pendingAmountInput, () => validateAmountAndUpdateAmountInputUI(pendingAmountInput));
 addValidationListenersToInputElement(injectionDateInput, () => validateDateAndUpdateDateInputUI(injectionDateInput));
 
 
