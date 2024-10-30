@@ -77,6 +77,14 @@ const newDateInput = createNewInjectInfoAndAiDateModal.querySelector("#date");
 const createNewInjectInfoAndAiDateModalMessageEl = createNewInjectInfoAndAiDateModal.querySelector("#message-element");
 const createNewInjectInfoAndAiDateBTN = createNewInjectInfoAndAiDateModal.querySelector("#create-btn");
 
+const updateInjectInfoAndAiDateModal = document.getElementById("update-inject-info-and-ai-date-modal");
+const updateInjectNameInput = updateInjectInfoAndAiDateModal.querySelector("#name");
+const updateInjectPriceInput = updateInjectInfoAndAiDateModal.querySelector("#inject-price");
+const updateGivenAmountInput = updateInjectInfoAndAiDateModal.querySelector("#given-amount");
+const updatePendingAmountInput = updateInjectInfoAndAiDateModal.querySelector("#pending-amount");
+const updateDateInput = updateInjectInfoAndAiDateModal.querySelector("#date");
+const updateInjectInfoAndAiDateBTN = updateInjectInfoAndAiDateModal.querySelector("#update-btn");
+
 
 /* This function used to reset the update user record modal components to old state */
 function updateUserRecordToUI(user) {
@@ -916,6 +924,28 @@ async function fetchRecordAndUpdateUI() {
       deleteInjectInfoAndAiDateModalCheckbox.parentElement.classList.add("d-none");
       deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.nextElementSibling.classList.add("d-none");
       deleteInjectInfoAndAiDateModalOKEl.nextElementSibling.removeAttribute("hidden");
+    });
+
+
+    // Update inject info and ai date code implementation.
+    addValidationListenersToInputElement(updateInjectNameInput, () => validateInputAndUpdateUI(updateInjectNameInput));
+    addValidationListenersToInputElement(updateInjectPriceInput, () => validateAmountAndUpdateAmountInputUI(updateInjectPriceInput));
+    addValidationListenersToInputElement(updateGivenAmountInput, () => validateAmountAndUpdateAmountInputUI(updateGivenAmountInput));
+    addValidationListenersToInputElement(updatePendingAmountInput, () => validateAmountAndUpdateAmountInputUI(updatePendingAmountInput));
+    addValidationListenersToInputElement(updateDateInput, () => validateDateAndUpdateDateInputUI(updateDateInput));
+
+    updateInjectInfoAndAiDateBTN.addEventListener("click", (e) => {
+      e.preventDefault();
+      const isValidName = validateInputAndUpdateUI(updateInjectNameInput);
+      const isValidPrice = validateAmountAndUpdateAmountInputUI(updateInjectPriceInput);
+      const isValidGivenAmount = validateAmountAndUpdateAmountInputUI(updateGivenAmountInput);
+      const isValidPendingAmount = validateAmountAndUpdateAmountInputUI(updatePendingAmountInput);
+      const isValidDate = validateDateAndUpdateDateInputUI(updateDateInput);
+
+      if (selectedInjectInfoAndAiDateRow) {
+        console.log(selectedInjectInfoAndAiDateRow.getAttribute("key"));
+      }
+  
     });
 
   } catch(err) {
