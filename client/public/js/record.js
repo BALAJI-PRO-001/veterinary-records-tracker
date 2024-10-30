@@ -84,6 +84,7 @@ const updateGivenAmountInput = updateInjectInfoAndAiDateModal.querySelector("#gi
 const updatePendingAmountInput = updateInjectInfoAndAiDateModal.querySelector("#pending-amount");
 const updateDateInput = updateInjectInfoAndAiDateModal.querySelector("#date");
 const updateInjectInfoAndAiDateBTN = updateInjectInfoAndAiDateModal.querySelector("#update-btn");
+const updateInjectInfoAndAiDateModalMessageEl = updateInjectInfoAndAiDateModal.querySelector("#message-element");
 
 
 /* This function used to reset the update user record modal components to old state */
@@ -211,6 +212,17 @@ function resetUpdateCowModalComponents() {
     component.parentElement.querySelector("#err-message-element").innerText = "";
   }
   updateCowRecordModalMessageEl.innerText = "";
+}
+
+
+
+function resetUpdateInjectInfoAndAiDateModalComponents() {
+  let components = [updateInjectNameInput, updateInjectPriceInput, updateGivenAmountInput, updatePendingAmountInput, updateDateInput];
+  for (let component of components) {
+    component.classList.remove("is-valid", "is-invalid");
+    component.parentElement.querySelector("#err-message-element").innerText = "";
+  }
+  updateInjectInfoAndAiDateModalMessageEl.innerText = "";
 }
 
 
@@ -927,13 +939,29 @@ async function fetchRecordAndUpdateUI() {
 
 
     // Update inject info and ai date code implementation.
+    updateInjectInfoAndAiDateModal.addEventListener("show.bs.modal", () => {
+      const selectedInjectInfoAndAiDateId = selectedInjectInfoAndAiDateRow.getAttribute("key");
+      console.log(selectedInjectInfoAndAiDateId);
+      const injectionInfoAndAiDate = selectedCow.injectionInfoAndAiDates.find(({id}) => id == selectedInjectInfoAndAiDateId);
+      // Update data into input elements.
+      updateInjectNameInput.value = injectionInfoAndAiDate.name;
+      updateInjectPriceInput.value = injectionInfoAndAiDate.price;
+      updateGivenAmountInput.value = injectionInfoAndAiDate.givenAmount;
+      updatePendingAmountInput.value = injectionInfoAndAiDate.pendingAmount;
+      updateDateInput.value = injectionInfoAndAiDate.date;
+    });
+
+    updateInjectInfoAndAiDateModal.addEventListener("hidden.bs.modal", () => {
+      resetUpdateInjectInfoAndAiDateModalComponents();
+    });
+
     addValidationListenersToInputElement(updateInjectNameInput, () => validateInputAndUpdateUI(updateInjectNameInput));
     addValidationListenersToInputElement(updateInjectPriceInput, () => validateAmountAndUpdateAmountInputUI(updateInjectPriceInput));
     addValidationListenersToInputElement(updateGivenAmountInput, () => validateAmountAndUpdateAmountInputUI(updateGivenAmountInput));
     addValidationListenersToInputElement(updatePendingAmountInput, () => validateAmountAndUpdateAmountInputUI(updatePendingAmountInput));
     addValidationListenersToInputElement(updateDateInput, () => validateDateAndUpdateDateInputUI(updateDateInput));
 
-    updateInjectInfoAndAiDateBTN.addEventListener("click", (e) => {
+    updateInjectInfoAndAiDateBTN.addEventListener("click", async (e) => {
       e.preventDefault();
       const isValidName = validateInputAndUpdateUI(updateInjectNameInput);
       const isValidPrice = validateAmountAndUpdateAmountInputUI(updateInjectPriceInput);
@@ -941,8 +969,56 @@ async function fetchRecordAndUpdateUI() {
       const isValidPendingAmount = validateAmountAndUpdateAmountInputUI(updatePendingAmountInput);
       const isValidDate = validateDateAndUpdateDateInputUI(updateDateInput);
 
-      if (selectedInjectInfoAndAiDateRow) {
-        console.log(selectedInjectInfoAndAiDateRow.getAttribute("key"));
+      if (
+        selectedInjectInfoAndAiDateRow && isValidName && isValidPrice &&
+        isValidGivenAmount && isValidPendingAmount && isValidDate
+      ) {
+        updateInjectInfoAndAiDateBTN.setAttribute("disabled", "");
+        updateInjectInfoAndAiDateBTN.nextElementSibling.setAttribute("disabled", "");
+        updateInjectInfoAndAiDateModalMessageEl.innerText = "Saving Changes ....";
+
+        const injectionInfoAndAiDateDataToUpdate = {
+          name: updateInjectNameInput.value.trim(),
+          price: Number(updateInjectPriceInput.value.trim()),
+          givenAmount: Number(updateGivenAmountInput.value.trim()),
+          pendingAmount: Number(updatePendingAmountInput.value.trim()),
+          date: updateDateInput.value.split("-").reverse().join("/")
+        };
+
+        const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}/inject-info-ai-dates/${selectedInjectInfoAndAiDateRow.getAttribute("key")}`, {
+          headers: { "Content-Type": "application/json" },
+          method: "PATCH", 
+          body: JSON.stringify(injectionInfoAndAiDateDataToUpdate)
+        });
+        const data = await res.json();
+        updateInjectInfoAndAiDateBTN.removeAttribute("disabled", "");
+        updateInjectInfoAndAiDateBTN.nextElementSibling.removeAttribute("disabled", "");
+
+        if (data.statusCode === 401) {
+          updateInjectInfoAndAiDateModalMessageEl.classList.remove("text-success");
+          updateInjectInfoAndAiDateModalMessageEl.classList.add("text-danger");
+          return updateInjectInfoAndAiDateModalMessageEl.innerText = "Your session has expired. Please log out and log back in to continue.";
+        }
+
+        if (data.statusCode === 200) {
+          updateInjectInfoAndAiDateModalMessageEl.classList.remove("text-danger");
+          updateInjectInfoAndAiDateModalMessageEl.classList.add("text-success");
+          updateInjectInfoAndAiDateModalMessageEl.innerText = "Changes saved successfully.";
+          return setTimeout(() => {
+            selectedInjectInfoAndAiDateRow.children[0].innerText = injectionInfoAndAiDateDataToUpdate.name;
+            selectedInjectInfoAndAiDateRow.children[1].innerText = injectionInfoAndAiDateDataToUpdate.price;
+            selectedInjectInfoAndAiDateRow.children[2].innerText = injectionInfoAndAiDateDataToUpdate.givenAmount;
+            selectedInjectInfoAndAiDateRow.children[3].innerText = injectionInfoAndAiDateDataToUpdate.pendingAmount;
+            selectedInjectInfoAndAiDateRow.children[4].innerText = injectionInfoAndAiDateDataToUpdate.date;
+
+            resetUpdateInjectInfoAndAiDateModalComponents();
+          }, 1000);
+        }
+
+        // If any possible error while update inject info ai date record
+        updateInjectInfoAndAiDateModalMessageEl.classList.remove("text-success");
+        updateInjectInfoAndAiDateModalMessageEl.classList.add("text-danger");
+        updateInjectInfoAndAiDateModalMessageEl.innerText = "Error: " + data.message;
       }
   
     });
