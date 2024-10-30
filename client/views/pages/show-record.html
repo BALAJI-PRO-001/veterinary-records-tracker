@@ -170,26 +170,31 @@
           <form id="update-inject-info-and-ai-date-form" class="mx-2">
             <div class="d-flex flex-column mt-3 mb-3" style="height: 60px;">
               <input id="name" type="text" class="form-control form-control-lg border-2" placeholder="Injection name ....">
-              <div class="invalid-feedback mt-0 fw-bold"></div>
+              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
             </div>  
             
             <div class="d-flex flex-column mb-3" style="height: 60px;">
-              <input id="breed" type="text" class="form-control form-control-lg border-2" placeholder="Injection price ....">
-              <div class="invalid-feedback mt-0 fw-bold"></div>
+              <input id="inject-price" type="text" class="form-control form-control-lg border-2" placeholder="Injection price ....">
+              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
             </div> 
   
             <div class="d-flex flex-column mb-3" style="height: 60px;">
-              <input id="bull-name" type="text" class="form-control form-control-lg border-2" placeholder="Given Amount ....">
-              <div class="invalid-feedback mt-0 fw-bold"></div>
+              <input id="given-amount" type="text" class="form-control form-control-lg border-2" placeholder="Given Amount ....">
+              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
             </div> 
 
             <div class="d-flex flex-column mb-3" style="height: 60px;">
-              <input id="bull-name" type="text" class="form-control form-control-lg border-2" placeholder="Pending Amount ....">
-              <div class="invalid-feedback mt-0 fw-bold"></div>
+              <input id="pending-amount" type="text" class="form-control form-control-lg border-2" placeholder="Pending Amount ....">
+              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
+            </div> 
+
+            <div class="d-flex flex-column mb-3" style="height: 60px;">
+              <input id="date" type="date" class="form-control form-control-lg border-2" placeholder="Pending Amount ....">
+              <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
             </div> 
             
             <div class="d-flex gap-2 flex-wrap">
-              <button type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Update</button>
+              <button id="update-btn" type="button" class="btn border-success btn-hover-success text-success p-2 fw-bold c-w-f-srp-b">Update</button>
               <button type="button" class="btn border-danger btn-hover-danger text-danger p-2 fw-bold c-w-f-srp-b" data-bs-dismiss="modal">Go Back</button>  
             </div>
             
