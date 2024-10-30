@@ -793,18 +793,17 @@ async function fetchRecordAndUpdateUI() {
 
 
         createNewInjectInfoAndAiDateModalMessageEl.innerText = "Creating new injection record ....";
-        const newInjectionInfoAndAiDates = {
-          name: newInjectNameInput.value,
-          price: Number(newInjectPriceInput.value),
-          givenAmount: Number(newGivenAmountInput.value),
-          pendingAmount: Number(newPendingAmountInput.value),
-          date: newDateInput.value.split("-").reverse().join("/")
-        };
 
         const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}/inject-info-ai-dates`, {
           headers: { "Content-Type": "application/json" },
           method: "POST",
-          body: JSON.stringify(newInjectionInfoAndAiDates)
+          body: JSON.stringify({
+            name: newInjectNameInput.value,
+            price: Number(newInjectPriceInput.value),
+            givenAmount: Number(newGivenAmountInput.value),
+            pendingAmount: Number(newPendingAmountInput.value),
+            date: newDateInput.value.split("-").reverse().join("/")
+          })
         });
 
         const data = await res.json();
@@ -824,13 +823,13 @@ async function fetchRecordAndUpdateUI() {
           createNewInjectInfoAndAiDateModalMessageEl.classList.add("text-success");
           createNewInjectInfoAndAiDateModalMessageEl.innerText = "New injection record created successfully.";
 
-          return setTimeout(() => {
+          return setTimeout(async () => {
             createNewInjectInfoAndAiDateModalMessageEl.innerText = "";
             resetCreateNewInjectInfoAndAiDateModalComponents();
             doctorImgContainer.classList.add("d-none");
             const injectionInfoAndAiDatesTable = tableContainer.children[1];
-            const newInjectionInfoAndAiDatesTable = createDynamicInjectionInfoAndAiDatesTable([newInjectionInfoAndAiDates]);
-            record.cows.find((cow) => cow.id === selectedCow.id).injectionInfoAndAiDates.push(newInjectionInfoAndAiDates);
+            const newInjectionInfoAndAiDatesTable = createDynamicInjectionInfoAndAiDatesTable([data.data.injectionInfoAndAiDate]);
+            record.cows.find((cow) => cow.id === selectedCow.id).injectionInfoAndAiDates.push(data.data.injectionInfoAndAiDate);
             
             if (!injectionInfoAndAiDatesTable) {
               tableContainer.appendChild(newInjectionInfoAndAiDatesTable);
