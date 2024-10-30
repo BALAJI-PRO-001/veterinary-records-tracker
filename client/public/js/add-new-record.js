@@ -7,13 +7,14 @@ import {
   validateInputAndUpdateUI,
   validatePhoneNumberAndUpdatePhoneNumberInputUI
 } from "./utils/userInteraction.js";
+import { isValidDate } from "./utils/validator.js";
 
     
 const container = document.getElementById("main-container");
 
-const userForm = document.getElementById("user-form")
-const cowForm = document.getElementById("cow-form");
-const injectionForm = document.getElementById("injection-form");
+const userForm = document.forms[0];
+const cowForm = document.forms[1];
+const injectionForm = document.forms[2];
 
 const userNameInput = userForm.querySelector("#user-name");
 const userPhoneNumberInput = userForm.querySelector("#user-phone-number");
@@ -33,6 +34,8 @@ const submitBTN = document.getElementById("submit");
 const addNewCowBTN = document.getElementById("add-new-cow");
 const addNewInjectionBTN = document.getElementById("add-new-injection");
 
+const showRecordsModal = document.getElementById("show-record-modal");
+
 userForm.reset();
 cowForm.reset();
 injectionForm.reset();
@@ -51,8 +54,72 @@ addValidationListenersToInputElement(givenAmountInput, () => validateAmountAndUp
 addValidationListenersToInputElement(pendingAmountInput, () => validateAmountAndUpdateAmountInputUI(pendingAmountInput));
 addValidationListenersToInputElement(injectionDateInput, () => validateDateAndUpdateDateInputUI(injectionDateInput));
 
+const record = {};
 
-submitBTN.addEventListener("click",(e) => {
-  
-})
+function submit(e) {
+  e.preventDefault();
+  if(Object.keys(record).length === 0) {
+    const user = {};
+    const cow = {};
+    const injection = {}
+    const isValidName = validateNameAndUpdateNameInputUI(userNameInput);
+    const isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(userPhoneNumberInput);
+    const isValidAddress = validateAddressAndUpdateAddressInputUI(userAddressInput);
+    if(isValidName && isValidPhoneNumber && isValidAddress) {
+      user.name = userNameInput.value,
+      user.phoneNo = userPhoneNumberInput.value,
+      user.address = userAddressInput.value
+      record.user = user;
+    }
+
+    const isValidCowName = validateNameAndUpdateNameInputUI(cowNameInput);
+    const isValidBreed = validateInputAndUpdateUI(cowBreedInput);
+    const isValidBullName = validateInputAndUpdateUI(bullNameInput);
+
+    if(isValidCowName && isValidBreed && isValidBullName) {
+      cow.name = cowNameInput.value,
+      cow.breed = cowBreedInput.value,
+      cow.bullName = bullNameInput.value
+
+      record.cows = [cow];
+    }
+    
+    const isValidInjectionName = validateInputAndUpdateUI(injectionNameInput);
+    const isValidInjectionPrice = validateInputAndUpdateUI(injectionPriceInput);
+    const isValidGivenAmount = validateInputAndUpdateUI(givenAmountInput);
+    const isValidPendingAmount = validateInputAndUpdateUI(pendingAmountInput);
+    const isValidInjectionDate = validateDateAndUpdateDateInputUI(injectionDateInput);
+
+    if(isValidInjectionName && isValidInjectionPrice && isValidGivenAmount && isValidPendingAmount && isValidInjectionDate) {
+      injection.name = injectionNameInput.value,
+      injection.price = injectionPriceInput.value,
+      injection.givenAmount = givenAmountInput.value,
+      injection.pendingAmount = pendingAmountInput.value,
+      injection.date = injectionDateInput.value
+
+      cow.injectionInfoAndAiDateds = [injection];
+    }
+
+
+    console.log(record.pretty());
+
+  }
+}
+
+submitBTN.addEventListener("click",submit);
+
+addNewCowBTN.addEventListener("click",() => {
+  cowForm.reset();
+  cowForm.querySelectorAll("input").forEach((input) => {
+    input.value = "";
+    input.classList.remove("is-invalid","is-valid");
+  })
+  injectionForm.querySelectorAll("input").forEach((input) => {
+    input.value = "";
+    input.classList.remove("is-invalid","is-valid");
+  })
+  if(Object.keys(record).length === 0) {
+    alert("add before save the previous cow data");
+  }
+});
 
