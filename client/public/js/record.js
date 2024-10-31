@@ -403,6 +403,7 @@ async function fetchRecordAndUpdateUI() {
     toggleElementVisibility(mainContainer, false, "d-none");
 
     // Update user record code implementation.
+    let userDataToUpdate = {};
     userNameInput.value = record.user.name;
     phoneNumberInput.value = record.user.phoneNumber;
     addressInput.value = record.user.address;
@@ -410,6 +411,18 @@ async function fetchRecordAndUpdateUI() {
     addValidationListenersToInputElement(userNameInput, () => validateNameAndUpdateNameInputUI(userNameInput));
     addValidationListenersToInputElement(phoneNumberInput, () => validatePhoneNumberAndUpdatePhoneNumberInputUI(phoneNumberInput));
     addValidationListenersToInputElement(addressInput, () => validateAddressAndUpdateAddressInputUI(addressInput));
+
+    userNameInput.addEventListener("change", () => {
+      userDataToUpdate = { ...userDataToUpdate, name: userNameInput.value.trim() };
+    });
+
+    phoneNumberInput.addEventListener("change", () => {
+      userDataToUpdate = { ...userDataToUpdate, phoneNumber: Number( phoneNumberInput.value.trim()) };
+    });
+
+    addressInput.addEventListener("change", () => {
+      userDataToUpdate = { ...userDataToUpdate, address: addressInput.value.trim() };
+    });
 
     updateUserRecordModal.addEventListener("hidden.bs.modal", () => {
       resetUserUpdateModalComponents();
@@ -421,11 +434,25 @@ async function fetchRecordAndUpdateUI() {
 
     updateUserRecordBTN.addEventListener("click", async (e) => {
       e.preventDefault();
-      const isValidName = validateNameAndUpdateNameInputUI(userNameInput);
-      const isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(phoneNumberInput);
-      const isValidAddress = validateAddressAndUpdateAddressInputUI(addressInput);
+      let isValidName = false;
+      let isValidPhoneNumber = false;
+      let isValidAddress = false;
+      const keys = Object.keys(userDataToUpdate);
+      if (keys.length === 0) {
+        return;
+      }
 
-      if (isValidName && isValidPhoneNumber && isValidAddress) {
+      for (let key of keys) {
+        if (key === "name") {
+          isValidName = validateNameAndUpdateNameInputUI(userNameInput);
+        } else if (key === "phoneNumber") {
+          isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(phoneNumberInput);
+        } else if (key === "address") {
+          isValidAddress = validateAddressAndUpdateAddressInputUI(addressInput);
+        }
+      }
+
+      if (isValidName || isValidPhoneNumber || isValidAddress) {
         updateUserRecordModalMessageEl.innerText = "Saving Changes ...."
         updateUserRecordBTN.setAttribute("disabled", "");
         updateUserRecordBTN.nextElementSibling.setAttribute("disabled", "");
@@ -433,12 +460,9 @@ async function fetchRecordAndUpdateUI() {
         const res = await fetch("/api/v1/records/users/" + record.user.id, {
           headers: { "Content-Type": "application/json" },
           method: "PATCH",
-          body: JSON.stringify({
-            name: userNameInput.value.trim(),
-            phoneNumber: Number(phoneNumberInput.value.trim()),
-            address: addressInput.value.trim()
-          })
+          body: JSON.stringify(userDataToUpdate)
         });
+        userDataToUpdate = {};
         const data = await res.json();
         updateUserRecordBTN.removeAttribute("disabled");
         updateUserRecordBTN.nextElementSibling.removeAttribute("disabled");
@@ -941,7 +965,6 @@ async function fetchRecordAndUpdateUI() {
     // Update inject info and ai date code implementation.
     updateInjectInfoAndAiDateModal.addEventListener("show.bs.modal", () => {
       const selectedInjectInfoAndAiDateId = selectedInjectInfoAndAiDateRow.getAttribute("key");
-      console.log(selectedInjectInfoAndAiDateId);
       const injectionInfoAndAiDate = selectedCow.injectionInfoAndAiDates.find(({id}) => id == selectedInjectInfoAndAiDateId);
       // Update data into input elements.
       updateInjectNameInput.value = injectionInfoAndAiDate.name;
