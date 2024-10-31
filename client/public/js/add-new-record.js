@@ -59,13 +59,12 @@ let addInjectionBTNIsClicked = false;
 const record = {};
 
 function handleSubmit(e) {
-  e.preventDefault();
   const recordModalBody =  recordModal.querySelector(".modal-body > pre");
   const newRecordModal = new bootstrap.Modal(recordModal);
   if(Object.keys(record).length === 0) {
     const user = {};
     const cow = {};
-    const injection = {}
+    const injection = {};
     const isValidName = validateNameAndUpdateNameInputUI(userNameInput);
     const isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(userPhoneNumberInput);
     const isValidAddress = validateAddressAndUpdateAddressInputUI(userAddressInput);
@@ -98,11 +97,11 @@ function handleSubmit(e) {
     const isValidInjectionDate = validateDateAndUpdateDateInputUI(injectionDateInput);
 
     if(isValidInjectionName && isValidInjectionPrice && isValidGivenAmount && isValidPendingAmount && isValidInjectionDate) {
-      injection.name = injectionNameInput.value,
-      injection.price = injectionPriceInput.value,
-      injection.givenAmount = givenAmountInput.value,
-      injection.pendingAmount = pendingAmountInput.value,
-      injection.date = injectionDateInput.value
+      injection.name = injectionNameInput.value;
+      injection.price = injectionPriceInput.value;
+      injection.givenAmount = givenAmountInput.value;
+      injection.pendingAmount = pendingAmountInput.value;
+      injection.date = injectionDateInput.value;
       cow.injectionInfoAndAiDates = [injection];
     } else {
       return;
@@ -113,6 +112,7 @@ function handleSubmit(e) {
   }
 
   if(addCowBTNIsClicked) {
+    console.log("welcome");
     const cow = {};
     const injection = {}
     const isValidCowName = validateNameAndUpdateNameInputUI(cowNameInput);
@@ -138,26 +138,42 @@ function handleSubmit(e) {
       injection.givenAmount = givenAmountInput.value,
       injection.pendingAmount = pendingAmountInput.value,
       injection.date = injectionDateInput.value
-      cow.injectionInfoAndAiDates.push(injection);
+      cow.injectionInfoAndAiDates = [injection];
     }
     addCowBTNIsClicked = false;
     const prettyJson = JSON.stringify(record,null,2).replace(/"/g, ' ');
     recordModalBody.innerText = prettyJson; 
+    newRecordModal.show();
   }
 
-  if(addInjectionBTNIsClicked) {
+  if(addInjectionBTNIsClicked) {}
 
-  }
+  newRecordModal.show();
 }
 
 
+
 function addNewCowDetails(e) {
-  e.preventDefault();
 
   if(Object.keys(record).length === 0) {
     alert("Save the previous cow details before new cow.");
     return;
   }
+
+  cowNameInput.classList.remove("is-invalid","is-valid");
+  cowBreedInput.classList.remove("is-invalid","is-valid");
+  bullNameInput.classList.remove("is-invalid","is-valid");
+  injectionNameInput.classList.remove("is-invalid","is-valid");
+  injectionPriceInput.classList.remove("is-invalid","is-valid");
+  givenAmountInput.classList.remove("is-invalid","is-valid");
+  pendingAmountInput.classList.remove("is-invalid","is-valid");
+  injectionDateInput.classList.remove("is-invalid","is-valid");
+
+  cowForm.reset();
+  injectionForm.reset();
+
+  cowNameInput.focus();
+
   addCowBTNIsClicked = true;
 }
 
