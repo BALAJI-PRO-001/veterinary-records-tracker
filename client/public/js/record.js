@@ -1,4 +1,4 @@
-import { addValidationListenersToInputElement } from "./utils/common.js";
+import { addValidationListenersToInputElement, isTrue } from "./utils/common.js";
 import { 
   toggleElementVisibility, 
   validateAddressAndUpdateAddressInputUI, 
@@ -506,6 +506,7 @@ async function fetchRecordAndUpdateUI() {
 
     // Update cow record code implementation.
     if (record.cows.length > 0) {
+      let cowDataToUpdate = {};
       cowNameInput.value = record.cows[0].name;
       breedInput.value = record.cows[0].breed;
       bullNameInput.value = record.cows[0].bullName;
@@ -513,6 +514,19 @@ async function fetchRecordAndUpdateUI() {
       addValidationListenersToInputElement(cowNameInput, () => validateInputAndUpdateUI(cowNameInput));
       addValidationListenersToInputElement(breedInput, () => validateInputAndUpdateUI(breedInput));
       addValidationListenersToInputElement(bullNameInput, () => validateInputAndUpdateUI(bullNameInput));      
+
+      cowNameInput.addEventListener("change", () => {
+        cowDataToUpdate = { ...cowDataToUpdate, name: cowNameInput.value.trim() };
+      });
+
+      breedInput.addEventListener("change", () => {
+        cowDataToUpdate = { ...cowDataToUpdate, breed: breedInput.value.trim() };
+      });
+      
+      bullNameInput.addEventListener("change", () => {
+        cowDataToUpdate = { ...cowDataToUpdate, bullName: bullNameInput.value.trim() };
+      });
+      
       
       updateCowRecordModal.addEventListener("hidden.bs.modal", () => {
         resetUpdateCowModalComponents();
@@ -524,12 +538,25 @@ async function fetchRecordAndUpdateUI() {
 
       updateCowRecordBTN.addEventListener("click", async (e) => {
         e.preventDefault();
+        const booleans = [];
 
-        const isValidCowName = validateInputAndUpdateUI(cowNameInput);
-        const isValidBreed = validateInputAndUpdateUI(breedInput);
-        const isValidBullName = validateInputAndUpdateUI(bullNameInput);
+        const keys = Object.keys(cowDataToUpdate);
+        if (keys.length === 0) {
+          return;
+        }
 
-        if (isValidCowName && isValidBreed && isValidBullName) {
+        for (let key of keys) {
+          if (key === "name") {
+            booleans.push(validateInputAndUpdateUI(cowNameInput));
+          } else if (key === "breed") {
+            booleans.push(validateInputAndUpdateUI(breedInput));
+          } else if (key === "bullName") {
+            booleans.push(validateInputAndUpdateUI(bullNameInput));
+          }
+        }
+
+
+        if (isTrue(booleans)) {
           updateCowRecordModalMessageEl.innerText = "Saving Changes ....";
           updateCowRecordBTN.setAttribute("disabled", "");
           updateCowRecordBTN.nextElementSibling.setAttribute("disabled", "");
@@ -537,12 +564,9 @@ async function fetchRecordAndUpdateUI() {
           const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}`, {
             headers: { "Content-Type": "application/json" },
             method: "PATCH",
-            body: JSON.stringify({
-              name: cowNameInput.value.trim(),
-              breed: breedInput.value.trim(),
-              bullName: bullNameInput.value.trim()
-            })
+            body: JSON.stringify(cowDataToUpdate)
           });
+          cowDataToUpdate = {};
           const data = await res.json();
           updateCowRecordBTN.removeAttribute("disabled");
           updateCowRecordBTN.nextElementSibling.removeAttribute("disabled");
