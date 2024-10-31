@@ -81,10 +81,10 @@
         <div class="d-flex flex-column flex-lg-row flex my-3 w-100" id="button-container">
             <button class="btn btn-success me-2 mb-2 fw-bold position-relative" style="width: 200px; height: 50px;" id="add-new-cow">Add New Cow</button>
             <button class="btn btn-secondary fw-bold me-2 mb-2" style="width: 200px; height: 50px;" id="add-new-injection">Add New Injection</button>
-            <button class="btn btn-primary fw-bold me-2" style="width: 200px; height: 50px;" id="submit" data-bs-toggle="modal" data-bs-target="#show-record-modal">Save</button>
+            <button class="btn btn-primary fw-bold me-2" style="width: 200px; height: 50px;" id="submit">Save</button>
         </div>   
         
-        <div class="modal fade" id="show-record-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true" style="max-height: 500px;">
+        <div class="modal fade" id="record-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="false" style="z-index: 10000 !important;">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -92,7 +92,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body h-50 overflow-auto">
-                        <p>Modal body text goes here.</p>
+                        <pre></pre>
                     </div>                
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

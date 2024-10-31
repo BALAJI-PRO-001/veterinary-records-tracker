@@ -32,7 +32,9 @@ const submitBTN = document.getElementById("submit");
 const addNewCowBTN = document.getElementById("add-new-cow");
 const addNewInjectionBTN = document.getElementById("add-new-injection");
 
-const showRecordsModal = document.getElementById("show-record-modal");
+const recordModal = document.getElementById("record-modal");
+const cowModal = document.getElementById("cow-modal");
+const injectionModal = document.getElementById("injection-modal");
 
 userForm.reset();
 cowForm.reset();
@@ -52,10 +54,14 @@ addValidationListenersToInputElement(givenAmountInput, () => validateAmountAndUp
 addValidationListenersToInputElement(pendingAmountInput, () => validateAmountAndUpdateAmountInputUI(pendingAmountInput));
 addValidationListenersToInputElement(injectionDateInput, () => validateDateAndUpdateDateInputUI(injectionDateInput));
 
+let addCowBTNIsClicked = false;
+let addInjectionBTNIsClicked = false;
 const record = {};
 
 function handleSubmit(e) {
   e.preventDefault();
+  const recordModalBody =  recordModal.querySelector(".modal-body > pre");
+  const newRecordModal = new bootstrap.Modal(recordModal);
   if(Object.keys(record).length === 0) {
     const user = {};
     const cow = {};
@@ -68,6 +74,8 @@ function handleSubmit(e) {
       user.phoneNo = userPhoneNumberInput.value,
       user.address = userAddressInput.value
       record.user = user;
+    } else {
+      return;
     }
 
     const isValidCowName = validateNameAndUpdateNameInputUI(cowNameInput);
@@ -79,6 +87,8 @@ function handleSubmit(e) {
       cow.breed = cowBreedInput.value,
       cow.bullName = bullNameInput.value
       record.cows = [cow];
+    } else {
+      return;
     }
     
     const isValidInjectionName = validateInputAndUpdateUI(injectionNameInput);
@@ -94,17 +104,64 @@ function handleSubmit(e) {
       injection.pendingAmount = pendingAmountInput.value,
       injection.date = injectionDateInput.value
       cow.injectionInfoAndAiDates = [injection];
+    } else {
+      return;
     }
-    const prettyJson = JSON.stringify(record,null,2).replace(/"/g, ' ');    
-    showRecordsModal.querySelector(".modal-body").innerText = prettyJson;
+    const prettyJson = JSON.stringify(record,null,2).replace(/"/g, ' ');
+    recordModalBody.innerText = prettyJson;
+    newRecordModal.show();
   }
-  
 
+  if(addCowBTNIsClicked) {
+    const cow = {};
+    const injection = {}
+    const isValidCowName = validateNameAndUpdateNameInputUI(cowNameInput);
+    const isValidBreed = validateInputAndUpdateUI(cowBreedInput);
+    const isValidBullName = validateInputAndUpdateUI(bullNameInput);
+
+    if(isValidCowName && isValidBreed && isValidBullName) {
+      cow.name = cowNameInput.value,
+      cow.breed = cowBreedInput.value,
+      cow.bullName = bullNameInput.value
+      record.cows.push(cow)
+    }
+    
+    const isValidInjectionName = validateInputAndUpdateUI(injectionNameInput);
+    const isValidInjectionPrice = validateInputAndUpdateUI(injectionPriceInput);
+    const isValidGivenAmount = validateInputAndUpdateUI(givenAmountInput);
+    const isValidPendingAmount = validateInputAndUpdateUI(pendingAmountInput);
+    const isValidInjectionDate = validateDateAndUpdateDateInputUI(injectionDateInput);
+
+    if(isValidInjectionName && isValidInjectionPrice && isValidGivenAmount && isValidPendingAmount && isValidInjectionDate) {
+      injection.name = injectionNameInput.value,
+      injection.price = injectionPriceInput.value,
+      injection.givenAmount = givenAmountInput.value,
+      injection.pendingAmount = pendingAmountInput.value,
+      injection.date = injectionDateInput.value
+      cow.injectionInfoAndAiDates.push(injection);
+    }
+    addCowBTNIsClicked = false;
+    const prettyJson = JSON.stringify(record,null,2).replace(/"/g, ' ');
+    recordModalBody.innerText = prettyJson; 
+  }
+
+  if(addInjectionBTNIsClicked) {
+
+  }
+}
+
+
+function addNewCowDetails(e) {
+  e.preventDefault();
+
+  if(Object.keys(record).length === 0) {
+    alert("Save the previous cow details before new cow.");
+    return;
+  }
+  addCowBTNIsClicked = true;
 }
 
 submitBTN.addEventListener("click",handleSubmit);
 
-addNewCowBTN.addEventListener("click",() => {
-
-});
+addNewCowBTN.addEventListener("click",addNewCowDetails);
 
