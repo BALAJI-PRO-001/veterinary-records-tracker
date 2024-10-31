@@ -70,3 +70,17 @@ export async function logout(reqURL) {
   }
 }
 
+
+
+export function isTrue(booleans) {
+  if (booleans.length === 0) {
+    throw new Error("The input array must contain at least one element.");
+  }
+
+  for (let boolean of booleans) {
+    if (!boolean) {
+      return false;
+    }
+  }
+  return true;
+}
