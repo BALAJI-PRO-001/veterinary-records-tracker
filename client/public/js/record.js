@@ -434,9 +434,8 @@ async function fetchRecordAndUpdateUI() {
 
     updateUserRecordBTN.addEventListener("click", async (e) => {
       e.preventDefault();
-      let isValidName = false;
-      let isValidPhoneNumber = false;
-      let isValidAddress = false;
+      const booleans = [];
+
       const keys = Object.keys(userDataToUpdate);
       if (keys.length === 0) {
         return;
@@ -444,15 +443,15 @@ async function fetchRecordAndUpdateUI() {
 
       for (let key of keys) {
         if (key === "name") {
-          isValidName = validateNameAndUpdateNameInputUI(userNameInput);
+          booleans.push(validateNameAndUpdateNameInputUI(userNameInput));
         } else if (key === "phoneNumber") {
-          isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(phoneNumberInput);
+          booleans.push(validatePhoneNumberAndUpdatePhoneNumberInputUI(phoneNumberInput));
         } else if (key === "address") {
-          isValidAddress = validateAddressAndUpdateAddressInputUI(addressInput);
+          booleans.push(validateAddressAndUpdateAddressInputUI(addressInput));
         }
       }
 
-      if (isValidName || isValidPhoneNumber || isValidAddress) {
+      if (isTrue(booleans)) {
         updateUserRecordModalMessageEl.innerText = "Saving Changes ...."
         updateUserRecordBTN.setAttribute("disabled", "");
         updateUserRecordBTN.nextElementSibling.setAttribute("disabled", "");
