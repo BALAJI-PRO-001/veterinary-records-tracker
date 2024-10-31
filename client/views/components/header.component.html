@@ -1,18 +1,17 @@
 <header class="container-fluid header text-white d-flex justify-content-between align-items-center mb-1 position-sticky" style="min-width: 300px; top: 0; z-index: 3000">
-    <div class="logo mx-2">
-        <a href="/home"><img src="/images/cow-img.png" alt=""></a>
+  <div class="logo mx-2">
+    <a href="/home"><img src="/images/cow-img.png" alt=""></a>
+  </div>
+  <div class="search d-flex mx-3"> 
+    <input type="text" class="form-control" placeholder="Search Customer ..." style="font-weight: 501;">
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark position-relative">
+    <button class="navbar-toggler" type="button"  id="toggler" style="width: 3rem; height: 2.2rem; z-index: 10 "><i class="fas fa-bars" id="bars" style="z-index: -1; position: relative;"></i></button>
+    <div class="d-none flex-column d-lg-flex  flex-lg-row " id="toggle-menu" style="z-index: 2000;">
+      <a href="/home" class="m-2 me-lg-3"><i class="fas fa-home me-1"></i>Home</a>
+      <a href="/about" class="m-2 me-lg-3"><i class="fas fa-laugh me-1"></i>About</a>
+      <a href="/api/v1/records/download" class="m-2 me-lg-3" id="download"><i class="fas fa-download me-1"></i>Download</a>
+      <a href="" class="m-2 me-lg-3" id="logout"><i class="fas fa-sign-out-alt me-1"></i>Logout </a>
     </div>
-    <div class="search d-flex mx-3"> 
-        <input type="text" class="form-control" placeholder="Search Customer ..." style="font-weight: 501;">
-    </div>
-    <nav class="navbar navbar-expand-lg navbar-dark position-relative">
-        <button class="navbar-toggler" type="button"  id="toggler" style="width: 3rem; height: 2.2rem; z-index: 10 "><i class="fas fa-bars" id="bars" style="z-index: -1; position: relative;"></i></button>
-        <div class="d-none flex-column d-lg-flex  flex-lg-row " id="toggle-menu" style="z-index: 2000;">
-            <a href="/home" class="m-2 me-lg-3"><i class="fas fa-home me-1"></i>Home</a>
-            <a href="/about" class="m-2 me-lg-3"><i class="fas fa-laugh me-1"></i>About</a>
-            <a href="/api/v1/records/download" class="m-2 me-lg-3" id="download"><i class="fas fa-download me-1"></i>Download</a>
-            <a href="" class="m-2 me-lg-3" id="logout"><i class="fas fa-sign-out-alt me-1"></i>Logout </a>
-        </div>
-    </nav>
-
+  </nav>
 </header>

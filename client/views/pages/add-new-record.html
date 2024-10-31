@@ -1,106 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Record</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/header.component.css">
-    <link rel="stylesheet" href="/css/add-new-record.css">   
-    <link rel="stylesheet" href="/css/global.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="/js/header.component.js" type="module"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Record</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/header.component.css">
+  <link rel="stylesheet" href="/css/add-new-record.css">   
+  <link rel="stylesheet" href="/css/global.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="/js/header.component.js" type="module"></script>
 </head>
 <body>
-    {{HEADER}} 
-    <div class="container shadow rounded overflow-auto mt-lg-5 h-100 h-sm-75" style="min-width: 300px; max-width: 1300px;" id="main-container">
-        <form id="user-form" class="w-100">
-            <div class="row flex-wrap">
-                <h2 class="text-black text-start mb-4 mt-4 ps-3" style="font-size: x-large; font-weight: 600;">User Details</h2>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="user-name" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="User name...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="user-phone-number" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Phone no...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="user-address" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Address...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-            </div>
-        </form>
-
-        <form id="cow-form" class="w-100">
-            <div class="row flex-wrap">
-                <h2 class="text-black text-start mb-4 mt-1 ps-3" style="font-size: x-large; font-weight: 600;">Cow Details</h2>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="cow-name" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Cow Name...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="cow-breed" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Cow Breed...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="bull-name" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Bull Name...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-            </div>
-        </form>
-            
-        <form id="injection-form" class="w-100">
-            <div class="row flex-wrap mb-3 mt-1">
-                <h2 class="text-black text-start mb-4 mt-1 ps-3" style="font-size: x-large; font-weight: 600;">Injection Details</h2>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="injection-name" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Injection Name...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="injection-price" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Injection Price...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="given-amount" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Given Amount...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div> 
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="pending-amount" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Pending Amount...">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-                <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
-                    <input id="injection-date" type="date" class="form-control form-control-lg border-2 rounded-1" placeholder="Date..." style="color: rgb(78, 78, 78);">
-                    <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
-                </div>
-            </div>
-        </form>
-              
-        <div class="d-flex flex-wrap flex-lg-row my-3 w-100" id="button-container">
-            <button class="btn btn-success me-2 mb-2 fw-bold" style="width: 200px; height: 50px; flex: 1 0 140px !important; min-width: 150px;" id="add-new-cow">Add New Cow</button>
-            <button class="btn btn-warning text-white fw-bold me-2 mb-2" style="width: 200px; height: 50px; flex: 1 0 140px !important; min-width: 150px;" id="add-new-injection">Add New Injection</button>
-            <button class="btn btn-primary fw-bold me-2" style="width: 200px; height: 50px; flex: 1 0 140px !important; min-width: 150px;" id="submit">Save</button>
-        </div>   
-        
-        <div class="modal fade" id="record-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="false" style="z-index: 10000 !important;">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Customer Record</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body h-50 overflow-auto">
-                        <pre></pre>
-                    </div>                
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                </div>
-            </div>
+  {{HEADER}} 
+  <div class="container shadow rounded overflow-auto mt-lg-5 h-100 h-sm-75" style="min-width: 300px; max-width: 1300px;" id="main-container">
+    <form id="user-form" class="w-100">
+      <div class="row flex-wrap">
+        <h2 class="text-black text-start mb-4 mt-4 ps-3" style="font-size: x-large; font-weight: 600;">User Details</h2>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="user-name" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="User name...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
         </div>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="user-phone-number" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Phone no...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="user-address" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Address...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div>
+      </div>
+    </form>
+
+    <form id="cow-form" class="w-100">
+      <div class="row flex-wrap">
+        <h2 class="text-black text-start mb-4 mt-1 ps-3" style="font-size: x-large; font-weight: 600;">Cow Details</h2>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="cow-name" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Cow Name...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="cow-breed" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Cow Breed...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="bull-name" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Bull Name...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div>
+      </div>
+    </form>
+            
+    <form id="injection-form" class="w-100">
+      <div class="row flex-wrap mb-3 mt-1">
+        <h2 class="text-black text-start mb-4 mt-1 ps-3" style="font-size: x-large; font-weight: 600;">Injection Details</h2>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="injection-name" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Injection Name...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="injection-price" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Injection Price...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="given-amount" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Given Amount...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div> 
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="pending-amount" type="text" class="form-control form-control-lg border-2 rounded-1" placeholder="Pending Amount...">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-4" style="height: 72px;">
+          <input id="injection-date" type="date" class="form-control form-control-lg border-2 rounded-1" placeholder="Date..." style="color: rgb(78, 78, 78);">
+          <div id="err-message-element" class="invalid-feedback mt-0 fw-bold c-fs-f-err-message" style="padding-top: 2px;"></div>
+        </div>
+      </div>
+    </form>
+              
+    <div class="d-flex flex-wrap flex-lg-row my-3 w-100" id="button-container">
+      <button class="btn btn-success me-2 mb-2 fw-bold" style="width: 200px; height: 50px; flex: 1 0 140px !important; min-width: 150px;" id="add-new-cow">Add New Cow</button>
+      <button class="btn btn-warning text-white fw-bold me-2 mb-2" style="width: 200px; height: 50px; flex: 1 0 140px !important; min-width: 150px;" id="add-new-injection">Add New Injection</button>
+      <button class="btn btn-primary fw-bold me-2" style="width: 200px; height: 50px; flex: 1 0 140px !important; min-width: 150px;" id="submit">Save</button>
+    </div>   
+        
+    <div class="modal fade" id="record-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="false" style="z-index: 10000 !important;">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Customer Record</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body h-50 overflow-auto">
+            <pre></pre>
+          </div>                
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <script src="/js/add-new-record.js" type="module"></script>
+  </div>
+  <script src="/js/add-new-record.js" type="module"></script>
 </body>
 </html>

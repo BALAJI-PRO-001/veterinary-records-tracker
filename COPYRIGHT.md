@@ -1,6 +1,6 @@
 Copyright Notice
 
-© 2024 Balaji and Suray
+© 2024 Balaji and Surya
 All rights reserved.
 
 Project Title: Veterinary Records Tracker
