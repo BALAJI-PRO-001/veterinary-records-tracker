@@ -60,117 +60,56 @@ let addCowBTNIsClicked = false;
 let addInjectionBTNIsClicked = false;
 const record = {};
 
-
-// function convertUiForRecord(data) {
-//   let div = document.createElement("div");
-//   const header = `
-//     <header class="position-relative" style="height: 70px;">
-//       <h2 class="">${data.user.name}</h2>
-//       <p class="position-absolute" style="bottom: 0; right: 0;">${data.user.address}</p>
-//       <pre class="position-absolute" style="top: 0; right: 0;">${data.user.phoneNo}</pre>
-//     </header>
-//   `;
-//   div.innerHTML += header;
-//   data.cows.forEach((cow) => {
-//     const cowDetail = `
-//       <h3>cow-1</h3>
-//       <div class="cow-details w-100 d-flex flex-row justify-content-between">
-//         <h5>${cow.name}</h5>
-//         <h5>${cow.breed}</h5>
-//         <h5>${cow.bullName}</h5>
-//       </div>
-//       <h3>injections for cow</h3>
-//     `;
-//     div.innerHTML += cowDetail;
-//     let table = document.createElement("table");
-//     table.className = "w-100 table table-bordered";
-//     const tableHeader = `
-//       <tr class="border">
-//         <th>name</th>
-//         <th>price</th>
-//         <th>given</th>
-//         <th>Pending</th>
-//         <th>date</th>
-//       </tr>
-//     `;
-
-//     table.innerHTML += tableHeader;
-
-//     cow.injectionInfoAndAiDates.forEach((injection) => {
-//       const injectionDetail = `
-//         <tr>
-//           <td>${injection.name}</td>
-//           <td>${injection.price}</td>
-//           <td>${injection.givenAmount}</td>
-//           <td>${injection.pendingAmount}</td>
-//           <td>${injection.date}</td>
-//         </tr>
-//       `;
-//       table.innerHTML += injectionDetail;
-//     })
-//     div.appendChild(table);
-//   });
-//   return div;
-// }
-
 function convertUiForRecord(data) {
-
   let div = document.createElement("div");
-
   const header = `
-      <header class="position-relative" style="height: 70px;">
-          <h2>${data.user.name}</h2>
-          <p class="position-absolute" style="bottom: 0; right: 0;">${data.user.address}</p>
-          <pre class="position-absolute" style="top: 0; right: 0;">${data.user.phoneNo}</pre>
-      </header>
+    <header class="position-relative" style="height: 70px;">
+      <h2>${data.user.name}</h2>
+      <p class="position-absolute" style="bottom: 0; right: 0;">${data.user.address}</p>
+      <pre class="position-absolute" style="top: 0; right: 0;">${data.user.phoneNo}</pre>
+    </header>
   `;
   div.innerHTML += header; 
-
   data.cows.forEach((cow) => {
-      const cowDetail = `
-          <h3>cow-1</h3>
-          <div class="cow-details w-100 d-flex flex-row justify-content-between">
-            <h5>${cow.name}</h5>
-            <h5>${cow.breed}</h5>
-            <h5>${cow.bullName}</h5>
-          </div>
-          <h3>Injections for Cow</h3>
+    const cowDetail = `
+      <h3>cow-1</h3>
+        <div class="cow-details w-100 d-flex flex-row justify-content-between">
+          <h5>${cow.name}</h5>
+          <h5>${cow.breed}</h5>
+          <h5>${cow.bullName}</h5>
+        </div>
+        <h3>Injections for Cow</h3>
       `;
-      div.innerHTML += cowDetail; 
-
-      let table = document.createElement("table");
-      table.className = "w-100 table table-bordered";
-
-      const tableHeader = `
-          <thead>
-              <tr>
-                  <th>Name</th>
-                  <th>Price</th>
-                  <th>Given</th>
-                  <th>Pending</th>
-                  <th>Date</th>
-              </tr>
-          </thead>
+  div.innerHTML += cowDetail; 
+  let table = document.createElement("table");
+  table.className = "w-100 table table-bordered";
+  const tableHeader = `
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Given</th>
+        <th>Pending</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+  `;
+  table.innerHTML = tableHeader; 
+  const tbody = document.createElement("tbody");    
+    cow.injectionInfoAndAiDates.forEach((injection) => {
+      const injectionDetail = `
+        <tr>
+          <td>${injection.name}</td>
+          <td>${injection.price}</td>
+          <td>${injection.givenAmount}</td>
+          <td>${injection.pendingAmount}</td>
+          <td>${injection.date}</td>
+        </tr>
       `;
-      table.innerHTML = tableHeader; 
-
-      const tbody = document.createElement("tbody");
-      
-      cow.injectionInfoAndAiDates.forEach((injection) => {
-          const injectionDetail = `
-              <tr>
-                  <td>${injection.name}</td>
-                  <td>${injection.price}</td>
-                  <td>${injection.givenAmount}</td>
-                  <td>${injection.pendingAmount}</td>
-                  <td>${injection.date}</td>
-              </tr>
-          `;
-          tbody.innerHTML += injectionDetail; 
-      });
-
-      table.appendChild(tbody);
-      div.appendChild(table); 
+      tbody.innerHTML += injectionDetail; 
+    });
+    table.appendChild(tbody);
+    div.appendChild(table); 
   });
 
   return div; 
