@@ -154,6 +154,11 @@ async function removeInjectionInfoAndAiDateFromCow(id: number): Promise<void> {
 
 
 
+async function removeAllInjectionInfoAndAiDateFromCow(cowId: number): Promise<void> {
+  await Cow.deleteInjectionInfoAndAiDatesByCowId(cowId);
+}
+
+
 async function updateUserRecordById(id: number, userDataToUpdate: UserDataToUpdate): Promise<UserRecord> {
   return await User.updateUserById(id, userDataToUpdate);
 }
@@ -249,6 +254,7 @@ export default {
   deleteCowFromUser,
   addNewInjectionInfoAndAiDateToCow,
   removeInjectionInfoAndAiDateFromCow,
+  removeAllInjectionInfoAndAiDateFromCow,
   updateUserRecordById,
   updateCowRecordById,
   updateInjectionInfoAndAiDate,

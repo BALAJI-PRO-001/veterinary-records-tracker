@@ -247,6 +247,30 @@ export async function removeInjectionInfoAndAiDateFromCow(req: Request, res: Res
 
 
 
+export async function removeAllInjectionInfoAndAiDatesFromCow(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const { userId, cowId } = req.params;
+    validateURLId(userId, "user");
+    validateURLId(cowId, "cow");
+
+    const isUserRecordAvailable = await Record.hasUserRecord(Number(userId));
+    if (!isUserRecordAvailable) {
+      return next(errorHandler(404, "User record not found for the specified user id: " + userId));
+    }
+
+    const isCowRecordAvailable = await Record.hasCowRecord(Number(cowId));
+    if (!isCowRecordAvailable) {
+      return next(errorHandler(404, "Cow record not found for the specified cow id: " + cowId));
+    }
+
+    await Record.removeAllInjectionInfoAndAiDateFromCow(Number(cowId));
+    res.status(204).json({});
+  } catch(err) {
+    next(err);
+  }
+}
+
+
 
 export async function updateUserRecord(req: Request, res: Response, next: NextFunction): Promise<void> {
   try { 

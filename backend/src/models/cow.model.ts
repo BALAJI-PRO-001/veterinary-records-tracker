@@ -273,6 +273,7 @@ export default {
   addNewInjectionInfoAndAiDatesToCow,
   getInjectionInfoAndAiDateById,
   deleteInjectionInfoAndAiDateById,
+  deleteInjectionInfoAndAiDatesByCowId,
   updateCowById,
   updateInjectionInfoAndAiDateById
 };
