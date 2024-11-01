@@ -33,8 +33,6 @@ const addNewCowBTN = document.getElementById("add-new-cow");
 const addNewInjectionBTN = document.getElementById("add-new-injection");
 
 const recordModal = document.getElementById("record-modal");
-const cowModal = document.getElementById("cow-modal");
-const injectionModal = document.getElementById("injection-modal");
 
 const newRecordModal = new bootstrap.Modal(recordModal);
 
@@ -59,6 +57,89 @@ addValidationListenersToInputElement(injectionDateInput, () => validateDateAndUp
 let addCowBTNIsClicked = false;
 let addInjectionBTNIsClicked = false;
 const record = {};
+
+
+
+function cowFormReset() {
+  cowNameInput.classList.remove("is-invalid","is-valid");
+  cowBreedInput.classList.remove("is-invalid","is-valid");
+  bullNameInput.classList.remove("is-invalid","is-valid");
+  injectionNameInput.classList.remove("is-invalid","is-valid");
+  injectionPriceInput.classList.remove("is-invalid","is-valid");
+  givenAmountInput.classList.remove("is-invalid","is-valid");
+  pendingAmountInput.classList.remove("is-invalid","is-valid");
+  injectionDateInput.classList.remove("is-invalid","is-valid");
+  cowForm.reset();
+  injectionForm.reset();
+  cowNameInput.focus();
+}
+
+
+
+function injectionFormReset() {
+  injectionNameInput.classList.remove("is-invalid","is-valid");
+  injectionPriceInput.classList.remove("is-invalid","is-valid");
+  givenAmountInput.classList.remove("is-invalid","is-valid");
+  pendingAmountInput.classList.remove("is-invalid","is-valid");
+  injectionDateInput.classList.remove("is-invalid","is-valid");
+  injectionForm.reset();
+  injectionNameInput.focus();
+}
+
+
+
+function getUserRecord() {
+  const user = {};
+  const isValidName = validateNameAndUpdateNameInputUI(userNameInput);
+  const isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(userPhoneNumberInput);
+  const isValidAddress = validateAddressAndUpdateAddressInputUI(userAddressInput);
+  if(isValidName && isValidPhoneNumber && isValidAddress) {
+    user.name = userNameInput.value.trim();
+    user.phoneNo = userPhoneNumberInput.value.trim();
+    user.address = userAddressInput.value.trim();
+    return user;
+  } 
+  return null;
+}
+
+
+
+function getCowRecord() {
+  const cow = {};
+  const isValidCowName = validateNameAndUpdateNameInputUI(cowNameInput);
+  const isValidBreed = validateInputAndUpdateUI(cowBreedInput);
+  const isValidBullName = validateInputAndUpdateUI(bullNameInput);
+  if(isValidCowName && isValidBreed && isValidBullName) {
+    cow.name = cowNameInput.value.trim();
+    cow.breed = cowBreedInput.value.trim();
+    cow.bullName = bullNameInput.value.trim();
+    return cow;
+    }
+    return null;
+}
+
+
+
+function getInjectionRecord() {
+  const injection = {};
+  const isValidInjectionName = validateInputAndUpdateUI(injectionNameInput);
+  const isValidInjectionPrice = validateInputAndUpdateUI(injectionPriceInput);
+  const isValidGivenAmount = validateInputAndUpdateUI(givenAmountInput);
+  const isValidPendingAmount = validateInputAndUpdateUI(pendingAmountInput);
+  const isValidInjectionDate = validateDateAndUpdateDateInputUI(injectionDateInput);
+
+  if(isValidInjectionName && isValidInjectionPrice && isValidGivenAmount && isValidPendingAmount && isValidInjectionDate) {
+    injection.name = injectionNameInput.value.trim();
+    injection.price = injectionPriceInput.value.trim();
+    injection.givenAmount = givenAmountInput.value.trim();
+    injection.pendingAmount = pendingAmountInput.value.trim();
+    injection.date = injectionDateInput.value.trim();
+    return injection;
+  } 
+  return null;
+}
+
+
 
 function convertUiForRecord(data) {
   let div = document.createElement("div");
@@ -111,9 +192,9 @@ function convertUiForRecord(data) {
     table.appendChild(tbody);
     div.appendChild(table); 
   });
-
   return div; 
 }
+
 
 
 function handleSubmit(e) {
@@ -121,44 +202,63 @@ function handleSubmit(e) {
   addNewCowBTN.setAttribute("disabled","");
   addNewInjectionBTN.setAttribute("disabled","");
   if(Object.keys(record).length === 0) {
-    const user = {};
-    const cow = {};
-    const injection = {};
-    const isValidName = validateNameAndUpdateNameInputUI(userNameInput);
-    const isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(userPhoneNumberInput);
-    const isValidAddress = validateAddressAndUpdateAddressInputUI(userAddressInput);
-    if(isValidName && isValidPhoneNumber && isValidAddress) {
-      user.name = userNameInput.value.trim();
-      user.phoneNo = userPhoneNumberInput.value.trim();
-      user.address = userAddressInput.value.trim();
+    const user = getUserRecord();
+    const cow = getCowRecord();
+    const injection = getInjectionRecord();
+
+    if(user) {
       record.user = user;
-    } 
+    } else {
+      alert("user record missing");
+      return;
+    }
 
-    const isValidCowName = validateNameAndUpdateNameInputUI(cowNameInput);
-    const isValidBreed = validateInputAndUpdateUI(cowBreedInput);
-    const isValidBullName = validateInputAndUpdateUI(bullNameInput);
-
-    if(isValidCowName && isValidBreed && isValidBullName) {
-      cow.name = cowNameInput.value.trim();
-      cow.breed = cowBreedInput.value.trim();
-      cow.bullName = bullNameInput.value.trim();
+    if(cow) {
       record.cows = [cow];
+    } else {
+      alert("cow record missing..");
+      return;
     }
     
-    const isValidInjectionName = validateInputAndUpdateUI(injectionNameInput);
-    const isValidInjectionPrice = validateInputAndUpdateUI(injectionPriceInput);
-    const isValidGivenAmount = validateInputAndUpdateUI(givenAmountInput);
-    const isValidPendingAmount = validateInputAndUpdateUI(pendingAmountInput);
-    const isValidInjectionDate = validateDateAndUpdateDateInputUI(injectionDateInput);
-
-    if(isValidInjectionName && isValidInjectionPrice && isValidGivenAmount && isValidPendingAmount && isValidInjectionDate) {
-      injection.name = injectionNameInput.value.trim();
-      injection.price = injectionPriceInput.value.trim();
-      injection.givenAmount = givenAmountInput.value.trim();
-      injection.pendingAmount = pendingAmountInput.value.trim();
-      injection.date = injectionDateInput.value.trim();
+    if(injection) {
       cow.injectionInfoAndAiDates = [injection];
-    } 
+    } else {
+      alert("injection record missing");
+      return;
+    }
+
+    if(user && cow && injection) {
+      const prettyJson = convertUiForRecord(record);
+      recordModalBody.innerHTML = "";
+      recordModalBody.appendChild(prettyJson);
+      newRecordModal.show();
+    } else {
+      recordModalBody.innerHTML = "you have no record";
+      newRecordModal.show();
+    }
+    
+  }
+
+  if(addCowBTNIsClicked) {
+    const cow = getCowRecord();
+    console.log(cow);
+    const injection = getInjectionRecord();
+    console.log(injection);
+    if(cow) {
+      record.cows.push(cow);
+    } else {
+      alert("cow record missing...");
+      return;
+    }
+    
+    if(injection) {
+      cow.injectionInfoAndAiDates = [injection];
+    } else {
+      alert("injection record missing...");
+      return;
+    }
+
+    addCowBTNIsClicked = false;
     const prettyJson = convertUiForRecord(record);
     console.log(prettyJson);
     recordModalBody.innerHTML = "";
@@ -166,59 +266,15 @@ function handleSubmit(e) {
     newRecordModal.show();
   }
 
-  if(addCowBTNIsClicked) {
-    const cow = {};
-    const injection = {}
-    const isValidCowName = validateNameAndUpdateNameInputUI(cowNameInput);
-    const isValidBreed = validateInputAndUpdateUI(cowBreedInput);
-    const isValidBullName = validateInputAndUpdateUI(bullNameInput);
-
-    if(isValidCowName && isValidBreed && isValidBullName) {
-      cow.name = cowNameInput.value.trim();
-      cow.breed = cowBreedInput.value.trim();
-      cow.bullName = bullNameInput.value.trim();
-      record.cows.push(cow)
-    }
-    
-    const isValidInjectionName = validateInputAndUpdateUI(injectionNameInput);
-    const isValidInjectionPrice = validateInputAndUpdateUI(injectionPriceInput);
-    const isValidGivenAmount = validateInputAndUpdateUI(givenAmountInput);
-    const isValidPendingAmount = validateInputAndUpdateUI(pendingAmountInput);
-    const isValidInjectionDate = validateDateAndUpdateDateInputUI(injectionDateInput);
-
-    if(isValidInjectionName && isValidInjectionPrice && isValidGivenAmount && isValidPendingAmount && isValidInjectionDate) {
-      injection.name = injectionNameInput.value.trim();
-      injection.price = injectionPriceInput.value.trim();
-      injection.givenAmount = givenAmountInput.value.trim();
-      injection.pendingAmount = pendingAmountInput.value.trim();
-      injection.date = injectionDateInput.value.trim();
-      cow.injectionInfoAndAiDates = [injection];
-    }
-    addCowBTNIsClicked = false;
-    const prettyJson = convertUiForRecord(record);
-    recordModalBody.innerHTML = "";
-    recordModalBody.appendChild = prettyJson;
-    newRecordModal.show();
-  }
-
   if(addInjectionBTNIsClicked) {
-    const injection = {};
+    const injection = getInjectionRecord();
     const lastCowInjectionDetails = record.cows[record.cows.length-1].injectionInfoAndAiDates;
-    console.log(lastCowInjectionDetails);
-    const isValidInjectionName = validateInputAndUpdateUI(injectionNameInput);
-    const isValidInjectionPrice = validateInputAndUpdateUI(injectionPriceInput);
-    const isValidGivenAmount = validateInputAndUpdateUI(givenAmountInput);
-    const isValidPendingAmount = validateInputAndUpdateUI(pendingAmountInput);
-    const isValidInjectionDate = validateDateAndUpdateDateInputUI(injectionDateInput);
-
-    if(isValidInjectionName && isValidInjectionPrice && isValidGivenAmount && isValidPendingAmount && isValidInjectionDate) {
-      injection.name = injectionNameInput.value.trim();
-      injection.price = injectionPriceInput.value.trim();
-      injection.givenAmount = givenAmountInput.value.trim();
-      injection.pendingAmount = pendingAmountInput.value.trim();
-      injection.date = injectionDateInput.value.trim();
+    if(injection) {
       lastCowInjectionDetails.push(injection);
-    }    
+    } else {
+      alert("injection record is missing");
+      return;
+    } 
     addInjectionBTNIsClicked = false;
     const prettyJson = convertUiForRecord(record);
     recordModalBody.innerHTML = "";
@@ -228,15 +284,11 @@ function handleSubmit(e) {
   }
   addNewCowBTN.removeAttribute("disabled");
   addNewInjectionBTN.removeAttribute("disabled");
-  // const prettyJson = convertUiForRecord(record);
-  // recordModalBody.appendChild(prettyJson);
-  // newRecordModal.show();
 }
 
 
 
 function addNewCowDetails(e) {
-
   if(addInjectionBTNIsClicked) {
     alert("injection action going on..");
     return;
@@ -247,24 +299,13 @@ function addNewCowDetails(e) {
     return;
   }
 
-  cowNameInput.classList.remove("is-invalid","is-valid");
-  cowBreedInput.classList.remove("is-invalid","is-valid");
-  bullNameInput.classList.remove("is-invalid","is-valid");
-  injectionNameInput.classList.remove("is-invalid","is-valid");
-  injectionPriceInput.classList.remove("is-invalid","is-valid");
-  givenAmountInput.classList.remove("is-invalid","is-valid");
-  pendingAmountInput.classList.remove("is-invalid","is-valid");
-  injectionDateInput.classList.remove("is-invalid","is-valid");
-  cowForm.reset();
-  injectionForm.reset();
-  cowNameInput.focus();
+  cowFormReset();
 
   addCowBTNIsClicked = true;
   addInjectionBTNIsClicked = false;
 }
 
 function addNewInjectionDetails(e) {
-
   if(addCowBTNIsClicked) {
     alert("Cow action going on");
     return;
@@ -275,14 +316,7 @@ function addNewInjectionDetails(e) {
     return;
   }
 
-  injectionNameInput.classList.remove("is-invalid","is-valid");
-  injectionPriceInput.classList.remove("is-invalid","is-valid");
-  givenAmountInput.classList.remove("is-invalid","is-valid");
-  pendingAmountInput.classList.remove("is-invalid","is-valid");
-  injectionDateInput.classList.remove("is-invalid","is-valid");
-  injectionForm.reset();
-  injectionNameInput.focus();
-
+  injectionFormReset();
   addInjectionBTNIsClicked = true;
   addCowBTNIsClicked = false;
 
