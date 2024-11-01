@@ -952,6 +952,7 @@ async function fetchRecordAndUpdateUI() {
           if (injectionInfoAndAiDate) {
             const index = cow.injectionInfoAndAiDates.indexOf(injectionInfoAndAiDate);
             pendingAmountSpan.innerText = Number(pendingAmountSpan.innerText) - injectionInfoAndAiDate.pendingAmount;
+            totalPendingAmountSpan.innerText = Number(totalPendingAmountSpan.innerText) - injectionInfoAndAiDate.pendingAmount;
             cow.injectionInfoAndAiDates.splice(index, 1);
 
             if (cow.injectionInfoAndAiDates.length === 0) {
