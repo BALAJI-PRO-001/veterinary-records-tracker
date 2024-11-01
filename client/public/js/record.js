@@ -987,6 +987,7 @@ async function fetchRecordAndUpdateUI() {
 
 
     // Update inject info and ai date code implementation.
+    let injectionInfoAndAiDateDataToUpdate = {};
     updateInjectInfoAndAiDateModal.addEventListener("show.bs.modal", () => {
       const selectedInjectInfoAndAiDateId = selectedInjectInfoAndAiDateRow.getAttribute("key");
       const injectionInfoAndAiDate = selectedCow.injectionInfoAndAiDates.find(({id}) => id == selectedInjectInfoAndAiDateId);
@@ -1008,29 +1009,54 @@ async function fetchRecordAndUpdateUI() {
     addValidationListenersToInputElement(updatePendingAmountInput, () => validateAmountAndUpdateAmountInputUI(updatePendingAmountInput));
     addValidationListenersToInputElement(updateDateInput, () => validateDateAndUpdateDateInputUI(updateDateInput));
 
+    updateInjectNameInput.addEventListener("change", () => {
+      injectionInfoAndAiDateDataToUpdate = { ...injectionInfoAndAiDateDataToUpdate, name: updateInjectNameInput.value.trim() };
+    });
+
+    updateInjectPriceInput.addEventListener("change", () => {
+      injectionInfoAndAiDateDataToUpdate = { ...injectionInfoAndAiDateDataToUpdate, price: Number(updateInjectPriceInput.value.trim()) };
+    });
+
+    updateGivenAmountInput.addEventListener("change", () => {
+      injectionInfoAndAiDateDataToUpdate = { ...injectionInfoAndAiDateDataToUpdate, givenAmount: Number(updateGivenAmountInput.value.trim()) };
+    });
+
+    updatePendingAmountInput.addEventListener("change", () => {
+      injectionInfoAndAiDateDataToUpdate = { ...injectionInfoAndAiDateDataToUpdate, pendingAmount: Number(updatePendingAmountInput.value.trim()) };
+    });
+
+    updateDateInput.addEventListener("change", () => {
+      injectionInfoAndAiDateDataToUpdate = { ...injectionInfoAndAiDateDataToUpdate, date: updateDateInput.value.split("-").reverse().join("/").trim() };
+    });
+
     updateInjectInfoAndAiDateBTN.addEventListener("click", async (e) => {
       e.preventDefault();
-      const isValidName = validateInputAndUpdateUI(updateInjectNameInput);
-      const isValidPrice = validateAmountAndUpdateAmountInputUI(updateInjectPriceInput);
-      const isValidGivenAmount = validateAmountAndUpdateAmountInputUI(updateGivenAmountInput);
-      const isValidPendingAmount = validateAmountAndUpdateAmountInputUI(updatePendingAmountInput);
-      const isValidDate = validateDateAndUpdateDateInputUI(updateDateInput);
+      const booleans = [];
+      const keys = Object.keys(injectionInfoAndAiDateDataToUpdate);
 
-      if (
-        selectedInjectInfoAndAiDateRow && isValidName && isValidPrice &&
-        isValidGivenAmount && isValidPendingAmount && isValidDate
-      ) {
+      if (keys.length === 0) {
+        return;
+      }
+
+      for (let key of keys) {
+        if (key === "name") {
+          booleans.push(validateInputAndUpdateUI(updateInjectNameInput));
+        } else if (key === "price") {
+          booleans.push(validateAmountAndUpdateAmountInputUI(updateInjectPriceInput));
+        } else if (key === "givenAmount") {
+          booleans.push(validateAmountAndUpdateAmountInputUI(updateGivenAmountInput));
+        } else if (key === "pendingAmount") {
+          booleans.push(validateAmountAndUpdateAmountInputUI(updatePendingAmountInput));
+        } else if (key === "date") {
+          booleans.push(validateDateAndUpdateDateInputUI(updateDateInput));
+        }
+      }
+
+      if (selectedInjectInfoAndAiDateRow && isTrue(booleans)) {
         updateInjectInfoAndAiDateBTN.setAttribute("disabled", "");
         updateInjectInfoAndAiDateBTN.nextElementSibling.setAttribute("disabled", "");
         updateInjectInfoAndAiDateModalMessageEl.innerText = "Saving Changes ....";
 
-        const injectionInfoAndAiDateDataToUpdate = {
-          name: updateInjectNameInput.value.trim(),
-          price: Number(updateInjectPriceInput.value.trim()),
-          givenAmount: Number(updateGivenAmountInput.value.trim()),
-          pendingAmount: Number(updatePendingAmountInput.value.trim()),
-          date: updateDateInput.value.split("-").reverse().join("/")
-        };
 
         const res = await fetch(`/api/v1/records/${record.user.id}/cows/${selectedCow.id}/inject-info-ai-dates/${selectedInjectInfoAndAiDateRow.getAttribute("key")}`, {
           headers: { "Content-Type": "application/json" },
@@ -1038,6 +1064,7 @@ async function fetchRecordAndUpdateUI() {
           body: JSON.stringify(injectionInfoAndAiDateDataToUpdate)
         });
         const data = await res.json();
+        injectionInfoAndAiDateDataToUpdate = {};
         updateInjectInfoAndAiDateBTN.removeAttribute("disabled", "");
         updateInjectInfoAndAiDateBTN.nextElementSibling.removeAttribute("disabled", "");
 
@@ -1052,12 +1079,16 @@ async function fetchRecordAndUpdateUI() {
           updateInjectInfoAndAiDateModalMessageEl.classList.add("text-success");
           updateInjectInfoAndAiDateModalMessageEl.innerText = "Changes saved successfully.";
           return setTimeout(() => {
-            selectedInjectInfoAndAiDateRow.children[0].innerText = injectionInfoAndAiDateDataToUpdate.name;
-            selectedInjectInfoAndAiDateRow.children[1].innerText = injectionInfoAndAiDateDataToUpdate.price;
-            selectedInjectInfoAndAiDateRow.children[2].innerText = injectionInfoAndAiDateDataToUpdate.givenAmount;
-            selectedInjectInfoAndAiDateRow.children[3].innerText = injectionInfoAndAiDateDataToUpdate.pendingAmount;
-            selectedInjectInfoAndAiDateRow.children[4].innerText = injectionInfoAndAiDateDataToUpdate.date;
+            const prevPendingAmount = Number(selectedInjectInfoAndAiDateRow.children[3].innerText);
+            totalPendingAmountSpan.innerText = (Number(totalPendingAmountSpan.innerText) - prevPendingAmount) + data.data.injectionInfoAndAiDate.pendingAmount;
+            pendingAmountSpan.innerText = (Number(pendingAmountSpan.innerText) - prevPendingAmount) + data.data.injectionInfoAndAiDate.pendingAmount;
 
+            selectedInjectInfoAndAiDateRow.children[0].innerText = data.data.injectionInfoAndAiDate.name;
+            selectedInjectInfoAndAiDateRow.children[1].innerText = data.data.injectionInfoAndAiDate.price;
+            selectedInjectInfoAndAiDateRow.children[2].innerText = data.data.injectionInfoAndAiDate.givenAmount;
+            selectedInjectInfoAndAiDateRow.children[3].innerText = data.data.injectionInfoAndAiDate.pendingAmount;
+            selectedInjectInfoAndAiDateRow.children[4].innerText = data.data.injectionInfoAndAiDate.date;
+            
             resetUpdateInjectInfoAndAiDateModalComponents();
           }, 1000);
         }
