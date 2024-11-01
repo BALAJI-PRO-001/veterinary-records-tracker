@@ -58,7 +58,7 @@ const record = {};
 
 
 
-function cowFormReset() {
+function resetCowForm() {
   const elements = [
     cowNameInput, cowBreedInput, bullNameInput,
     injectionNameInput, injectionPriceInput, givenAmountInput,
@@ -75,7 +75,7 @@ function cowFormReset() {
 
 
 
-function injectionFormReset() {
+function resetInjectionInfoForm() {
   const elements = [
     injectionNameInput, injectionPriceInput, givenAmountInput,
     pendingAmountInput, injectionDateInput
@@ -304,7 +304,7 @@ function addNewCowDetails(e) {
     return;
   }
 
-  cowFormReset();
+  resetCowForm();
 
   addCowBTNIsClicked = true;
   addInjectionBTNIsClicked = false;
@@ -321,7 +321,7 @@ function addNewInjectionDetails(e) {
     return;
   }
 
-  injectionFormReset();
+  resetInjectionInfoForm();
   addInjectionBTNIsClicked = true;
   addCowBTNIsClicked = false;
 
