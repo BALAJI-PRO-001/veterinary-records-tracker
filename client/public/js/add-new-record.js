@@ -8,8 +8,6 @@ import {
   validatePhoneNumberAndUpdatePhoneNumberInputUI
 } from "./utils/userInteraction.js";
     
-const container = document.getElementById("main-container");
-
 const userForm = document.forms[0];
 const cowForm = document.forms[1];
 const injectionForm = document.forms[2];
@@ -61,14 +59,15 @@ const record = {};
 
 
 function cowFormReset() {
-  cowNameInput.classList.remove("is-invalid","is-valid");
-  cowBreedInput.classList.remove("is-invalid","is-valid");
-  bullNameInput.classList.remove("is-invalid","is-valid");
-  injectionNameInput.classList.remove("is-invalid","is-valid");
-  injectionPriceInput.classList.remove("is-invalid","is-valid");
-  givenAmountInput.classList.remove("is-invalid","is-valid");
-  pendingAmountInput.classList.remove("is-invalid","is-valid");
-  injectionDateInput.classList.remove("is-invalid","is-valid");
+  const elements = [
+    cowNameInput, cowBreedInput, bullNameInput,
+    injectionNameInput, injectionPriceInput, givenAmountInput,
+    pendingAmountInput, injectionDateInput
+  ];
+
+  for (let element of elements) {
+    element.remove("is-invalid","is-valid");
+  }
   cowForm.reset();
   injectionForm.reset();
   cowNameInput.focus();
@@ -77,18 +76,21 @@ function cowFormReset() {
 
 
 function injectionFormReset() {
-  injectionNameInput.classList.remove("is-invalid","is-valid");
-  injectionPriceInput.classList.remove("is-invalid","is-valid");
-  givenAmountInput.classList.remove("is-invalid","is-valid");
-  pendingAmountInput.classList.remove("is-invalid","is-valid");
-  injectionDateInput.classList.remove("is-invalid","is-valid");
+  const elements = [
+    injectionNameInput, injectionPriceInput, givenAmountInput,
+    pendingAmountInput, injectionDateInput
+  ];
+  
+  for (let element of elements) {
+    element.remove("is-invalid","is-valid");
+  }
   injectionForm.reset();
   injectionNameInput.focus();
 }
 
 
 
-function getUserRecord() {
+function validateAndExtractUserRecord() {
   const user = {};
   const isValidName = validateNameAndUpdateNameInputUI(userNameInput);
   const isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(userPhoneNumberInput);
@@ -104,7 +106,7 @@ function getUserRecord() {
 
 
 
-function getCowRecord() {
+function validateAndExtractCowRecord() {
   const cow = {};
   const isValidCowName = validateNameAndUpdateNameInputUI(cowNameInput);
   const isValidBreed = validateInputAndUpdateUI(cowBreedInput);
@@ -115,27 +117,30 @@ function getCowRecord() {
     cow.bullName = bullNameInput.value.trim();
     return cow;
     }
-    return null;
+  return null;
 }
 
 
 
-function getInjectionRecord() {
-  const injection = {};
+function validateAndExtractInjectInfoAndAiDate() {
   const isValidInjectionName = validateInputAndUpdateUI(injectionNameInput);
   const isValidInjectionPrice = validateInputAndUpdateUI(injectionPriceInput);
   const isValidGivenAmount = validateInputAndUpdateUI(givenAmountInput);
   const isValidPendingAmount = validateInputAndUpdateUI(pendingAmountInput);
   const isValidInjectionDate = validateDateAndUpdateDateInputUI(injectionDateInput);
 
-  if(isValidInjectionName && isValidInjectionPrice && isValidGivenAmount && isValidPendingAmount && isValidInjectionDate) {
-    injection.name = injectionNameInput.value.trim();
-    injection.price = injectionPriceInput.value.trim();
-    injection.givenAmount = givenAmountInput.value.trim();
-    injection.pendingAmount = pendingAmountInput.value.trim();
-    injection.date = injectionDateInput.value.trim();
-    return injection;
-  } 
+  if (
+    isValidInjectionName && isValidInjectionPrice && isValidGivenAmount && 
+    isValidPendingAmount && isValidInjectionDate
+  ) {
+    return {
+      name: injectionNameInput.value.trim(),
+      price: injectionPriceInput.value.trim(),
+      givenAmount: givenAmountInput.value.trim(),
+      pendingAmount: pendingAmountInput.value.trim(),
+      date: injectionDateInput.value.trim()
+    };
+  }
   return null;
 }
 
@@ -197,14 +202,14 @@ function convertUiForRecord(data) {
 
 
 
-function handleSubmit(e) {
+function handleSubmit() {
   const recordModalBody =  recordModal.querySelector(".modal-body");
   addNewCowBTN.setAttribute("disabled","");
   addNewInjectionBTN.setAttribute("disabled","");
   if(Object.keys(record).length === 0) {
-    const user = getUserRecord();
-    const cow = getCowRecord();
-    const injection = getInjectionRecord();
+    const user = validateAndExtractUserRecord();
+    const cow = validateAndExtractCowRecord();
+    const injection = validateAndExtractInjectInfoAndAiDate();
 
     if(user) {
       record.user = user;
@@ -240,9 +245,9 @@ function handleSubmit(e) {
   }
 
   if(addCowBTNIsClicked) {
-    const cow = getCowRecord();
+    const cow = validateAndExtractCowRecord();
     console.log(cow);
-    const injection = getInjectionRecord();
+    const injection = validateAndExtractInjectInfoAndAiDate();
     console.log(injection);
     if(cow) {
       record.cows.push(cow);
@@ -267,7 +272,7 @@ function handleSubmit(e) {
   }
 
   if(addInjectionBTNIsClicked) {
-    const injection = getInjectionRecord();
+    const injection = validateAndExtractInjectInfoAndAiDate();
     const lastCowInjectionDetails = record.cows[record.cows.length-1].injectionInfoAndAiDates;
     if(injection) {
       lastCowInjectionDetails.push(injection);
