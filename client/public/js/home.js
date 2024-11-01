@@ -3,7 +3,8 @@ import { toggleElementVisibility } from "./utils/userInteraction.js";
 const contentContainer = document.getElementById("content-container");
 const spinner = document.getElementById("spinner");
 const cowImageContainer = document.getElementById("cow-img-container");
-const addUserBTN = document.getElementById("add-user-btn")
+
+
 
 function calculatePendingAmount(cows) {
   if (cows === null || cows === undefined) {
@@ -18,9 +19,7 @@ function calculatePendingAmount(cows) {
   return pendingAmount.reduce((total, amount) => total + amount, 0)
 }
 
-addUserBTN.addEventListener("click",() => {
-  location.href = "/add-new-record"
-}) 
+
 
 async function fetchRecordAndUpdateUI() {
   try {
