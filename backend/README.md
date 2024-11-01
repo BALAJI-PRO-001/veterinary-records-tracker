@@ -24,6 +24,7 @@
   - [Delete all cow from user](#delete-all-cow-from-user)
   - [Add new injection info and ai dates to cow](#add-new-injection-info-and-ai-dates-to-cow)
   - [Delete injection info and ai dates from cow](#delete-injection-info-and-ai-dates-from-cow)
+  - [Delete all injection info and ai dates from cow](#delete-all-injection-info-and-ai-dates-from-cow)
   - [Update user record](#update-user-record)
   - [Update cow record](#update-cow-record)
   - [Update injection info and ai date record](#update-injection-info-and-ai-date-record)
@@ -419,6 +420,21 @@ Response (Request Based)
 Request Information
 ===================
 URL: /api/v1/records/<userId>/cows/<cowId>/inject-info-ai-dates/<id>
+METHOD: DELETE
+COOKIE: Admin cookie must 
+
+Response (Request Based)
+=========================
+statusCode: 204  body: empty
+```
+
+
+## Delete All Injection Info And Ai Dates From Cow
+**Api usage and request response details**
+``` base
+Request Information
+===================
+URL: /api/v1/records/<userId>/cows/<cowId>/inject-info-ai-dates/all
 METHOD: DELETE
 COOKIE: Admin cookie must 
 
