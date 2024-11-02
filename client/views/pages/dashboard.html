@@ -16,14 +16,29 @@
   <div id="alert-box" class="alert alert-danger d-none fw-bold fs-6" role="alert"></div>  
 
   <main class="mt-3 d-flex flex-column gap-3">
-    <div id="server-info-coantianer" class="shadow mx-3 p-3 border rounded" style="min-height: 100px;">
+    <div id="server-info-container" class="shadow mx-3 p-3 border rounded" style="min-height: 100px;">
       <h4>Server Information</h4>
-      <div id="spinner" style="width: 200px;" class="d-flex d-none py-2 px-0 align-items-center gap-2">
-        <p class="m-0">Status: <span class="text-success">Running </span></p>
-        <div class="spinner-border text-success" role="status" style="height: 20px; width: 20px; border-width: 2px;"></div>
+      <div class="d-flex align-items-center flex-wrap gap-2">
+        <div id="spinner" style="width: 140px;" class="d-flex p-0 align-items-center gap-2">
+          <p class="m-0">Status: <span class="text-success">Running </span></p>
+          <div class="spinner-border text-success" role="status" style="height: 20px; width: 20px; border-width: 2px;"></div>
+        </div>
+        <p id="deactivated-content-element" class="mb-2 d-none">Status: <span class="text-danger">Deactivated.</span></p>
+        
+        <p class="m-0">Total Request Count: <span class="fw-bold" id="request-count"></span></p>
+        <p class="m-0">Total Request Time: <span class="fw-bold" id="response-time"></span></p>
       </div>
-      <p class="mb-2">Status: <span class="text-danger">Deactivated.</span></p>
-      <p class="m-0">RPS: 1111  </p>
+
+      <hr>
+
+      <div class="d-flex align-items-center mt-2 flex-wrap gap-2">
+        <p class="m-0">Allocated Mem: <span class="fw-bold" id="allocated-mem" ></span></p>
+        <p class="m-0">Heap Mem: <span class="fw-bold" id="heap-memory" ></span></p>
+        <p class="m-0">Heap Mem Usage: <span class="fw-bold" id="heap-mem-usage" ></span></p>
+      </div>
+
+      <hr>
+      <p class="m-0">CPU Usage: <span class="fw-bold" id="cpu-usage"></span></p>
     </div>
 
     <div id="db-and-records-management-container" class="shadow mx-3 p-3 border rounded" style="min-height: 100px;">
@@ -41,8 +56,8 @@
         <div class="btn-group dropup">
           <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">Download </button>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Database</a></li>
-            <li><a class="dropdown-item" href="#">Records</a></li>
+            <li><a class="dropdown-item" style="color: #0a58ca" href="/api/v1/super-user/download/db">Database</a></li>
+            <li><a class="dropdown-item" style="color: #0a58ca" href="/api/v1/super-user/download/records">Records</a></li>
           </ul>
         </div>
       </div>
@@ -66,7 +81,7 @@
       </div>
       <pre style="min-height: 300px; max-height: 500px;" class="bg-dark text-white rounded c-fs-f-console overflow-auto">
       </pre>
-      <button class="btn btn-success mt-3">Download Logs</button>
+      <button class="btn btn-success ">Download Logs</button>
       <p id="err-message-element" class="text-danger fw-bold mt-2 mb-0"></p>
     </div>
 
