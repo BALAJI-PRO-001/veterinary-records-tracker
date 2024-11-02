@@ -946,19 +946,20 @@ async function fetchRecordAndUpdateUI() {
       }
 
       if (res.status === 204) {
+        const selectedInjectInfoAndAiDateId = selectedInjectInfoAndAiDateRow.getAttribute("key");
         record.cows.forEach((cow) => {
-          const selectedInjectInfoAndAiDateId = selectedInjectInfoAndAiDateRow.getAttribute("key");
-          const injectionInfoAndAiDate = cow.injectionInfoAndAiDates.find(({id}) => id == selectedInjectInfoAndAiDateId);
-          if (injectionInfoAndAiDate) {
-            const index = cow.injectionInfoAndAiDates.indexOf(injectionInfoAndAiDate);
-            pendingAmountSpan.innerText = Number(pendingAmountSpan.innerText) - injectionInfoAndAiDate.pendingAmount;
-            totalPendingAmountSpan.innerText = Number(totalPendingAmountSpan.innerText) - injectionInfoAndAiDate.pendingAmount;
-            cow.injectionInfoAndAiDates.splice(index, 1);
+          cow.injectionInfoAndAiDates.forEach((injectionInfoAndAiDate, index, injectionInfoAndAiDates) => {
+            if (injectionInfoAndAiDate.id == selectedInjectInfoAndAiDateId) {
+              injectionInfoAndAiDates.splice(index, 1);
 
-            if (cow.injectionInfoAndAiDates.length === 0) {
-              return location.reload();
+              if (injectionInfoAndAiDates.length == 0) {
+                location.reload();
+              }
+
+              totalPendingAmountSpan.innerText = calculatePendingAmount(record.cows);
+              pendingAmountSpan.innerText = calculatePendingAmount([cow]);
             }
-          }
+          });
         });
 
         selectedInjectInfoAndAiDateRow.remove();
@@ -1079,16 +1080,22 @@ async function fetchRecordAndUpdateUI() {
           updateInjectInfoAndAiDateModalMessageEl.classList.add("text-success");
           updateInjectInfoAndAiDateModalMessageEl.innerText = "Changes saved successfully.";
           return setTimeout(() => {
-            const prevPendingAmount = Number(selectedInjectInfoAndAiDateRow.children[3].innerText);
-            totalPendingAmountSpan.innerText = (Number(totalPendingAmountSpan.innerText) - prevPendingAmount) + data.data.injectionInfoAndAiDate.pendingAmount;
-            pendingAmountSpan.innerText = (Number(pendingAmountSpan.innerText) - prevPendingAmount) + data.data.injectionInfoAndAiDate.pendingAmount;
-
             selectedInjectInfoAndAiDateRow.children[0].innerText = data.data.injectionInfoAndAiDate.name;
             selectedInjectInfoAndAiDateRow.children[1].innerText = data.data.injectionInfoAndAiDate.price;
             selectedInjectInfoAndAiDateRow.children[2].innerText = data.data.injectionInfoAndAiDate.givenAmount;
             selectedInjectInfoAndAiDateRow.children[3].innerText = data.data.injectionInfoAndAiDate.pendingAmount;
             selectedInjectInfoAndAiDateRow.children[4].innerText = data.data.injectionInfoAndAiDate.date;
-            
+
+            record.cows.forEach((cow) => {
+              cow.injectionInfoAndAiDates.forEach((injectionInfoAndAiDate, index, injectionInfoAndAiDates) => {
+                if (injectionInfoAndAiDate.id == data.data.injectionInfoAndAiDate.id) {
+                  injectionInfoAndAiDates[index] = data.data.injectionInfoAndAiDate;
+                  totalPendingAmountSpan.innerText = calculatePendingAmount(record.cows);
+                  pendingAmountSpan.innerText = calculatePendingAmount([cow]);
+                }
+              });
+            });
+
             resetUpdateInjectInfoAndAiDateModalComponents();
           }, 1000);
         }
