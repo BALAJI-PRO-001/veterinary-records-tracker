@@ -6,7 +6,6 @@ import superUserRouter from "./routes/superuser.route";
 import cookieParser from "cookie-parser";
 import { STATIC_FILES_PATH } from "./utils/constants";
 import dotenv from "dotenv";
-import { cpuUsage, memoryUsage } from "process";
 
 const app = express();
 dotenv.config(); 
@@ -14,31 +13,9 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
-let requestCount = 0;
-let responseTime = 0;
-app.use((req, res, next) => {
-  const start = Date.now();
-  res.on("finish", () => {
-    const duration = Date.now() - start;
-    responseTime += duration;
-    requestCount ++;
-  });
-  next();
-});
-
 app.use("/api/v1/admin", adminRouter);
 app.use("/api/v1/records", recordRouter);
 app.use("/api/v1/super-user", superUserRouter);
-
-
-app.get("/server-information", (req, res) => {
-  res.status(200).json({
-    requestCount: requestCount,
-    responseTime: responseTime,
-    memoryUsage: process.memoryUsage(),
-    cpuUsage: process.cpuUsage(),
-  });
-});
 
 
 app.use(express.static(STATIC_FILES_PATH));
