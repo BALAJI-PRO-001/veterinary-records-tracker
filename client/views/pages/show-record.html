@@ -258,10 +258,10 @@
           </div>  
           <p id="main-content" class="text-secondary fs-5 p-2 m-0">Are you sure you want to delete this cow record, including the injection information and AI (Artificial Insemination) dates?</p>
 
-          <div class="form-check ms-2 d-flex align-items-center gap-2 p-0">
+          <from autocomplete="off" class="form-check ms-2 d-flex align-items-center gap-2 p-0">
             <input class="form-check-input m-0 border border-2" type="checkbox" value="false" id="checkbox" style="height: 20px; width: 20px;">
             <label class="form-check-label fs-5 text-secondary" for="checkbox">Delete All</label>
-          </div>
+          </from>
 
           <div class="d-flex gap-2 me-2 flex-wrap justify-content-end">
             <p id="ok-element" class="text-danger m-0 p-2 c-fs-f-srp-p cursor-pointer">Ok</p>
@@ -298,10 +298,10 @@
 
           <p id="main-content" class="text-secondary fs-5 p-2 m-0">Are you sure you want to delete this injection info and ai date record?.</p>
 
-          <div class="form-check ms-2 d-flex align-items-center gap-2 p-0">
+          <form autocomplete="off" class="form-check ms-2 d-flex align-items-center gap-2 p-0">
             <input class="form-check-input m-0 border border-2" type="checkbox" id="checkbox" style="height: 20px; width: 20px;">
             <label class="form-check-label fs-5 text-secondary" for="checkbox">Delete All</label>
-          </div>
+          </form>
           
           <div class="d-flex gap-2 me-2 flex-wrap justify-content-end">
             <p id="ok-element" class="text-danger m-0 p-2 c-fs-f-srp-p cursor-pointer">Ok</p>
@@ -410,7 +410,7 @@
             </div> 
 
             <div class="d-flex flex-column mb-3" style="height: 60px;">
-              <input id="date" type="text" onfocus="this.type='date'"  onblur="this.type='text'"  class="form-control form-control-lg border-2" placeholder="Date ....">
+              <input id="date" type="date"  class="form-control form-control-lg border-2" placeholder="Date ....">
               <div id="err-message-element" class="invalid-feedback mt-0 fw-bold"></div>
             </div> 
             
