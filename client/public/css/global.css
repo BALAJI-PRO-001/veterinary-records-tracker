@@ -46,6 +46,10 @@
   color: white !important;
 }
 
+.c-fs-f-console {
+  font-size: 10px;
+}
+
 @media  screen and (min-width: 500px) {
   .c-fs-f-srp-h {
     font-size: x-large;
@@ -58,12 +62,15 @@
   .c-max-h-f-srp-t {
     max-height: 350px !important;
   }
-
 }
 
 @media screen and (min-width: 560px) {
   .c-fs-f-srp-t {
     font-size: 20px;
+  }
+
+  .c-fs-f-console {
+    font-size: 15px;
   }
 }
 
