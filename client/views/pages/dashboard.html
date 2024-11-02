@@ -16,14 +16,27 @@
   <div id="alert-box" class="alert alert-danger d-none fw-bold fs-6" role="alert"></div>  
 
   <main class="mt-3 d-flex flex-column gap-3">
-    <div class="shadow mx-3 p-3 border rounded" style="min-height: 100px;">
+    <div id="server-info-coantianer" class="shadow mx-3 p-3 border rounded" style="min-height: 100px;">
+      <h4>Server Information</h4>
+      <div id="spinner" style="width: 200px;" class="d-flex d-none py-2 px-0 align-items-center gap-2">
+        <p class="m-0">Status: <span class="text-success">Running </span></p>
+        <div class="spinner-border text-success" role="status" style="height: 20px; width: 20px; border-width: 2px;"></div>
+      </div>
+      <p class="mb-2">Status: <span class="text-danger">Deactivated.</span></p>
+      <p class="m-0">RPS: 1111  </p>
+    </div>
+
+    <div id="db-and-records-management-container" class="shadow mx-3 p-3 border rounded" style="min-height: 100px;">
       <h4>Database And Records Management</h4>
       <p class="text-secondary mb-0"><span class="text-danger fw-bold">*</span> All data in the old database will be permanently lost once you upload a new database file.</p>
       <p class="text-secondary mt-0"><span class="text-danger fw-bold">*</span> After the new database is uploaded successfully, its data will be loaded into your application.</p>
-      <input type="file" id="db-input" accept=".db" class="form-control form-control-lg mt-3" style="max-width: 400px;">
+      <p class="text-secondary mt-0">
+        <span class="text-dark">Note:</span> Only SQLite databases are supported. The file extension must be <strong>.db</strong>.
+      </p>      
+      <input type="file" id="db-file-input" accept=".db" class="form-control form-control-lg mt-3" style="max-width: 400px;">
 
       <div class="d-flex mt-3 gap-2 flex-wrap">
-        <button class="btn btn-primary">Update</button>
+        <button id="db-update-btn" class="btn btn-primary">Update</button>
 
         <div class="btn-group dropup">
           <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">Download </button>
@@ -33,7 +46,11 @@
           </ul>
         </div>
       </div>
-      <p id="err-message-element" class="text-danger fw-bold mt-2 mb-0"></p>
+      <p id="message-element" class="text-success fw-bold mt-2 mb-0"></p>
+      <div id="spinner" style="width: 200px;" class="d-flex d-none py-2 px-0 align-items-center gap-2">
+        <p class="c-fs-f-srp-p m-0 text-success">Uploading </p>
+        <div class="spinner-border text-success" role="status" style="height: 20px; width: 20px; border-width: 2px;"></div>
+      </div>  
     </div>
 
     <div class="shadow border mx-3 rounded p-3">
