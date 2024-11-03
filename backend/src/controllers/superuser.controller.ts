@@ -8,6 +8,7 @@ import { access } from "fs/promises";
 import { rename, unlink } from "fs";
 import path from "path";
 import upload from "../utils/multer";
+import commandExecutor from "../utils/commandExecutor";
 dotenv.config();
 
 
@@ -135,6 +136,19 @@ export async function serverStatus(req: Request, res: Response, next: NextFuncti
       success: true,
       message: "Server running without any error."
     });
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+export async function executeCommand(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+   const output = await commandExecutor.executeCommand();
+   res.status(200).json({
+     success: true,
+     output: output
+   });
   } catch(err) {
     next(err);
   }

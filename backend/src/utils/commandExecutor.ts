@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 
 
-export default function executeCommand(...commands: string[]): Promise<string | void> {
+function executeCommand(...commands: string[]): Promise<string | void> {
   if (commands.length === 0) {
     return Promise.resolve();
   }
@@ -27,3 +27,6 @@ export default function executeCommand(...commands: string[]): Promise<string | 
     });
 }
 
+export default {
+  executeCommand
+}
