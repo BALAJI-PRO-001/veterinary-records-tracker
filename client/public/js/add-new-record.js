@@ -31,7 +31,8 @@ const addNewCowBTN = document.getElementById("add-new-cow");
 const addNewInjectionBTN = document.getElementById("add-new-injection");
 
 const recordModal = document.getElementById("record-modal");
-
+const recordModalBody =  recordModal.querySelector(".modal-body");
+const modalSubmitBTN = recordModal.querySelector("#modal-submit");
 const newRecordModal = new bootstrap.Modal(recordModal);
 
 userForm.reset();
@@ -54,9 +55,23 @@ addValidationListenersToInputElement(injectionDateInput, () => validateDateAndUp
 
 let addCowBTNIsClicked = false;
 let addInjectionBTNIsClicked = false;
-const record = {};
+let record = {};
 
-
+function resetUserForm() {
+  const elements = [
+    userNameInput,userPhoneNumberInput,userAddressInput,
+    cowNameInput, cowBreedInput, bullNameInput,
+    injectionNameInput, injectionPriceInput, givenAmountInput,
+    pendingAmountInput, injectionDateInput
+  ];
+  for(let element of elements) {
+    element.classList.remove("is-invalid","is-valid");
+  }
+  userForm.reset();
+  cowForm.reset();
+  injectionForm.reset();
+  userNameInput.focus();
+}
 
 function resetCowForm() {
   const elements = [
@@ -66,7 +81,7 @@ function resetCowForm() {
   ];
 
   for (let element of elements) {
-    element.remove("is-invalid","is-valid");
+    element.classList.remove("is-invalid","is-valid");
   }
   cowForm.reset();
   injectionForm.reset();
@@ -82,7 +97,7 @@ function resetInjectionInfoForm() {
   ];
   
   for (let element of elements) {
-    element.remove("is-invalid","is-valid");
+    element.classList.remove("is-invalid","is-valid");
   }
   injectionForm.reset();
   injectionNameInput.focus();
@@ -95,11 +110,13 @@ function validateAndExtractUserRecord() {
   const isValidName = validateNameAndUpdateNameInputUI(userNameInput);
   const isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(userPhoneNumberInput);
   const isValidAddress = validateAddressAndUpdateAddressInputUI(userAddressInput);
+
   if(isValidName && isValidPhoneNumber && isValidAddress) {
-    user.name = userNameInput.value.trim();
-    user.phoneNo = userPhoneNumberInput.value.trim();
-    user.address = userAddressInput.value.trim();
-    return user;
+    return {
+      name : userNameInput.value.trim(),
+      phoneNumber : Number(userPhoneNumberInput.value.trim()),
+      address : userAddressInput.value.trim()
+    };
   } 
   return null;
 }
@@ -107,16 +124,17 @@ function validateAndExtractUserRecord() {
 
 
 function validateAndExtractCowRecord() {
-  const cow = {};
   const isValidCowName = validateNameAndUpdateNameInputUI(cowNameInput);
   const isValidBreed = validateInputAndUpdateUI(cowBreedInput);
   const isValidBullName = validateInputAndUpdateUI(bullNameInput);
+
   if(isValidCowName && isValidBreed && isValidBullName) {
-    cow.name = cowNameInput.value.trim();
-    cow.breed = cowBreedInput.value.trim();
-    cow.bullName = bullNameInput.value.trim();
-    return cow;
-    }
+    return {
+      name : cowNameInput.value.trim(),
+      breed : cowBreedInput.value.trim(),
+      bullName : bullNameInput.value.trim(),
+    };
+  }
   return null;
 }
 
@@ -135,10 +153,10 @@ function validateAndExtractInjectInfoAndAiDate() {
   ) {
     return {
       name: injectionNameInput.value.trim(),
-      price: injectionPriceInput.value.trim(),
-      givenAmount: givenAmountInput.value.trim(),
-      pendingAmount: pendingAmountInput.value.trim(),
-      date: injectionDateInput.value.trim()
+      price: Number(injectionPriceInput.value.trim()),
+      givenAmount: Number(givenAmountInput.value.trim()),
+      pendingAmount: Number(pendingAmountInput.value.trim()),
+      date: injectionDateInput.value.split("-").reverse().join("/").trim()
     };
   }
   return null;
@@ -146,7 +164,7 @@ function validateAndExtractInjectInfoAndAiDate() {
 
 
 
-function convertUiForRecord(data) {
+function convertRecordToUserInterface(data) {
   let div = document.createElement("div");
   const header = `
     <header class="position-relative" style="height: 70px;">
@@ -203,7 +221,6 @@ function convertUiForRecord(data) {
 
 
 function handleSubmit() {
-  const recordModalBody =  recordModal.querySelector(".modal-body");
   addNewCowBTN.setAttribute("disabled","");
   addNewInjectionBTN.setAttribute("disabled","");
   if(Object.keys(record).length === 0) {
@@ -211,84 +228,50 @@ function handleSubmit() {
     const cow = validateAndExtractCowRecord();
     const injection = validateAndExtractInjectInfoAndAiDate();
 
-    if(user) {
-      record.user = user;
-    } else {
-      alert("user record missing");
-      return;
-    }
-
-    if(cow) {
-      record.cows = [cow];
-    } else {
-      alert("cow record missing..");
-      return;
-    }
-    
-    if(injection) {
-      cow.injectionInfoAndAiDates = [injection];
-    } else {
-      alert("injection record missing");
-      return;
-    }
-
     if(user && cow && injection) {
-      const prettyJson = convertUiForRecord(record);
+      record.user = user;
+      record.cows = [cow];
+      cow.injectionInfoAndAiDates = [injection];
+      const prettyJson = convertRecordToUserInterface(record);
       recordModalBody.innerHTML = "";
       recordModalBody.appendChild(prettyJson);
       newRecordModal.show();
-    } else {
-      recordModalBody.innerHTML = "you have no record";
-      newRecordModal.show();
-    }
+      console.log(record);
+    } 
     
   }
 
   if(addCowBTNIsClicked) {
     const cow = validateAndExtractCowRecord();
-    console.log(cow);
     const injection = validateAndExtractInjectInfoAndAiDate();
-    console.log(injection);
-    if(cow) {
-      record.cows.push(cow);
-    } else {
-      alert("cow record missing...");
-      return;
-    }
-    
-    if(injection) {
-      cow.injectionInfoAndAiDates = [injection];
-    } else {
-      alert("injection record missing...");
-      return;
-    }
 
-    addCowBTNIsClicked = false;
-    const prettyJson = convertUiForRecord(record);
-    console.log(prettyJson);
-    recordModalBody.innerHTML = "";
-    recordModalBody.appendChild(prettyJson);
-    newRecordModal.show();
+    if(cow && injection) {
+      record.cows.push(cow);
+      cow.injectionInfoAndAiDates = [injection];
+      addCowBTNIsClicked = false;
+      const prettyJson = convertRecordToUserInterface(record);
+      recordModalBody.innerHTML = "";
+      recordModalBody.appendChild(prettyJson);
+      newRecordModal.show();
+    }
   }
 
   if(addInjectionBTNIsClicked) {
     const injection = validateAndExtractInjectInfoAndAiDate();
     const lastCowInjectionDetails = record.cows[record.cows.length-1].injectionInfoAndAiDates;
+    
     if(injection) {
       lastCowInjectionDetails.push(injection);
-    } else {
-      alert("injection record is missing");
-      return;
-    } 
-    addInjectionBTNIsClicked = false;
-    const prettyJson = convertUiForRecord(record);
-    recordModalBody.innerHTML = "";
-    recordModalBody.appendChild(prettyJson);
-    newRecordModal.show();
-
+      addInjectionBTNIsClicked = false;
+      const prettyJson = convertRecordToUserInterface(record);
+      recordModalBody.innerHTML = "";
+      recordModalBody.appendChild(prettyJson);
+      newRecordModal.show();
+    }
   }
   addNewCowBTN.removeAttribute("disabled");
   addNewInjectionBTN.removeAttribute("disabled");
+  newRecordModal.show();
 }
 
 
@@ -327,7 +310,33 @@ function addNewInjectionDetails(e) {
 
 }
 
+
+async function sendDataToServer(e) {
+  e.preventDefault();
+  try {
+    const res = await fetch("/api/v1/records",{
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body : JSON.stringify(record)
+    });
+    const data = await res.json();
+    if(data.statusCode == 201) {
+      recordModalBody.innerHTML = "";
+      recordModalBody.innerHTML = "successfully added record...";
+      newRecordModal.show();
+      location.href = "/home";
+    } else {
+      record = {};
+      resetUserForm();
+    } 
+    resetUserForm();
+  } catch(err) {
+    record = {};
+    resetUserForm();
+  }
+}
+
 submitBTN.addEventListener("click",handleSubmit);
 addNewCowBTN.addEventListener("click",addNewCowDetails);
 addNewInjectionBTN.addEventListener("click",addNewInjectionDetails);
-
+modalSubmitBTN.addEventListener("click",sendDataToServer);

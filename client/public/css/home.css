@@ -2,13 +2,13 @@
 
 @media  screen and (min-width: 300px) {
   .main-container {
-    height: 91vh;
+    max-height: 91vh;
   } 
 }
 
 @media screen and (max-width: 400px) {
   .main-container {
-    height: 85.5vh;
+    max-height: 85.5vh;
   }
 }
 

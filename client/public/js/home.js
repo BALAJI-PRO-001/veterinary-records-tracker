@@ -3,7 +3,7 @@ import { toggleElementVisibility } from "./utils/userInteraction.js";
 const contentContainer = document.getElementById("content-container");
 const spinner = document.getElementById("spinner");
 const cowImageContainer = document.getElementById("cow-img-container");
-
+const addNewCustomerBTN = document.getElementById("add-new-btn");
 
 
 function calculatePendingAmount(cows) {
@@ -33,6 +33,12 @@ async function fetchRecordAndUpdateUI() {
       toggleElementVisibility(cowImageContainer,false,"d-none");
     } else {
       cowImageContainer.classList.add("d-none");
+      addNewCustomerBTN.classList.remove("start-50","translate-middle");
+      addNewCustomerBTN.style.cssText =  `
+        bottom : 4% !important;
+        width: 200px !important;
+        right: 4% !important;
+      `
     }
     data.data.records.forEach((data) => {
       const details = `
