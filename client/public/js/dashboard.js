@@ -55,31 +55,32 @@ dbUpdateBTN.addEventListener("click", async () => {
       dbAndRecordsDivMessageEl.classList.add("text-success");
       dbAndRecordsDivMessageEl.innerText = "Database file uploaded successfully.";
       
-      setTimeout(async () => {
+      setTimeout(() => {
         dbAndRecordsDivMessageEl.classList.remove("text-success");
         dbAndRecordsDivMessageEl.classList.add("text-danger");
         dbAndRecordsDivMessageEl.innerText = "Connecting to the server ....";
         
-        try {
-          const res = await fetch("/api/v1/super-user/server/status");
-          dbAndRecordsDivMessageEl.classList.remove("text-danger");
-          dbAndRecordsDivMessageEl.classList.add("text-success");
-          dbAndRecordsDivMessageEl.innerText = "Server restarted successfully.";
-          return setTimeout(() => {
-            dbAndRecordsDivMessageEl.innerText = "";
-          }, 1000);
-        } catch(err) {
-          dbAndRecordsDivMessageEl.classList.remove("text-success");
-          dbAndRecordsDivMessageEl.classList.add("text-danger");
-          dbAndRecordsDivMessageEl.innerText = "Server Deactivated.";
-        }
+        setTimeout(async () => {
+          try {
+            await fetch("/api/v1/super-user/server/status");
+            dbAndRecordsDivMessageEl.classList.remove("text-danger");
+            dbAndRecordsDivMessageEl.classList.add("text-success");
+            dbAndRecordsDivMessageEl.innerText = "Server restarted successfully.";
+            return setTimeout(() => {
+              dbAndRecordsDivMessageEl.innerText = "";
+            }, 1000);
+          } catch(err) {
+            dbAndRecordsDivMessageEl.classList.remove("text-success");
+            dbAndRecordsDivMessageEl.classList.add("text-danger");
+            dbAndRecordsDivMessageEl.innerText = "Server restart failed. You cannot make further requests to the server. Please check the deployed machine.";
+          }
+        }, 1000);
       }, 1000);
     }
   } catch(err) {
     alertBox.classList.remove("d-none");
     alertBox.innerText = "Error: " + err.message;
   }
-
 });
 
 
