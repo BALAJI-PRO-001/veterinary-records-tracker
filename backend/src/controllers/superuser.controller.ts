@@ -127,3 +127,15 @@ export async function serverActions(req: Request, res: Response, next: NextFunct
     next(err);
   }
 }
+
+
+export async function serverStatus(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    res.status(200).json({
+      success: true,
+      message: "Server running without any error."
+    });
+  } catch(err) {
+    next(err);
+  }
+}

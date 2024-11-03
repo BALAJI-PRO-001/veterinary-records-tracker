@@ -1,7 +1,5 @@
 
 const alertBox = document.getElementById("alert-box");
-const serverInfoContainer = document.getElementById("server-info-container");
-
 
 const dbAndRecordsManagementContainer = document.getElementById("db-and-records-management-container");
 const dbFileInput = dbAndRecordsManagementContainer.querySelector("#db-file-input");
@@ -14,7 +12,11 @@ dbFileInput.addEventListener("change", async (e) => {
   if (file && file.name.split(".").pop() !== "db") {
     dbAndRecordsDivMessageEl.classList.remove("text-success");
     dbAndRecordsDivMessageEl.classList.add("text-danger");
-    return dbAndRecordsDivMessageEl.innerText = "You can only upload database file ....";
+    dbUpdateBTN.setAttribute("disabled", "");
+    dbAndRecordsDivMessageEl.innerText = "You can only upload database file.";
+  } else {
+    dbUpdateBTN.removeAttribute("disabled");
+    dbAndRecordsDivMessageEl.innerText = "";
   }
 });
 
@@ -25,8 +27,9 @@ dbUpdateBTN.addEventListener("click", async () => {
     if (!dbFile) {
       dbAndRecordsDivMessageEl.classList.remove("text-success");
       dbAndRecordsDivMessageEl.classList.add("text-danger");
-      return dbAndRecordsDivMessageEl.innerText = "Please select a database file.";
-    }
+      return dbAndRecordsDivMessageEl.innerText = "Please select a file. The file must be an SQLite database file.";
+    } 
+    dbAndRecordsDivMessageEl.innerText = "";
 
     const spinner = dbAndRecordsManagementContainer.querySelector("#spinner");
     spinner.classList.remove("d-none");
@@ -51,8 +54,25 @@ dbUpdateBTN.addEventListener("click", async () => {
       dbAndRecordsDivMessageEl.classList.remove("text-danger");
       dbAndRecordsDivMessageEl.classList.add("text-success");
       dbAndRecordsDivMessageEl.innerText = "Database file uploaded successfully.";
-      return setTimeout(() => {
-        dbAndRecordsDivMessageEl.innerText = "";
+      
+      setTimeout(async () => {
+        dbAndRecordsDivMessageEl.classList.remove("text-success");
+        dbAndRecordsDivMessageEl.classList.add("text-danger");
+        dbAndRecordsDivMessageEl.innerText = "Connecting to the server ....";
+        
+        try {
+          const res = await fetch("/api/v1/super-user/server/status");
+          dbAndRecordsDivMessageEl.classList.remove("text-danger");
+          dbAndRecordsDivMessageEl.classList.add("text-success");
+          dbAndRecordsDivMessageEl.innerText = "Server restarted successfully.";
+          return setTimeout(() => {
+            dbAndRecordsDivMessageEl.innerText = "";
+          }, 1000);
+        } catch(err) {
+          dbAndRecordsDivMessageEl.classList.remove("text-success");
+          dbAndRecordsDivMessageEl.classList.add("text-danger");
+          dbAndRecordsDivMessageEl.innerText = "Server Deactivated.";
+        }
       }, 1000);
     }
   } catch(err) {
