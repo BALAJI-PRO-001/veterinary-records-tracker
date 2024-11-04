@@ -151,7 +151,34 @@ export async function executeCommand(req: Request, res: Response, next: NextFunc
     const output = await commandExecutor.executeCommand(...commands);
     res.status(200).json({
       success: true,
+      statusCode: 200,
       output: output
+    });
+  } catch(err) {
+    next(err);
+  }
+}
+
+
+
+export async function sendLogFiles(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    const logFilePath = path.join(__dirname, "../../../logs", req.query.fileName as string);
+    await access(logFilePath);
+    res.download(logFilePath);
+  } catch(err) {
+    next(errorHandler(404, "File not found. Unable to provide requested file."));
+  }
+}
+
+
+export async function clearLogs(req: Request, res: Response, next: NextFunction): Promise<void> {
+  try {
+    await commandExecutor.executeCommand("npx pm2 flush");
+    res.status(200).json({
+      success: true,
+      statusCode: 200,
+      message: "All log content has been successfully cleared."
     });
   } catch(err) {
     next(err);
