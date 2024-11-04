@@ -7,6 +7,14 @@ const dbUpdateBTN = dbAndRecordsManagementContainer.querySelector("#db-update-bt
 const dbAndRecordsDivMessageEl = dbAndRecordsManagementContainer.querySelector("#message-element");
 
 
+const logAndMonitContainer = document.getElementById("log-and-monit-container");
+const logConsole = logAndMonitContainer.querySelector("#console-output-element");
+const commandInput = logAndMonitContainer.querySelector("#command-input");
+const logAndMonitContainerMessageEl = logAndMonitContainer.querySelector("#message-element");
+const paginationContainer = logAndMonitContainer.querySelector("#pagination-container");
+
+// const commandExecuteBTN = logAndMonitContainer.querySelector("#command-execute-btn");
+
 dbFileInput.addEventListener("change", async (e) => {
   const file = e.target.files[0];
   if (file && file.name.split(".").pop() !== "db") {
@@ -84,3 +92,84 @@ dbUpdateBTN.addEventListener("click", async () => {
 });
 
 
+
+const pageLinks = paginationContainer.querySelectorAll("#page-link");
+pageLinks.forEach((pageLink) => {
+  pageLink.addEventListener("click", async (e) => {
+    e.preventDefault();
+    try {
+      let requestURL = "";
+      if (pageLink.innerText === "App Log") {
+        requestURL = "/api/v1/super-user/logs?fileName=app.log";
+      } else if (pageLink.innerText === "Output Log") {
+        requestURL = "/api/v1/super-user/logs?fileName=output.log";
+      } else if (pageLink.innerText === "Error Log") {
+        requestURL = "/api/v1/super-user/logs?fileName=error.log";
+      }
+  
+      const res = await fetch(requestURL);
+      const logContent = await res.text();
+      logConsole.innerText = `[ ${pageLink.innerText} ] \n\n${logContent}`;
+    } catch(err) {
+      logConsole.innerText = `Error: ${err.message}`;
+    }
+  });
+});
+pageLinks[0].click();
+
+
+logAndMonitContainer.querySelector("#clear-log-content-btn").addEventListener("click", async () => {
+  try {
+    const res = await fetch("/api/v1/super-user/logs/clear", {method: "POST"});
+    const data = await res.json();
+    if (data.statusCode === 200) {
+      logConsole.innerText = data.message;
+      return;
+    }
+
+    logConsole.innerText = data.message
+  } catch(err) {
+    logConsole.innerText = err.message;
+  }
+});
+
+
+
+// commandInput.addEventListener("keypress", (e) => {
+//   if (e.code === "Enter") {
+//     commandExecuteBTN.click();
+//   }
+// });
+
+// commandExecuteBTN.addEventListener("click", async () => {
+//   try {
+//     const commands = commandInput.value.split(",");
+//     for (let command of commands) {
+//       if (command === "cls" || command === "clear") {
+//         consoleOutputEl.innerText = "";
+//         return;
+//       }
+
+//       const res = await fetch("/api/v1/super-user/commands/execute", {
+//         headers: { "Content-Type": "application/json"},
+//         method: "POST",
+//         body: JSON.stringify({
+//           commands: [command]
+//         })
+//       });
+//       const data = await res.json();
+//       consoleOutputEl.scrollTop = consoleOutputEl.scrollHeight;
+      
+//       if (data.statusCode === 200) {
+//         consoleOutputEl.innerText += `\n[Executed Command: ${command} ]\n${data.output}`;
+//       }
+
+//       if (data.statusCode !== 200) {
+//         consoleOutputEl.innerText += `\n[Executed Command: ${command} ]\n${data.message}`;
+//       }
+//     }
+//   } catch(err) {
+//     alertBox.classList.remove("d-none");
+//     alertBox.innerText = "Error: " + err.message;
+//   }
+// });
