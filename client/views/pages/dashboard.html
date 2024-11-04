@@ -62,7 +62,17 @@
     <div class="shadow border mx-3 rounded p-3" id="process-management-container">
       <h4>Process Management via CLI<span class="text-danger">[ Danger Zone ]</span></h4>
       <p class="text-secondary"><span class="text-danger fw-bold">*</span> The following service directly affects the process. Important data may be lost, so please back up before proceeding.</p>
-      <pre id="monit-output-element" style="min-height: 300px; max-height: 500px;" class="rounded c-fs-f-console overflow-auto p-2">Loading ....</pre>
+      <div class="d-flex flex-wrap gap-3 align-items-center">
+        <label >Update Time In Milliseconds: </label>
+        <select id="time-out" class="form-control mb-2" style="max-width: 50px;">
+          <option value="1000">1s</option>
+          <option value="2000">2s</option>
+          <option value="5000">5s</option>
+          <option value="10000" selected>10s</option>
+        </select>
+      </div>
+
+      <pre id="monit-output-element" style="min-height: 200px; max-height: 500px;" class="rounded shadow c-fs-f-console overflow-auto p-2">Loading ....</pre>
       <pre id="console-output-element" style="min-height: 300px; max-height: 500px;" class="bg-dark text-white rounded c-fs-f-console overflow-auto p-2"></pre>
 
       <div class="d-flex gap-3 mt-3 mb-2">
