@@ -1,7 +1,7 @@
 import { exec } from "child_process";
 
 
-function executeCommand(...commands: string[]): Promise<string | void> {
+async function executeCommand(...commands: string[]): Promise<string | void> {
   if (commands.length === 0) {
     return Promise.resolve();
   }
