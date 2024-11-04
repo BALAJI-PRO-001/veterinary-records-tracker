@@ -73,19 +73,9 @@ dbUpdateBTN.addEventListener("click", async () => {
         dbAndRecordsDivMessageEl.innerText = "Connecting to the server ....";
         
         setTimeout(async () => {
-          try {
-            await fetch("/api/v1/super-user/server/status");
             dbAndRecordsDivMessageEl.classList.remove("text-danger");
             dbAndRecordsDivMessageEl.classList.add("text-success");
-            dbAndRecordsDivMessageEl.innerText = "Server restarted successfully.";
-            return setTimeout(() => {
-              dbAndRecordsDivMessageEl.innerText = "";
-            }, 1000);
-          } catch(err) {
-            dbAndRecordsDivMessageEl.classList.remove("text-success");
-            dbAndRecordsDivMessageEl.classList.add("text-danger");
-            dbAndRecordsDivMessageEl.innerText = "Server restart failed. You cannot make further requests to the server. Please check the deployed machine.";
-          }
+            dbAndRecordsDivMessageEl.innerText = "Server restarted required use (CLI) to restart your all instance.";
         }, 1000);
       }, 1000);
     }
@@ -139,23 +129,43 @@ logAndMonitContainer.querySelector("#clear-log-content-btn").addEventListener("c
 
 
 
+let timeOut = 5000;
+let setIntervalId; // To keep track of the interval ID
+const timeOutSelectEl = processManagementContainer.querySelector("#time-out");
+const monitConsole = processManagementContainer.querySelector("#monit-output-element");
 
-// Monit Process every 1s.
-setInterval(async () => {
-  try {
-    const res = await fetch("/api/v1/super-user/commands/execute", {
-      headers: { "Content-Type": "application/json"},
-      method: "POST",
-      body: JSON.stringify({
-        commands: ["npx pm2 list"]
-      })
-    });
-    const data = await res.json();
-    processManagementContainer.querySelector("#monit-output-element").innerText = data.output;
-  } catch(err) {
-    
-  }
-}, 1000);
+// Function to start the monitoring interval
+const startMonitoring = () => {
+  // Clear any existing interval to avoid multiple intervals
+  if (setIntervalId) clearInterval(setIntervalId);
+
+  // Start a new interval with the updated timeout
+  setIntervalId = setInterval(async () => {
+    try {
+      const res = await fetch("/api/v1/super-user/commands/execute", {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({
+          commands: ["npx pm2 list"]
+        })
+      });
+      const data = await res.json();
+      monitConsole.innerText = data.output;
+    } catch (err) {
+      monitConsole.innerText = "Error: All application instances have stopped on the deployed server. No further requests can be processed at this time. Please check the server status and restart the instances to restore functionality.";
+      clearInterval(setIntervalId); // Stop monitoring on error
+    }
+  }, timeOut);
+};
+
+// Event listener for changes in timeout selection
+timeOutSelectEl.addEventListener("change", () => {
+  timeOut = parseInt(timeOutSelectEl.value, 10) || 10000; // Update timeOut, default to 1000 if parsing fails
+  startMonitoring(); // Restart the monitoring interval with the new timeout
+});
+
+// Initialize by clicking the fourth child element of timeOutSelectEl
+timeOutSelectEl.children[3].click();
 
 
 
@@ -195,6 +205,7 @@ commandExecuteBTN.addEventListener("click", async () => {
       }
     }
   } catch(err) {
+    commandConsole.innerText = "Error: All application instances have stopped on the deployed server. No further requests can be processed at this time. Please check the server status and restart the instances to restore functionality.";
     alertBox.classList.remove("d-none");
     alertBox.innerText = "Error: " + err.message;
   }
