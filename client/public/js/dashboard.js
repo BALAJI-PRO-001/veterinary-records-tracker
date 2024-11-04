@@ -9,11 +9,15 @@ const dbAndRecordsDivMessageEl = dbAndRecordsManagementContainer.querySelector("
 
 const logAndMonitContainer = document.getElementById("log-and-monit-container");
 const logConsole = logAndMonitContainer.querySelector("#console-output-element");
-const commandInput = logAndMonitContainer.querySelector("#command-input");
 const logAndMonitContainerMessageEl = logAndMonitContainer.querySelector("#message-element");
 const paginationContainer = logAndMonitContainer.querySelector("#pagination-container");
 
-// const commandExecuteBTN = logAndMonitContainer.querySelector("#command-execute-btn");
+const processManagementContainer = document.getElementById("process-management-container");
+const commandConsole = processManagementContainer.querySelector("#console-output-element");
+const commandInput = processManagementContainer.querySelector("#command-input");
+const commandExecuteBTN = processManagementContainer.querySelector("#command-execute-btn");
+
+
 
 dbFileInput.addEventListener("change", async (e) => {
   const file = e.target.files[0];
@@ -135,41 +139,63 @@ logAndMonitContainer.querySelector("#clear-log-content-btn").addEventListener("c
 
 
 
-// commandInput.addEventListener("keypress", (e) => {
-//   if (e.code === "Enter") {
-//     commandExecuteBTN.click();
-//   }
-// });
 
-// commandExecuteBTN.addEventListener("click", async () => {
-//   try {
-//     const commands = commandInput.value.split(",");
-//     for (let command of commands) {
-//       if (command === "cls" || command === "clear") {
-//         consoleOutputEl.innerText = "";
-//         return;
-//       }
+// Monit Process every 1s.
+setInterval(async () => {
+  try {
+    const res = await fetch("/api/v1/super-user/commands/execute", {
+      headers: { "Content-Type": "application/json"},
+      method: "POST",
+      body: JSON.stringify({
+        commands: ["npx pm2 list"]
+      })
+    });
+    const data = await res.json();
+    processManagementContainer.querySelector("#monit-output-element").innerText = data.output;
+  } catch(err) {
+    
+  }
+}, 1000);
 
-//       const res = await fetch("/api/v1/super-user/commands/execute", {
-//         headers: { "Content-Type": "application/json"},
-//         method: "POST",
-//         body: JSON.stringify({
-//           commands: [command]
-//         })
-//       });
-//       const data = await res.json();
-//       consoleOutputEl.scrollTop = consoleOutputEl.scrollHeight;
+
+
+
+commandInput.addEventListener("keypress", (e) => {
+  if (e.code === "Enter") {
+    commandExecuteBTN.click();
+  }
+});
+
+
+commandExecuteBTN.addEventListener("click", async () => {
+  try {
+    const commands = commandInput.value.split(",");
+    for (let command of commands) {
+      if (command === "cls" || command === "clear") {
+        commandConsole.innerText = "";
+        return;
+      }
+
+      const res = await fetch("/api/v1/super-user/commands/execute", {
+        headers: { "Content-Type": "application/json"},
+        method: "POST",
+        body: JSON.stringify({
+          commands: [command]
+        })
+      });
+      const data = await res.json();
+      commandConsole.scrollTop = commandConsole.scrollHeight;
       
-//       if (data.statusCode === 200) {
-//         consoleOutputEl.innerText += `\n[Executed Command: ${command} ]\n${data.output}`;
-//       }
+      if (data.statusCode === 200) {
+        commandConsole.innerText += `\n[Executed Command: ${command} ]\n${data.output}`;
+      }
 
-//       if (data.statusCode !== 200) {
-//         consoleOutputEl.innerText += `\n[Executed Command: ${command} ]\n${data.message}`;
-//       }
-//     }
-//   } catch(err) {
-//     alertBox.classList.remove("d-none");
-//     alertBox.innerText = "Error: " + err.message;
-//   }
-// });
+      if (data.statusCode !== 200) {
+        commandConsole.innerText += `\n[Executed Command: ${command} ]\n${data.message}`;
+      }
+    }
+  } catch(err) {
+    alertBox.classList.remove("d-none");
+    alertBox.innerText = "Error: " + err.message;
+  }
+});
