@@ -144,11 +144,15 @@ export async function serverStatus(req: Request, res: Response, next: NextFuncti
 
 export async function executeCommand(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
-   const output = await commandExecutor.executeCommand();
-   res.status(200).json({
-     success: true,
-     output: output
-   });
+    const commands = req.body.commands;
+    if (typeof commands !== "object") {
+      return next(errorHandler(400, "Bad Request: Commands must be array of string."));
+    }
+    const output = await commandExecutor.executeCommand(...commands);
+    res.status(200).json({
+      success: true,
+      output: output
+    });
   } catch(err) {
     next(err);
   }
