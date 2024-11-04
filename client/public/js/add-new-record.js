@@ -27,8 +27,6 @@ const pendingAmountInput = injectionForm.querySelector("#pending-amount");
 const injectionDateInput = injectionForm.querySelector("#injection-date");
 
 const submitBTN = document.getElementById("submit");
-const addNewCowBTN = document.getElementById("add-new-cow");
-const addNewInjectionBTN = document.getElementById("add-new-injection");
 
 const recordModal = document.getElementById("validate-modal");
 const recordModalBody =  recordModal.querySelector(".modal-body");
@@ -53,8 +51,6 @@ addValidationListenersToInputElement(givenAmountInput, () => validateAmountAndUp
 addValidationListenersToInputElement(pendingAmountInput, () => validateAmountAndUpdateAmountInputUI(pendingAmountInput));
 addValidationListenersToInputElement(injectionDateInput, () => validateDateAndUpdateDateInputUI(injectionDateInput));
 
-let addCowBTNIsClicked = false;
-let addInjectionBTNIsClicked = false;
 let record = {};
 
 
@@ -73,36 +69,6 @@ function resetUserForm() {
   cowForm.reset();
   injectionForm.reset();
   userNameInput.focus();
-}
-
-function resetCowForm() {
-  const elements = [
-    cowNameInput, cowBreedInput, bullNameInput,
-    injectionNameInput, injectionPriceInput, givenAmountInput,
-    pendingAmountInput, injectionDateInput
-  ];
-
-  for (let element of elements) {
-    element.classList.remove("is-invalid","is-valid");
-  }
-  cowForm.reset();
-  injectionForm.reset();
-  cowNameInput.focus();
-}
-
-
-
-function resetInjectionInfoForm() {
-  const elements = [
-    injectionNameInput, injectionPriceInput, givenAmountInput,
-    pendingAmountInput, injectionDateInput
-  ];
-  
-  for (let element of elements) {
-    element.classList.remove("is-invalid","is-valid");
-  }
-  injectionForm.reset();
-  injectionNameInput.focus();
 }
 
 
@@ -166,65 +132,9 @@ function validateAndExtractInjectInfoAndAiDate() {
 
 
 
-function convertRecordToUserInterface(data) {
-  let div = document.createElement("div");
-  const header = `
-    <header class="position-relative" style="height: 70px;">
-      <h2>${data.user.name}</h2>
-      <p class="position-absolute" style="bottom: 0; right: 0;">${data.user.address}</p>
-      <pre class="position-absolute" style="top: 0; right: 0;">${data.user.phoneNumber}</pre>
-    </header>
-  `;
-  div.innerHTML += header; 
-  data.cows.forEach((cow) => {
-    const cowDetail = `
-      <h3>cow-1</h3>
-        <div class="cow-details w-100 d-flex flex-row justify-content-between">
-          <h5>${cow.name}</h5>
-          <h5>${cow.breed}</h5>
-          <h5>${cow.bullName}</h5>
-        </div>
-        <h3>Injections for Cow</h3>
-      `;
-  div.innerHTML += cowDetail; 
-  let table = document.createElement("table");
-  table.className = "w-100 table table-bordered";
-  const tableHeader = `
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Given</th>
-        <th>Pending</th>
-        <th>Date</th>
-      </tr>
-    </thead>
-  `;
-  table.innerHTML = tableHeader; 
-  const tbody = document.createElement("tbody");    
-    cow.injectionInfoAndAiDates.forEach((injection) => {
-      const injectionDetail = `
-        <tr>
-          <td>${injection.name}</td>
-          <td>${injection.price}</td>
-          <td>${injection.givenAmount}</td>
-          <td>${injection.pendingAmount}</td>
-          <td>${injection.date}</td>
-        </tr>
-      `;
-      tbody.innerHTML += injectionDetail; 
-    });
-    table.appendChild(tbody);
-    div.appendChild(table); 
-  });
-  return div; 
-}
-
-
-
-function handleSubmit() {
-
-  if(Object.keys(record).length === 0) {
+async function handleSubmit(e) {
+  e.preventDefault();
+  try {
     const user = validateAndExtractUserRecord();
     const cow = validateAndExtractCowRecord();
     const injection = validateAndExtractInjectInfoAndAiDate();
@@ -233,104 +143,35 @@ function handleSubmit() {
       record.user = user;
       record.cows = [cow];
       cow.injectionInfoAndAiDates = [injection];
-      const prettyJson = convertRecordToUserInterface(record);
-      recordModalBody.innerHTML = "";
-      recordModalBody.appendChild(prettyJson);
-      newRecordModal.show();
+
+      console.log(record);
+
+      const res = await fetch("/api/v1/records",{
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body : JSON.stringify(record)
+      });
+
+      const data = await res.json();
+
+      if(data.statusCode == 201) {
+        location.href = "/home";
+      } else {
+        record = {};
+        alert(data.message);
+      } 
     } 
-    
-  }
-
-  if(addCowBTNIsClicked) {
-    const cow = validateAndExtractCowRecord();
-    const injection = validateAndExtractInjectInfoAndAiDate();
-
-    if(cow && injection) {
-      record.cows.push(cow);
-      cow.injectionInfoAndAiDates = [injection];
-      addCowBTNIsClicked = false;
-      const prettyJson = convertRecordToUserInterface(record);
-      recordModalBody.innerHTML = "";
-      recordModalBody.appendChild(prettyJson);
-      newRecordModal.show();
-    }
-  }
-
-  if(addInjectionBTNIsClicked) {
-    const injection = validateAndExtractInjectInfoAndAiDate();
-    const lastCowInjectionDetails = record.cows[record.cows.length-1].injectionInfoAndAiDates;
-    
-    if(injection) {
-      lastCowInjectionDetails.push(injection);
-      addInjectionBTNIsClicked = false;
-      const prettyJson = convertRecordToUserInterface(record);
-      recordModalBody.innerHTML = "";
-      recordModalBody.appendChild(prettyJson);
-      newRecordModal.show();
-    }
+  } catch(err) {
+   
   }
   newRecordModal.show();
 }
 
 
-
-function addNewCowDetails(e) {
-  if(addInjectionBTNIsClicked) {
-    alert("injection action going on..");
-    return;
-  }
-
-  if(Object.keys(record).length === 0) {
-    alert("Save the previous cow details before new cow.");
-    return;
-  }
-
-  resetCowForm();
-
-  addCowBTNIsClicked = true;
-  addInjectionBTNIsClicked = false;
-}
-
-function addNewInjectionDetails(e) {
-  if(addCowBTNIsClicked) {
-    alert("Cow action going on");
-    return;
-  }
-
-  if(Object.keys(record).length === 0) {
-    alert("Save the previous cow and injection details before add new injection.");
-    return;
-  }
-
-  resetInjectionInfoForm();
-  addInjectionBTNIsClicked = true;
-  addCowBTNIsClicked = false;
-
-}
-
-
 async function sendDataToServer(e) {
   e.preventDefault();
-  try {
-    const res = await fetch("/api/v1/records",{
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body : JSON.stringify(record)
-    });
-    const data = await res.json();
-    if(data.statusCode == 201) {
-      location.href = "/home";
-    } else {
-      record = {};
-      newRecordModal.hide();
-      alert(data.message);
-    } 
-  } catch(err) {
-   
-  }
+  
 }
 
 submitBTN.addEventListener("click",handleSubmit);
-addNewCowBTN.addEventListener("click",addNewCowDetails);
-addNewInjectionBTN.addEventListener("click",addNewInjectionDetails);
 modalSubmitBTN.addEventListener("click",sendDataToServer);
