@@ -77,13 +77,14 @@
       </div>
     </form>
               
-    <div class="d-flex flex-wrap flex-lg-row my-3 w-100" id="button-container">
-      <button class="btn btn-success me-2 mb-2 fw-bold" style="width: 200px; height: 50px; flex: 1 0 140px !important; min-width: 150px;" id="add-new-cow">Add New Cow</button>
-      <button class="btn btn-warning text-white fw-bold me-2 mb-2" style="width: 200px; height: 50px; flex: 1 0 140px !important; min-width: 150px;" id="add-new-injection">Add New Injection</button>
-      <button class="btn btn-primary fw-bold me-2" style="width: 200px; height: 50px; flex: 1 0 140px !important; min-width: 150px;" id="submit">Save</button>
+    <div class="d-flex flex-wrap my-3" id="button-container">
+      <button class="btn btn-success me-2 mb-2 fw-bold flex-grow-1" style="width: 200px; height: 50px; min-width: 150px;" id="add-new-cow">Add New Cow</button>
+      <button class="btn btn-warning text-white fw-bold me-2 mb-2 flex-grow-1" style="width: 200px; height: 50px; min-width: 150px;" id="add-new-injection">Add New Injection</button>
+      <button class="btn btn-primary fw-bold me-2 flex-grow-1" style="width: 200px; height: 50px; min-width: 150px;" id="submit">Save</button>
     </div>   
         
-    <div class="modal fade" id="record-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="false" style="z-index: 10000 !important;">
+
+    <div class="modal fade" id="validate-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="false" style="z-index: 10000 !important;">
       <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
           <div class="modal-header">
@@ -100,6 +101,26 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="result-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="false" style="z-index: 10000 !important;">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Customer Record</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body h-50 overflow-auto">
+        </div>                
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="modal-submit">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
   <script src="/js/add-new-record.js" type="module"></script>
 </body>
 </html>

@@ -30,7 +30,7 @@ const submitBTN = document.getElementById("submit");
 const addNewCowBTN = document.getElementById("add-new-cow");
 const addNewInjectionBTN = document.getElementById("add-new-injection");
 
-const recordModal = document.getElementById("record-modal");
+const recordModal = document.getElementById("validate-modal");
 const recordModalBody =  recordModal.querySelector(".modal-body");
 const modalSubmitBTN = recordModal.querySelector("#modal-submit");
 const newRecordModal = new bootstrap.Modal(recordModal);
@@ -56,6 +56,8 @@ addValidationListenersToInputElement(injectionDateInput, () => validateDateAndUp
 let addCowBTNIsClicked = false;
 let addInjectionBTNIsClicked = false;
 let record = {};
+
+
 
 function resetUserForm() {
   const elements = [
@@ -170,7 +172,7 @@ function convertRecordToUserInterface(data) {
     <header class="position-relative" style="height: 70px;">
       <h2>${data.user.name}</h2>
       <p class="position-absolute" style="bottom: 0; right: 0;">${data.user.address}</p>
-      <pre class="position-absolute" style="top: 0; right: 0;">${data.user.phoneNo}</pre>
+      <pre class="position-absolute" style="top: 0; right: 0;">${data.user.phoneNumber}</pre>
     </header>
   `;
   div.innerHTML += header; 
@@ -221,8 +223,7 @@ function convertRecordToUserInterface(data) {
 
 
 function handleSubmit() {
-  addNewCowBTN.setAttribute("disabled","");
-  addNewInjectionBTN.setAttribute("disabled","");
+
   if(Object.keys(record).length === 0) {
     const user = validateAndExtractUserRecord();
     const cow = validateAndExtractCowRecord();
@@ -236,7 +237,6 @@ function handleSubmit() {
       recordModalBody.innerHTML = "";
       recordModalBody.appendChild(prettyJson);
       newRecordModal.show();
-      console.log(record);
     } 
     
   }
@@ -269,8 +269,6 @@ function handleSubmit() {
       newRecordModal.show();
     }
   }
-  addNewCowBTN.removeAttribute("disabled");
-  addNewInjectionBTN.removeAttribute("disabled");
   newRecordModal.show();
 }
 
@@ -321,18 +319,14 @@ async function sendDataToServer(e) {
     });
     const data = await res.json();
     if(data.statusCode == 201) {
-      recordModalBody.innerHTML = "";
-      recordModalBody.innerHTML = "successfully added record...";
-      newRecordModal.show();
       location.href = "/home";
     } else {
       record = {};
-      resetUserForm();
+      newRecordModal.hide();
+      alert(data.message);
     } 
-    resetUserForm();
   } catch(err) {
-    record = {};
-    resetUserForm();
+   
   }
 }
 
