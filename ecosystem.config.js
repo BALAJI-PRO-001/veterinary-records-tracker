@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "VRT",                          // Application name
       script: "./backend/dist/index.js",    // Start script path
-      instances: -1,                        // Use all available CPU cores
+      instances: 2,                        // Use all available CPU cores
       exec_mode: "cluster",                 // Cluster mode for load balancing
       max_memory_restart: "500M",           // Restart if memory exceeds 500MB
       log_file: "./logs/app.log",           // Combined log for stdout and stderr
