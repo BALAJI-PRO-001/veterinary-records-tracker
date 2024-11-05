@@ -70,13 +70,8 @@ dbUpdateBTN.addEventListener("click", async () => {
       setTimeout(() => {
         dbAndRecordsDivMessageEl.classList.remove("text-success");
         dbAndRecordsDivMessageEl.classList.add("text-danger");
-        dbAndRecordsDivMessageEl.innerText = "Connecting to the server ....";
-        
-        setTimeout(async () => {
-            dbAndRecordsDivMessageEl.classList.remove("text-danger");
-            dbAndRecordsDivMessageEl.classList.add("text-success");
-            dbAndRecordsDivMessageEl.innerText = "Server restarted required use (CLI) to restart your all instance.";
-        }, 1000);
+        dbAndRecordsDivMessageEl.innerText = "All server instance restart required use (CLI).";
+        ;
       }, 1000);
     }
   } catch(err) {

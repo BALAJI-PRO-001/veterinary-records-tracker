@@ -7,7 +7,7 @@
     "start": "pm2 start ecosystem.config.js --no-daemon",
     "ts-dev": "nodemon ./backend/src/index.ts",
     "js-dev": "npm run build && nodemon ./backend/dist/index.js",
-    "build": "npm i && tsc",
+    "build": "tsc",
     "test": "jest"
   },
   "author": "Surya & Balaji",
