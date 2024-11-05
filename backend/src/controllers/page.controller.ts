@@ -7,7 +7,8 @@ import {
   ADD_NEW_RECORD_PAGE_FILE_PATH,
   SUPER_USER_LOGIN_PAGE_FILE_PATH,
   DASHBOARD_PAGE_FILE_PATH,
-  SHOW_RECORD_PAGE_FILE_PATH
+  SHOW_RECORD_PAGE_FILE_PATH,
+  ABOUT_PAGE_FILE_PATH,
 } from "../utils/constants";
 
 
@@ -19,7 +20,7 @@ const addNewRecordPageHTML: string = fs.readFileSync(ADD_NEW_RECORD_PAGE_FILE_PA
 const superUserLoginPageHTML: string = fs.readFileSync(SUPER_USER_LOGIN_PAGE_FILE_PATH, "utf-8");
 const dashboardPageHTML: string = fs.readFileSync(DASHBOARD_PAGE_FILE_PATH, "utf-8");
 const showRecordPageHTML: string = fs.readFileSync(SHOW_RECORD_PAGE_FILE_PATH, "utf-8");
-
+const aboutPageHTML: string = fs.readFileSync(ABOUT_PAGE_FILE_PATH, "utf-8");
 
 export function indexPage(req: Request, res: Response): void {
   res.end(indexHTML.replace("{{HEADER}}", headerHTML));
@@ -51,4 +52,9 @@ export function dashboardPage(req: Request, res: Response): void {
 
 export function showRecordPage(req: Request, res: Response): void {
   res.end(showRecordPageHTML.replace("{{HEADER}}", headerHTML));
+}
+
+
+export function aboutPage(req: Request, res: Response): void {
+  res.end(aboutPageHTML.replace("{{HEADER}}", headerHTML));
 }

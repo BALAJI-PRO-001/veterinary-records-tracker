@@ -12,6 +12,7 @@ export const STATIC_FILES_PATH = path.join(__dirname, "../../../client/public");
 export const SUPER_USER_LOGIN_PAGE_FILE_PATH = path.join(__dirname, "../../../client/views/pages/super-user-login.html");
 export const DASHBOARD_PAGE_FILE_PATH =  path.join(__dirname, "../../../client/views/pages/dashboard.html");
 export const SHOW_RECORD_PAGE_FILE_PATH = path.join(__dirname, "../../../client/views/pages/show-record.html");
+export const ABOUT_PAGE_FILE_PATH = path.join(__dirname, "../../../client/views/pages/about.html");
 
 
 export const CSV_WRITER_HEADERS = [

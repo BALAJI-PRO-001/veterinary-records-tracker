@@ -7,7 +7,8 @@ import {
   addNewRecordPage,
   superUserLoginPage,
   dashboardPage,
-  showRecordPage
+  showRecordPage,
+  aboutPage
 } from "../controllers/page.controller";
 
 const router = express.Router();
@@ -15,6 +16,7 @@ const router = express.Router();
 router.get("/", indexPage)
       .get("/home", privateRouteForAdmin, homePage)
       .get("/add-new-record", privateRouteForAdmin, addNewRecordPage)
+      .get("/about", privateRouteForAdmin, aboutPage)
       .get("/super-user/login", privateRouteForAdmin, superUserLoginPage)
       .get("/super-user/dashboard", privateRouteForSuperUser , dashboardPage)
       .get("/record/:id", privateRouteForAdmin, showRecordPage);
