@@ -29,11 +29,11 @@ export async function createNewRecord(req: Request, res: Response, next: NextFun
       return next(errorHandler(400, "Bad Request: " + errMessage));
     }
 
-    await Record.createNewRecord({user: user, cows: cows});
+    const record = await Record.createNewRecord({user: user, cows: cows});
     res.status(201).json({
       success: true,
       statusCode: 201,
-      message: "New record created successfully."
+      record: record
     });
   } catch(err) {
     next(err);
