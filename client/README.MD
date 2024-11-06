@@ -5,7 +5,7 @@
   - Admin Login Page **[Method: GET] [Route: /]**
   - Home Page **[Method: GET] [Route: /home]**
   - Create New Record Page **[Method: GET] [Route: /add-new-record]**
-  - Show Single Record Page **[Method: GET] [Route: /record/userId]**
+  - Show Single Record Page **[Method: GET] [Route: /records/userId]**
   - Super User Login **[Method: GET] [Route: /super-user/login]**
   - Super User Dashboard **[Method: GET] [Route: /super-user/dashboard]**
 
