@@ -6,6 +6,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/global.css">
   <link rel="stylesheet" href="/css/header.component.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="/js/header.component.js" type="module"></script>
@@ -13,10 +14,14 @@
 </head>
 <body>
   {{HEADER}}
-
-  <div id="cow-img-container" class="position-absolute d-none start-50 translate-middle d-flex flex-column justify-content-center align-items-center" style="max-width: 200px; max-height: 200px; top: 53%; z-index: 1050;">
-    <img src="/images/customers-img.png" fetchpriority="high" alt="img" style="max-height: 150px; max-width: 150px;">
+  <div id="alert-box" class="alert alert-danger d-none fw-bold fs-6" role="alert"></div>
+  <div id="customers-img-container" class="position-absolute d-none start-50 translate-middle d-flex flex-column justify-content-center align-items-center" style="max-width: 200px; max-height: 200px; top: 53%; z-index: 1050;">
+    <img src="/images/customers-img.png" fetchpriority="high" alt="img" style="height: 150px; width: 150px;">
     <p class="mt-3 ms-3 mb-0 fs-5">Customers: 0</p>
+    <a href="/add-new-record" class="btn mt-3 btn-success fw-bold rounded-3 d-flex align-items-center justify-content-center gap-1 p-2"
+      style="border: none;">
+      <i class="fa-solid fa-plus" style="font-size: 18px;"></i> Add New Customer
+    </a>
   </div>
 
   <div id="spinner" class="d-flex d-none align-items-center justify-content-center gap-3 mx-auto position-absolute top-50 start-50 translate-middle">
@@ -25,123 +30,52 @@
   </div>
 
   <main id="main-container">
-    <div id="card-container" class="d-flex flex-wrap gap-3 mt-3 mx-auto">
-      <a href="/record/3" class="d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card" style="min-height: 60px; max-height: 200px;">
-        <div class="d-flex gap-2 w-100 flex-wrap">
-          <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-primary"></i> Ram Kumar</span>
-          <span style="font-size: 18px;"><i class="fa-solid fa-phone text-primary"></i> 1231232133</span>
-          <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-primary"></i> Dindigul fdsfdasfdsafds</span>  
-        </div>
-        <hr class="m-0">
-        <div class="d-flex gap-3 w-100 flex-wrap">
-          <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> 10</span> 
-          <span style="font-size: 18px;"><i class="fas fa-syringe text-primary"></i> 10</span> 
-          <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 1000</span> 
-        </div>
-      </a> 
-      <a href="/record/3" class="d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card" style="min-height: 60px; max-height: 200px;">
-        <div class="d-flex gap-2 w-100 flex-wrap">
-          <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-primary"></i> Ram Kumar</span>
-          <span style="font-size: 18px;"><i class="fa-solid fa-phone text-primary"></i> 1231232133</span>
-          <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-primary"></i> Dindigul fdsfdasfdsafds</span>  
-        </div>
-        <hr class="m-0">
-        <div class="d-flex gap-3 w-100 flex-wrap">
-          <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> 10</span> 
-          <span style="font-size: 18px;"><i class="fas fa-syringe text-primary"></i> 10</span> 
-          <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 1000</span> 
-        </div>
-      </a> 
-      <a href="/record/3" class="d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card" style="min-height: 60px; max-height: 200px;">
-        <div class="d-flex gap-2 w-100 flex-wrap">
-          <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-primary"></i> Ram Kumar</span>
-          <span style="font-size: 18px;"><i class="fa-solid fa-phone text-primary"></i> 1231232133</span>
-          <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-primary"></i> Dindigul fdsfdasfdsafds</span>  
-        </div>
-        <hr class="m-0">
-        <div class="d-flex gap-3 w-100 flex-wrap">
-          <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> 10</span> 
-          <span style="font-size: 18px;"><i class="fas fa-syringe text-primary"></i> 10</span> 
-          <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 1000</span> 
-        </div>
-      </a> 
-      <a href="/record/3" class="d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card" style="min-height: 60px; max-height: 200px;">
-        <div class="d-flex gap-2 w-100 flex-wrap">
-          <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-primary"></i> Ram Kumar</span>
-          <span style="font-size: 18px;"><i class="fa-solid fa-phone text-primary"></i> 1231232133</span>
-          <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-primary"></i> Dindigul fdsfdasfdsafds</span>  
-        </div>
-        <hr class="m-0">
-        <div class="d-flex gap-3 w-100 flex-wrap">
-          <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> 10</span> 
-          <span style="font-size: 18px;"><i class="fas fa-syringe text-primary"></i> 10</span> 
-          <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 1000</span> 
-        </div>
-      </a> 
-      <a href="/record/3" class="d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card" style="min-height: 60px; max-height: 200px;">
-        <div class="d-flex gap-2 w-100 flex-wrap">
-          <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-primary"></i> Ram Kumar</span>
-          <span style="font-size: 18px;"><i class="fa-solid fa-phone text-primary"></i> 1231232133</span>
-          <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-primary"></i> Dindigul fdsfdasfdsafds</span>  
-        </div>
-        <hr class="m-0">
-        <div class="d-flex gap-3 w-100 flex-wrap">
-          <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> 10</span> 
-          <span style="font-size: 18px;"><i class="fas fa-syringe text-primary"></i> 10</span> 
-          <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 1000</span> 
-        </div>
-      </a> 
-      <a href="/record/3" class="d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card" style="min-height: 60px; max-height: 200px;">
-        <div class="d-flex gap-2 w-100 flex-wrap">
-          <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-primary"></i> Ram Kumar</span>
-          <span style="font-size: 18px;"><i class="fa-solid fa-phone text-primary"></i> 1231232133</span>
-          <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-primary"></i> Dindigul fdsfdasfdsafds</span>  
-        </div>
-        <hr class="m-0">
-        <div class="d-flex gap-3 w-100 flex-wrap">
-          <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> 10</span> 
-          <span style="font-size: 18px;"><i class="fas fa-syringe text-primary"></i> 10</span> 
-          <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 1000</span> 
-        </div>
-      </a> 
-      <a href="/record/3" class="d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card" style="min-height: 60px; max-height: 200px;">
-        <div class="d-flex gap-2 w-100 flex-wrap">
-          <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-primary"></i> Ram Kumar</span>
-          <span style="font-size: 18px;"><i class="fa-solid fa-phone text-primary"></i> 1231232133</span>
-          <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-primary"></i> Dindigul fdsfdasfdsafds</span>  
-        </div>
-        <hr class="m-0">
-        <div class="d-flex gap-3 w-100 flex-wrap">
-          <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> 10</span> 
-          <span style="font-size: 18px;"><i class="fas fa-syringe text-primary"></i> 10</span> 
-          <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 1000</span> 
-        </div>
-      </a> 
-      <a href="/record/3" class="d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card" style="min-height: 60px; max-height: 200px;">
-        <div class="d-flex gap-2 w-100 flex-wrap">
-          <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-primary"></i> Ram Kumar</span>
-          <span style="font-size: 18px;"><i class="fa-solid fa-phone text-primary"></i> 1231232133</span>
-          <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-primary"></i> Dindigul fdsfdasfdsafds</span>  
-        </div>
-        <hr class="m-0">
-        <div class="d-flex gap-3 w-100 flex-wrap">
-          <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> 10</span> 
-          <span style="font-size: 18px;"><i class="fas fa-syringe text-primary"></i> 10</span> 
-          <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> 1000</span> 
-        </div>
-      </a> 
-    </div>
+    <div id="card-container" class="d-flex flex-wrap gap-3 mt-3 mx-auto"></div>
+    <a href="/add-new-record" class="btn btn-primary fw-bold rounded-3 position-fixed d-flex align-items-center justify-content-center"
+      style="border: none; height: 50px; width: 50px; z-index: 1000; bottom: 30px; right: 90px;">
+      <i class="fa-solid fa-plus" style="font-size: 18px;"></i>
+    </a>
+
+    <button 
+      class="btn btn-danger fw-bold rounded-3 position-fixed" 
+      style="border: none; height: 50px; width: 50px; z-index: 1000; bottom: 30px; right: 30px; font-size: 18px;" 
+      data-bs-toggle="modal" data-bs-target="#delete-all-user-record-modal"
+    >
+      <i class="fa-solid fa-trash text-white"></i>
+    </button> 
   </main>
 
-  <a href="/add-new-record" class="btn btn-primary fw-bold rounded-3 position-fixed d-flex align-items-center justify-content-center"
-    style="border: none; height: 50px; width: 50px; z-index: 1000; bottom: 30px; right: 90px;">
-    <i class="fa-solid fa-plus" style="font-size: 18px;"></i>
-  </a>
+  <div id="delete-all-user-record-modal" class="modal fade shadow">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded mx-2 p-2">
+        <div class="d-flex justify-content-between align-items-center w-100">
+          <svg id="danger-icon" xmlns="http://www.w3.org/2000/svg" class="ms-2" width="24" height="24" fill="red" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
+            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+          </svg>
+          
+          <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="check-circle-fill" fill="green" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </symbol>
+          </svg>
+          <svg id="success-icon" class="bi flex-shrink-0 ms-2 d-none" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
 
-  <button class="btn btn-danger fw-bold rounded-3 position-fixed" style="border: none; height: 50px; width: 50px; z-index: 1000; bottom: 30px; right: 30px; font-size: 18px;">
-    <i class="fa-solid fa-trash text-white"></i>
-  </button> 
+          <h3 class="c-fs-f-srp-h text-center m-0 w-100 modal-title">Delete Records</h3>
+          <button type="button" style="width: 30px;" class="btn-close" data-bs-dismiss="modal"></button>  
+        </div>  
+        <div id="main-content" class="text-secondary fs-5 p-2 m-0" style="min-height: 90px !important;">Are you sure you want to delete all user records? This action cannot be undone and will permanently remove the entire record.</div>
+        <div class="d-flex gap-2 me-2 flex-wrap justify-content-end">
+          <p id="ok-element" class="text-danger m-0 p-2 c-fs-f-srp-p cursor-pointer">Ok</p>
+          <p class="text-success m-0 p-2 c-fs-f-srp-p cursor-pointer" data-bs-dismiss="modal">Cancel</p>  
 
+          <div id="spinner" class="d-flex p-2 d-none align-items-center justify-content-center gap-2">
+            <p class="c-fs-f-srp-p m-0 text-danger">Deleting </p>
+            <div class="spinner-border text-danger" role="status" style="height: 20px; width: 20px; border-width: 2px;"></div>
+          </div>           
+        </div>
+      </div>
+    </div>
+  </div>  
   <script src="/js/home.js" type="module"></script>
 </body>
 </html>
