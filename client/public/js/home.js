@@ -1,60 +1,89 @@
-import { toggleElementVisibility } from "./utils/userInteraction.js";
 
 const contentContainer = document.getElementById("content-container");
+const alertBox = document.getElementById("alert-box");
 const spinner = document.getElementById("spinner");
-const cowImageContainer = document.getElementById("cow-img-container");
-const addNewCustomerBTN = document.getElementById("add-new-btn");
+const customersImgContainer = document.getElementById("customers-img-container");
+const mainContainer = document.getElementById("main-container");
+const cardContainer = mainContainer.querySelector("#card-container");
 
 
-function calculatePendingAmount(cows) {
+function countInjectionAndCalculatePendingAmount(cows) {
   if (cows === null || cows === undefined) {
     throw new Error("Cows is null or undefined.");
   }
+  let totalInjection = 0;
   const pendingAmount = cows.map((cow) => {
+    totalInjection += cow.injectionInfoAndAiDates.length;
     const amounts = cow.injectionInfoAndAiDates.map(({pendingAmount}) => {
       return pendingAmount;
     });
     return amounts.reduce((total, amount) => total + amount, 0);
   });
-  return pendingAmount.reduce((total, amount) => total + amount, 0)
+  return { 
+    totalPendingAmount: pendingAmount.reduce((total, amount) => total + amount, 0),
+    totalInjection: totalInjection
+  };
 }
 
+
+
+function createCards(records) {
+  if (records === null || records === undefined) {
+    throw new Error("Records is null or undefined.");
+  }
+
+  const cards = [];
+  for (let record of records) {
+    const { totalPendingAmount, totalInjection } = countInjectionAndCalculatePendingAmount(record.cows);
+
+    const card = document.createElement("a");
+    card.href = "/records/" + record.user.id;
+    card.classList = "d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card";
+    card.style.cssText = "min-height: 60px; max-height: 200px;";
+    card.innerHTML = `
+      <div class="d-flex gap-2 w-100 flex-wrap">
+         <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-primary"></i> ${record.user.name}</span>
+         <span style="font-size: 18px;"><i class="fa-solid fa-phone text-primary"></i> ${record.user.phoneNumber}</span>
+         <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-primary"></i> ${record.user.address}</span>  
+       </div>
+       <hr class="m-0">
+       <div class="d-flex gap-3 w-100 flex-wrap">
+         <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> ${record.cows.length}</span> 
+         <span style="font-size: 18px;"><i class="fas fa-syringe text-primary"></i> ${totalInjection}</span> 
+         <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> ${totalPendingAmount}</span> 
+       </div>
+    `;
+    cards.push(card);
+  }
+  return cards;
+}
 
 
 async function fetchRecordAndUpdateUI() {
   try {
-    let index = 0;
-    contentContainer.innerText = "";
-    toggleElementVisibility(spinner, false, "d-none");
+    mainContainer.classList.add("d-none");
+    spinner.classList.remove("d-none");
+
     const res = await fetch("/api/v1/records/all");
     const data = await res.json();
-    toggleElementVisibility(spinner, true, "d-none");
-    if(data.data.records.length == 0) {
-      toggleElementVisibility(cowImageContainer,false,"d-none");
-    } else {
-      cowImageContainer.classList.add("d-none");
-      addNewCustomerBTN.classList.remove("start-50","translate-middle");
-      addNewCustomerBTN.style.cssText =  `
-        bottom : 4% !important;
-        width: 200px !important;
-        right: 4% !important;
-      `
+    spinner.classList.add("d-none");
+
+    if (data.statusCode === 200) {
+      if (data.data.records.length > 0) {
+        cardContainer.append(...createCards(data.data.records));
+        return mainContainer.classList.remove("d-none");
+      } else {
+        return customersImgContainer.classList.remove("d-none");
+      }
     }
-    data.data.records.forEach((data) => {
-      const details = `
-        <a class="rounded-2 bg-white p-2 shadow mt-3 ms-sm-4 d-flex justify-content-between align-items-center text-decoration-none text-black" style="min-width: 300px; width: 320px; height: 60px; font-weight: 600;" href="/record/${data.user.id}">
-          <span class="ms-3">${++index}</span>
-          <span class="text-truncate" style="max-width: 150px;">${data.user.name}</span>
-          <span class="text-success me-3">₹${calculatePendingAmount(data.cows)}</span>
-        </a>
-      `
-      contentContainer.innerHTML += details;
-    });
+
+    alertBox.classList.remove("d-none");
+    alertBox.innerText = "Error: " + data.message;
   } catch (err) {
-    throw err;
+    alertBox.classList.remove("d-none");
+    alertBox.innerText = "Error: " + err.message;
   }
 }
-
 
 
 fetchRecordAndUpdateUI();
