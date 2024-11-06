@@ -28,11 +28,6 @@ const injectionDateInput = injectionForm.querySelector("#injection-date");
 
 const submitBTN = document.getElementById("submit");
 
-const recordModal = document.getElementById("validate-modal");
-const recordModalBody =  recordModal.querySelector(".modal-body");
-const modalSubmitBTN = recordModal.querySelector("#modal-submit");
-const newRecordModal = new bootstrap.Modal(recordModal);
-
 userForm.reset();
 cowForm.reset();
 injectionForm.reset();
@@ -74,7 +69,6 @@ function resetUserForm() {
 
 
 function validateAndExtractUserRecord() {
-  const user = {};
   const isValidName = validateNameAndUpdateNameInputUI(userNameInput);
   const isValidPhoneNumber = validatePhoneNumberAndUpdatePhoneNumberInputUI(userPhoneNumberInput);
   const isValidAddress = validateAddressAndUpdateAddressInputUI(userAddressInput);
@@ -144,34 +138,31 @@ async function handleSubmit(e) {
       record.cows = [cow];
       cow.injectionInfoAndAiDates = [injection];
 
-      console.log(record);
-
       const res = await fetch("/api/v1/records",{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body : JSON.stringify(record)
       });
-
       const data = await res.json();
 
+      if (data.statusCode === 409) {
+        userPhoneNumberInput.focus();
+        userPhoneNumberInput.classList.add("is-invalid");
+        userPhoneNumberInput.nextElementSibling.textContent = "Phone number is already in use by another record.";
+        return;
+      }
+
       if(data.statusCode == 201) {
-        location.href = "/home";
-      } else {
-        record = {};
-        alert(data.message);
-      } 
+        location.href = `/records/${data.record.user.id}`;
+        return;
+      }
+
+      console.error(data.message);
     } 
   } catch(err) {
-   
+    console.error(err.message);
   }
-  newRecordModal.show();
 }
 
-
-async function sendDataToServer(e) {
-  e.preventDefault();
-  
-}
 
 submitBTN.addEventListener("click",handleSubmit);
-modalSubmitBTN.addEventListener("click",sendDataToServer);
