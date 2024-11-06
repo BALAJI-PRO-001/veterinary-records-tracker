@@ -19,6 +19,6 @@ router.get("/", indexPage)
       .get("/about", privateRouteForAdmin, aboutPage)
       .get("/super-user/login", privateRouteForAdmin, superUserLoginPage)
       .get("/super-user/dashboard", privateRouteForSuperUser , dashboardPage)
-      .get("/record/:id", privateRouteForAdmin, showRecordPage);
+      .get("/records/:id", privateRouteForAdmin, showRecordPage);
  
 export default router;
