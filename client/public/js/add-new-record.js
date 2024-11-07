@@ -46,8 +46,6 @@ addValidationListenersToInputElement(givenAmountInput, () => validateAmountAndUp
 addValidationListenersToInputElement(pendingAmountInput, () => validateAmountAndUpdateAmountInputUI(pendingAmountInput));
 addValidationListenersToInputElement(injectionDateInput, () => validateDateAndUpdateDateInputUI(injectionDateInput));
 
-injectionDateInput.value = new Date().toISOString().split('T')[0].split('-').reverse().join('/');
-console.log(new Date().toISOString().split('T')[0].split('-').reverse().join('/'));
 let record = {};
 
 
@@ -177,5 +175,4 @@ submitBTN.addEventListener("click", async (e) => {
 submitBTN.nextElementSibling.addEventListener("click", (e) => {
   e.preventDefault();
   resetForms();
-  injectionDateInput.value = new Date().toISOString().split('T')[0].split('-').reverse().join('/');
 });
