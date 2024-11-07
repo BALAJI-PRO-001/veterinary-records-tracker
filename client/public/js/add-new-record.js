@@ -50,7 +50,7 @@ let record = {};
 
 
 
-function resetUserForm() {
+function resetForms() {
   const elements = [
     userNameInput,userPhoneNumberInput,userAddressInput,
     cowNameInput, cowBreedInput, bullNameInput,
@@ -126,7 +126,7 @@ function validateAndExtractInjectInfoAndAiDate() {
 
 
 
-async function handleSubmit(e) {
+submitBTN.addEventListener("click", async (e) => {
   e.preventDefault();
   try {
     const user = validateAndExtractUserRecord();
@@ -138,12 +138,20 @@ async function handleSubmit(e) {
       record.cows = [cow];
       cow.injectionInfoAndAiDates = [injection];
 
+      submitBTN.setAttribute("disabled", "");
+      submitBTN.nextElementSibling.setAttribute("disabled", "");
+      submitBTN.innerText = "Saving ....";
+
       const res = await fetch("/api/v1/records",{
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body : JSON.stringify(record)
       });
+
       const data = await res.json();
+      submitBTN.removeAttribute("disabled");
+      submitBTN.nextElementSibling.removeAttribute("disabled");
+      submitBTN.innerText = "Save Record";
 
       if (data.statusCode === 409) {
         userPhoneNumberInput.focus();
@@ -162,7 +170,10 @@ async function handleSubmit(e) {
   } catch(err) {
     console.error(err.message);
   }
-}
+});
 
 
-submitBTN.addEventListener("click",handleSubmit);
+submitBTN.nextElementSibling.addEventListener("click", (e) => {
+  e.preventDefault();
+  resetForms();
+});

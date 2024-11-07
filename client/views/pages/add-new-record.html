@@ -77,26 +77,11 @@
       </div>
     </form>
 
-    <button class="btn btn-primary fw-bold me-2 flex-grow-1 mb-3" style="width: 200px; height: 50px; min-width: 150px;" id="submit">Save</button>
-    <div class=""></div>
-  
-    <div class="modal fade" id="validate-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="false" style="z-index: 10000 !important;">
-      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Veternery Records Tracker</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body"></div>                
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="modal-submit">Save changes</button>
-          </div>
-        </div>
-      </div>
+    <div class="d-flex flex-wrap gap-2 mb-4">
+      <button class="btn btn-primary fw-bold p-2" style="width: 150px;" id="submit">Save Record</button>
+      <button class="btn btn-danger fw-bold p-2" style="width: 150px;" id="submit">Reset</button>
     </div>
   </div>
-
   <script src="/js/add-new-record.js" type="module"></script>
 </body>
 </html>
