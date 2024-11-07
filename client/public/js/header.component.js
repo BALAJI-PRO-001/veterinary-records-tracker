@@ -35,10 +35,23 @@ async function logoutUser(e) {
 logoutBTN.addEventListener("click",logoutUser);
 
 
+function navigateToHomePage() {
+  if (!location.pathname.includes("/home")) {
+    location.href = "/home";
+  }
+}
+
+
+function sort() {
+  
+}
+
 
 searchInput.addEventListener("keypress", (e) => {
   if (e.code === "Enter") {
-    location.href = `/home?searchName=${searchInput.value.trim()}`;
+    navigateToHomePage();
+
+
   }
 });
 
