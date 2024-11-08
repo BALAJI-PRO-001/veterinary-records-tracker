@@ -5,6 +5,8 @@ const logoutBTN = document.getElementById("logout");
 const toggleBTN =  document.getElementById("toggler");
 const navigationMenu = document.getElementById("toggle-menu");
 const searchInput = document.getElementById("search-input");
+const header = document.getElementById("header");
+const cowLogo = header.querySelector(".logo");
 
 
 window.addEventListener("click",(e) => {
@@ -47,6 +49,14 @@ searchInput.addEventListener("keypress", (e) => {
     }
   }
 });
+
+
+
+header.addEventListener("click",(e) => {
+  if(e.target != toggleBTN && e.target != cowLogo) {
+    searchInput.focus();
+  }
+})
 
 
 
