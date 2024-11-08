@@ -34,24 +34,17 @@ async function logoutUser(e) {
 
 logoutBTN.addEventListener("click",logoutUser);
 
-
-function navigateToHomePage() {
-  if (!location.pathname.includes("/home")) {
-    location.href = "/home";
+searchInput.nextElementSibling.addEventListener("click", () => {
+  if (!location.href.includes("/home")) {
+    location.href = `/home?${searchInput.value}`;
   }
-}
-
-
-function sort() {
-  
-}
-
+});
 
 searchInput.addEventListener("keypress", (e) => {
   if (e.code === "Enter") {
-    navigateToHomePage();
-
-
+    if (!location.href.includes("/home")) {
+      location.href = `/home?${searchInput.value}`;
+    }
   }
 });
 
