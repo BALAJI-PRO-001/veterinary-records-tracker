@@ -34,11 +34,17 @@ async function logoutUser(e) {
 
 logoutBTN.addEventListener("click",logoutUser);
 
-
+searchInput.nextElementSibling.addEventListener("click", () => {
+  if (!location.href.includes("/home")) {
+    location.href = `/home?${searchInput.value}`;
+  }
+});
 
 searchInput.addEventListener("keypress", (e) => {
   if (e.code === "Enter") {
-    location.href = `/home?searchName=${searchInput.value.trim()}`;
+    if (!location.href.includes("/home")) {
+      location.href = `/home?${searchInput.value}`;
+    }
   }
 });
 
