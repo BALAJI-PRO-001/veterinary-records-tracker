@@ -264,3 +264,56 @@ export function setType(element,oldType,newType) {
     element.type = "password";
   }
 }
+
+
+
+function countInjectionAndCalculatePendingAmount(cows) {
+  if (cows === null || cows === undefined) {
+    throw new Error("Cows is null or undefined.");
+  }
+  let totalInjection = 0;
+  const pendingAmount = cows.map((cow) => {
+    totalInjection += cow.injectionInfoAndAiDates.length;
+    const amounts = cow.injectionInfoAndAiDates.map(({pendingAmount}) => {
+      return pendingAmount;
+    });
+    return amounts.reduce((total, amount) => total + amount, 0);
+  });
+  return { 
+    totalPendingAmount: pendingAmount.reduce((total, amount) => total + amount, 0),
+    totalInjection: totalInjection
+  };
+}
+
+
+
+export function createCards(records) {
+  if (records === null || records === undefined) {
+    throw new Error("Records is null or undefined.");
+  }
+
+  const cards = [];
+  for (let record of records) {
+    const { totalPendingAmount, totalInjection } = countInjectionAndCalculatePendingAmount(record.cows);
+
+    const card = document.createElement("a");
+    card.href = "/records/" + record.user.id;
+    card.classList = "d-flex text-decoration-none text-dark flex-column gap-3 p-2 fs-5 shadow rounded border mx-2 overflow-auto c-w-f-hp-card";
+    card.style.cssText = "min-height: 60px; max-height: 200px;";
+    card.innerHTML = `
+      <div class="d-flex gap-2 w-100 flex-wrap">
+         <span style="font-size: 18px;" class="text-truncate" style="max-width: 100px;"><i class="fa-solid fa-user text-secondary"></i> ${record.user.name}</span>
+         <span style="font-size: 18px;"><i class="fa-solid fa-phone text-secondary"></i> ${record.user.phoneNumber}</span>
+         <span style="font-size: 18px;" style="max-width: 200px;" class="text-truncate"><i class="fa-solid fa-location-dot text-success"></i> ${record.user.address}</span>  
+       </div>
+       <hr class="m-0">
+       <div class="d-flex gap-3 w-100 flex-wrap">
+         <span style="font-size: 18px;"><i class="fa-solid fa-cow text-primary"></i> ${record.cows.length}</span> 
+         <span style="font-size: 18px;"><i class="fas fa-syringe text-danger"></i> ${totalInjection}</span> 
+         <span style="font-size: 18px;" class="text-success fw-bold"><i class="ms-1 fa-sharp fa-solid text-success fa-indian-rupee-sign"></i> ${totalPendingAmount}</span> 
+       </div>
+    `;
+    cards.push(card);
+  }
+  return cards;
+}
