@@ -9,6 +9,7 @@ const searchInput = document.getElementById("search-input");
 const cardContainer = document.getElementById("card-container");
 const notePadContainer = document.getElementById("notepad-container");
 const inputGroup = document.getElementById("input-group");
+const searchIcon = document.getElementById("search-icon");
 
 window.addEventListener("click",(e) => {
   if(e.target !== toggleBTN && !(navigationMenu.classList.contains("d-none"))) {
@@ -87,4 +88,6 @@ inputGroup.addEventListener("click",(e) => {
 
 
 
-
+searchIcon.addEventListener("click",() => {
+  console.log("welcome");
+})
