@@ -23,7 +23,7 @@ toggleBTN.addEventListener("click",() => {
   const icon = document.getElementById("bars");
   navigationMenu.classList.toggle("d-none");  
   setIcon(icon,'fa-bars','fa-times');
-})
+});
 
 
 async function logoutUser(e) {
@@ -39,25 +39,15 @@ async function logoutUser(e) {
 logoutBTN.addEventListener("click",logoutUser);
 const urlSearchParams = new URLSearchParams(location.search);
 const searchText = urlSearchParams.get("search") || "";
-searchInput.value = searchText.toLowerCase();
+searchInput.value = searchText.trim().toLowerCase();
 const records = JSON.parse(localStorage.getItem("records")) || [];
-const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchText));
 
-if (filteredRecords.length > 0 && cardContainer) {
-  console.log(searchText);
-  // cardContainer.innerHTML = "";
-  // cardContainer.append(...createCards(filteredRecords));
+if (records.length > 0) {
+  const customerNamesOptionEl = records.map((record) => {
+    return `<option value="${record.user.name}">${record.user.name}</option>`;
+  }).join("");
+  searchInput.nextElementSibling.innerHTML = customerNamesOptionEl;
 }
-
-// if (searchText) {
-//   const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchText));
-//   if (cardContainer && filteredRecords.length > 0) {
-//     cardContainer.innerHTML = "";
-//     cardContainer.append(...createCards(filteredRecords));
-//   } else {
-//     notePadContainer.classList.remove("d-none");
-//   }
-// }
 
 searchInput.nextElementSibling.addEventListener("click", () => {
   if (!location.href.includes("/home") && searchInput.value.trim() !== "") {
@@ -65,21 +55,32 @@ searchInput.nextElementSibling.addEventListener("click", () => {
   }
 });
 
-searchInput.addEventListener("keyup", (e) => {
+
+function sortRecord(e) {
   if (e.code === "Enter" && !location.href.includes("/home") && searchInput.value.trim() !== "") {
     location.href = `/home?search=${searchInput.value}`;
   }
 
   if (location.href.includes("/home") && cardContainer && records.length > 0) {
-    const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchInput.value.trim()));
-    cardContainer.innerHTML = "";
-    notePadContainer.classList.add("d-none");
-    filteredRecords.length > 0 ? 
-      cardContainer.append(...createCards(filteredRecords)) :
-      notePadContainer.classList.remove("d-none");
-  }
-});
+      searchInput.addEventListener("input", () => {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const filteredRecords = records.filter(record => 
+          record.user && record.user.name.toLowerCase().includes(searchTerm)
+        );
+        cardContainer.innerHTML = "";
 
+        if (filteredRecords.length > 0) {
+          cardContainer.append(...createCards(filteredRecords));
+          notePadContainer.classList.add("d-none"); 
+        } else {
+          notePadContainer.classList.remove("d-none");
+        }
+      });
+  }
+}
+
+searchInput.addEventListener("keyup", sortRecord);
+searchInput.addEventListener("change", sortRecord);
 
 
 inputGroup.addEventListener("click",(e) => {
