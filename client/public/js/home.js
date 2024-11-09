@@ -5,6 +5,7 @@ const spinner = document.getElementById("spinner");
 const customersImgContainer = document.getElementById("customers-img-container");
 const mainContainer = document.getElementById("main-container");
 const cardContainer = mainContainer.querySelector("#card-container");
+const searchInput = document.getElementById("search-input");
 
 const deleteAllRecordsModal = document.getElementById("delete-all-records-modal");
 const deleteAllRecordsModalOkEl = deleteAllRecordsModal.querySelector("#ok-element");
@@ -17,11 +18,15 @@ async function fetchRecordAndUpdateUI() {
 
     const res = await fetch("/api/v1/records/all");
     const data = await res.json();
-    localStorage.setItem("records", JSON.stringify(data.data.records));
     spinner.classList.add("d-none");
 
     if (data.statusCode === 200) {
+      if (searchInput.value.trim().length > 0) {
+        return;
+      }
+
       if (data.data.records.length > 0) {
+        localStorage.setItem("records", JSON.stringify(data.data.records));
         cardContainer.append(...createCards(data.data.records));
         return mainContainer.classList.remove("d-none");
       } else {

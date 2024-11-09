@@ -38,25 +38,8 @@ async function logoutUser(e) {
 logoutBTN.addEventListener("click",logoutUser);
 const urlSearchParams = new URLSearchParams(location.search);
 const searchText = urlSearchParams.get("search") || "";
-searchInput.value = searchText.toLowerCase();
+searchInput.value = searchText.trim().toLowerCase();
 const records = JSON.parse(localStorage.getItem("records")) || [];
-const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchText));
-
-if (filteredRecords.length > 0 && cardContainer) {
-  console.log(searchText);
-  // cardContainer.innerHTML = "";
-  // cardContainer.append(...createCards(filteredRecords));
-}
-
-// if (searchText) {
-//   const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchText));
-//   if (cardContainer && filteredRecords.length > 0) {
-//     cardContainer.innerHTML = "";
-//     cardContainer.append(...createCards(filteredRecords));
-//   } else {
-//     notePadContainer.classList.remove("d-none");
-//   }
-// }
 
 searchInput.nextElementSibling.addEventListener("click", () => {
   if (!location.href.includes("/home") && searchInput.value.trim() !== "") {
