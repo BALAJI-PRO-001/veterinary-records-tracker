@@ -40,31 +40,40 @@ async function logoutUser(e) {
 
 logoutBTN.addEventListener("click",logoutUser);
 const urlSearchParams = new URLSearchParams(location.search);
-// const searchText = urlSearchParams.get("search") || "";
-// searchInput.value = searchText.toLowerCase();
+const searchText = urlSearchParams.get("search") || "";
+searchInput.value = searchText.toLowerCase();
 const records = JSON.parse(localStorage.getItem("records")) || [];
-// const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchText));
+const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchText));
 
-// if (cardContainer && filteredRecords.length > 0) {
-//   cardContainer.innerHTML = "";
-//   cardContainer.append(...createCards(filteredRecords));
+if (filteredRecords.length > 0 && cardContainer) {
+  console.log(searchText);
+  // cardContainer.innerHTML = "";
+  // cardContainer.append(...createCards(filteredRecords));
+}
+
+// if (searchText) {
+//   const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchText));
+//   if (cardContainer && filteredRecords.length > 0) {
+//     cardContainer.innerHTML = "";
+//     cardContainer.append(...createCards(filteredRecords));
+//   } else {
+//     notePadContainer.classList.remove("d-none");
+//   }
 // }
 
 searchInput.nextElementSibling.addEventListener("click", () => {
-  if (!location.href.includes("/home")) {
+  if (!location.href.includes("/home") && searchInput.value.trim() !== "") {
     location.href = `/home?search=${searchInput.value}`;
   }
 });
 
-const cards = createCards(records);
 searchInput.addEventListener("keyup", (e) => {
-  if (e.code === "Enter" && !location.href.includes("/home")) {
+  if (e.code === "Enter" && !location.href.includes("/home") && searchInput.value.trim() !== "") {
     location.href = `/home?search=${searchInput.value}`;
   }
 
   if (location.href.includes("/home") && cardContainer && records.length > 0) {
     const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchInput.value.trim()));
-    console.log(filteredRecords.length);
     cardContainer.innerHTML = "";
     notePadContainer.classList.add("d-none");
     filteredRecords.length > 0 ? 
