@@ -22,7 +22,7 @@ toggleBTN.addEventListener("click",() => {
   const icon = document.getElementById("bars");
   navigationMenu.classList.toggle("d-none");  
   setIcon(icon,'fa-bars','fa-times');
-})
+});
 
 
 async function logoutUser(e) {
@@ -40,6 +40,13 @@ const urlSearchParams = new URLSearchParams(location.search);
 const searchText = urlSearchParams.get("search") || "";
 searchInput.value = searchText.trim().toLowerCase();
 const records = JSON.parse(localStorage.getItem("records")) || [];
+
+if (records.length > 0) {
+  const customerNamesOptionEl = records.map((record) => {
+    return `<option value="${record.user.name}">${record.user.name}</option>`;
+  }).join("");
+  searchInput.nextElementSibling.innerHTML = customerNamesOptionEl;
+}
 
 searchInput.nextElementSibling.addEventListener("click", () => {
   if (!location.href.includes("/home") && searchInput.value.trim() !== "") {
