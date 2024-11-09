@@ -6,12 +6,9 @@ const logoutBTN = document.getElementById("logout");
 const toggleBTN =  document.getElementById("toggler");
 const navigationMenu = document.getElementById("toggle-menu");
 const searchInput = document.getElementById("search-input");
-const header = document.getElementById("header");
-const cowLogo = header.querySelector(".logo");
 const cardContainer = document.getElementById("card-container");
 const notePadContainer = document.getElementById("notepad-container");
-
-
+const inputGroup = document.getElementById("input-group");
 
 window.addEventListener("click",(e) => {
   if(e.target !== toggleBTN && !(navigationMenu.classList.contains("d-none"))) {
@@ -84,11 +81,10 @@ searchInput.addEventListener("keyup", (e) => {
 
 
 
-header.addEventListener("click",(e) => {
-  if(e.target != toggleBTN && e.target != cowLogo) {
-    searchInput.focus();
-  }
-})
+inputGroup.addEventListener("click",(e) => {
+  searchInput.focus();
+});
+
 
 
 
