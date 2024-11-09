@@ -54,21 +54,32 @@ searchInput.nextElementSibling.addEventListener("click", () => {
   }
 });
 
-searchInput.addEventListener("keyup", (e) => {
+
+function sortRecord(e) {
   if (e.code === "Enter" && !location.href.includes("/home") && searchInput.value.trim() !== "") {
     location.href = `/home?search=${searchInput.value}`;
   }
 
   if (location.href.includes("/home") && cardContainer && records.length > 0) {
-    const filteredRecords = records.filter(record => record.user && record.user.name.includes(searchInput.value.trim()));
-    cardContainer.innerHTML = "";
-    notePadContainer.classList.add("d-none");
-    filteredRecords.length > 0 ? 
-      cardContainer.append(...createCards(filteredRecords)) :
-      notePadContainer.classList.remove("d-none");
-  }
-});
+      searchInput.addEventListener("input", () => {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const filteredRecords = records.filter(record => 
+          record.user && record.user.name.toLowerCase().includes(searchTerm)
+        );
+        cardContainer.innerHTML = "";
 
+        if (filteredRecords.length > 0) {
+          cardContainer.append(...createCards(filteredRecords));
+          notePadContainer.classList.add("d-none"); 
+        } else {
+          notePadContainer.classList.remove("d-none");
+        }
+      });
+  }
+}
+
+searchInput.addEventListener("keyup", sortRecord);
+searchInput.addEventListener("change", sortRecord);
 
 
 inputGroup.addEventListener("click",(e) => {
