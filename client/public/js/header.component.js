@@ -79,16 +79,9 @@ function sortRecord(e) {
   }
 }
 
-searchInput.addEventListener("keyup", sortRecord);
-searchInput.addEventListener("change", sortRecord);
+searchInput.addEventListener("input", sortRecord);
 
 
 inputGroup.addEventListener("click",(e) => {
   searchInput.focus();
 });
-
-
-
-searchIcon.addEventListener("click",() => {
-  console.log("welcome");
-})
