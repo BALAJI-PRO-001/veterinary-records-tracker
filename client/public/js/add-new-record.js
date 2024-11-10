@@ -103,9 +103,9 @@ function validateAndExtractCowRecord() {
 
 function validateAndExtractInjectInfoAndAiDate() {
   const isValidInjectionName = validateInputAndUpdateUI(injectionNameInput);
-  const isValidInjectionPrice = validateInputAndUpdateUI(injectionPriceInput);
-  const isValidGivenAmount = validateInputAndUpdateUI(givenAmountInput);
-  const isValidPendingAmount = validateInputAndUpdateUI(pendingAmountInput);
+  const isValidInjectionPrice = validateAmountAndUpdateAmountInputUI(injectionPriceInput);
+  const isValidGivenAmount = validateAmountAndUpdateAmountInputUI(givenAmountInput);
+  const isValidPendingAmount = validateAmountAndUpdateAmountInputUI(pendingAmountInput);
   const isValidInjectionDate = validateDateAndUpdateDateInputUI(injectionDateInput);
 
   if (
