@@ -30,6 +30,7 @@ async function fetchRecordAndUpdateUI() {
         cardContainer.append(...createCards(data.data.records));
         return mainContainer.classList.remove("d-none");
       } else {
+        localStorage.setItem("records", JSON.stringify([]));
         return customersImgContainer.classList.remove("d-none");
       }
     }

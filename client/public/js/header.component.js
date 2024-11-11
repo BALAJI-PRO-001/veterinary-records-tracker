@@ -9,7 +9,6 @@ const searchInput = document.getElementById("search-input");
 const cardContainer = document.getElementById("card-container");
 const notePadContainer = document.getElementById("notepad-container");
 const inputGroup = document.getElementById("input-group");
-const searchIcon = document.getElementById("search-icon");
 
 window.addEventListener("click",(e) => {
   if(e.target !== toggleBTN && !(navigationMenu.classList.contains("d-none"))) {
@@ -49,7 +48,7 @@ if (records.length > 0) {
   searchInput.nextElementSibling.innerHTML = customerNamesOptionEl;
 }
 
-searchInput.nextElementSibling.addEventListener("click", () => {
+searchInput.nextElementSibling.nextElementSibling.addEventListener("click", () => {
   if (!location.href.includes("/home") && searchInput.value.trim() !== "") {
     location.href = `/home?search=${searchInput.value}`;
   }
@@ -61,21 +60,20 @@ function sortRecord(e) {
     location.href = `/home?search=${searchInput.value}`;
   }
 
+  console.log(records);
   if (location.href.includes("/home") && cardContainer && records.length > 0) {
-      searchInput.addEventListener("input", () => {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-        const filteredRecords = records.filter(record => 
-          record.user && record.user.name.toLowerCase().includes(searchTerm)
-        );
-        cardContainer.innerHTML = "";
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    const filteredRecords = records.filter(record => 
+      record.user && record.user.name.toLowerCase().includes(searchTerm)
+    );
+    cardContainer.innerHTML = "";
 
-        if (filteredRecords.length > 0) {
-          cardContainer.append(...createCards(filteredRecords));
-          notePadContainer.classList.add("d-none"); 
-        } else {
-          notePadContainer.classList.remove("d-none");
-        }
-      });
+    if (filteredRecords.length > 0) {
+      cardContainer.append(...createCards(filteredRecords));
+      notePadContainer.classList.add("d-none"); 
+    } else {
+      notePadContainer.classList.remove("d-none");
+    }
   }
 }
 
