@@ -18,7 +18,7 @@ app.use("/api/v1/records", recordRouter);
 app.use("/api/v1/super-user", superUserRouter);
 
 
-app.use(express.static(STATIC_FILES_PATH));
+app.use(express.static(STATIC_FILES_PATH, {maxAge: "1d", etag: false}));
 app.use("/", pageRouter);
 
 
