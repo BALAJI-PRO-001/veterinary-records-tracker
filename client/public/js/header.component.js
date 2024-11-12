@@ -9,6 +9,7 @@ const searchInput = document.getElementById("search-input");
 const cardContainer = document.getElementById("card-container");
 const notePadContainer = document.getElementById("notepad-container");
 const inputGroup = document.getElementById("input-group");
+const searchIcon = document.getElementById("search-icon");
 
 window.addEventListener("click",(e) => {
   if(e.target !== toggleBTN && !(navigationMenu.classList.contains("d-none"))) {
@@ -35,6 +36,7 @@ async function logoutUser(e) {
   }
 }
 
+
 logoutBTN.addEventListener("click",logoutUser);
 const urlSearchParams = new URLSearchParams(location.search);
 const searchText = urlSearchParams.get("search") || "";
@@ -48,19 +50,14 @@ if (records.length > 0) {
   searchInput.nextElementSibling.innerHTML = customerNamesOptionEl;
 }
 
-searchInput.nextElementSibling.nextElementSibling.addEventListener("click", () => {
+searchIcon.addEventListener("click", () => {
   if (!location.href.includes("/home") && searchInput.value.trim() !== "") {
     location.href = `/home?search=${searchInput.value}`;
   }
 });
 
 
-function sortRecord(e) {
-  if (e.code === "Enter" && !location.href.includes("/home") && searchInput.value.trim() !== "") {
-    location.href = `/home?search=${searchInput.value}`;
-  }
-
-  console.log(records);
+function sortRecordAndUpdateUI() {
   if (location.href.includes("/home") && cardContainer && records.length > 0) {
     const searchTerm = searchInput.value.toLowerCase().trim();
     const filteredRecords = records.filter(record => 
@@ -77,7 +74,7 @@ function sortRecord(e) {
   }
 }
 
-searchInput.addEventListener("input", sortRecord);
+searchInput.addEventListener("input", sortRecordAndUpdateUI);
 
 
 inputGroup.addEventListener("click",(e) => {

@@ -84,3 +84,20 @@ export function isTrue(booleans) {
   }
   return true;
 }
+
+
+
+
+export function sortRecordsByUserName(records, searchTerm) {
+  if (records === null || records === undefined) {
+    throw new Error("Records is null or undefined.");
+  }
+
+  if (searchTerm === "") {
+    return records;
+  }
+
+  return records.filter(record => 
+    record.user && record.user.name.toLowerCase().includes(searchTerm)
+  );
+} 

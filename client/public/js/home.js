@@ -1,3 +1,4 @@
+import { sortRecordsByUserName } from "./utils/common.js";
 import { createCards } from "./utils/userInteraction.js";
 
 const alertBox = document.getElementById("alert-box");
@@ -6,6 +7,7 @@ const customersImgContainer = document.getElementById("customers-img-container")
 const mainContainer = document.getElementById("main-container");
 const cardContainer = mainContainer.querySelector("#card-container");
 const searchInput = document.getElementById("search-input");
+const notePadContainer = document.getElementById("notepad-container");
 
 const deleteAllRecordsModal = document.getElementById("delete-all-records-modal");
 const deleteAllRecordsModalOkEl = deleteAllRecordsModal.querySelector("#ok-element");
@@ -21,13 +23,16 @@ async function fetchRecordAndUpdateUI() {
     spinner.classList.add("d-none");
 
     if (data.statusCode === 200) {
-      if (searchInput.value.trim().length > 0) {
-        return;
-      }
-
       if (data.data.records.length > 0) {
         localStorage.setItem("records", JSON.stringify(data.data.records));
-        cardContainer.append(...createCards(data.data.records));
+        const sortedRecords = sortRecordsByUserName(data.data.records, searchInput.value.trim());
+
+        if (sortedRecords.length > 0) {
+          cardContainer.append(...createCards(sortedRecords));
+        } else {
+          notePadContainer.classList.remove("d-none");
+        }
+
         return mainContainer.classList.remove("d-none");
       } else {
         localStorage.setItem("records", JSON.stringify([]));
@@ -64,6 +69,7 @@ deleteAllRecordsModalOkEl.addEventListener("click", async () => {
   }
 
   if (res.status === 204) {
+    localStorage.setItem("records", JSON.stringify([]));
     deleteAllRecordsModal.querySelector("#danger-icon").classList.add("d-none");
     deleteAllRecordsModal.querySelector("#success-icon").classList.remove("d-none");
     mainContentEl.classList.remove("text-danger");
