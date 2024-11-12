@@ -14,8 +14,8 @@
 @media screen and (max-width: 768px){
 
   .container {
-    height: 650px !important;
-    width: 99% !important;
+    width: 100% !important;
+    min-width: 330px;
   }
 
   .right {
@@ -37,3 +37,4 @@
     font-weight: 300;
   }
 }
+
